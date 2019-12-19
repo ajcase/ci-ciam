@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!--
+	Macro Substitution Values:
+	ACTION: @ACTION@
+	DEVICE_NAME: @DEVICE_NAME@
+	DEVICE_TYPE: @DEVICE_TYPE@
+	RESELECT_HIDDEN: @RESELECT_HIDDEN@
+-->
+<html>
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<base href="/" />
+	<link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="usc/css/stateless.css">
+	<title>Sign In - IBM Cloud Identity</title>
+</head>
+<script type="text/javascript">
+	function checkAuthStatus() {
+
+		document.forms[0].submit();
+
+		//Make the web-socket call for auth status
+
+		/* if ("WebSocket" in window) {
+		   //alert("WebSocket is supported by your Browser!");
+
+		   // Let us open a web socket
+		   var ws = new WebSocket("@WSS_AUTH_STATUS_URI@");
+
+		   ws.onopen = function() {
+			  // Web Socket is connected, send data using send()
+			  // ??? ws.send("Message to send");
+			  // alert("Message is sent...");
+		   };
+
+		   ws.onmessage = function (evt) {
+			  var received_msg = evt.data;
+			  //Retrieve the state
+			  var jsonResp = JSON.parse(evt.data);
+			  var state = jsonResp.state;
+
+			  if (state != "PENDING") {
+				ws.close();
+
+				//if state is anything other that PENDING, we conclude
+				document.getElementById("authStatus").value = state;
+
+				//Submit the call
+				document.forms[0].submit();
+			  }
+		   };
+
+		   ws.onclose = function() {
+			  // websocket is closed.
+			  // Ooops we need to fail...
+			  document.forms[0].submit();
+		   };
+		  } else {
+		   // The browser doesn't support WebSocket
+		   alert("WebSocket NOT supported by your Browser!");
+		  } */
+
+
+	}
+</script>
+
+<body cs-device-push class="tile-background">
+	<div data-role="page" class="cs-content">
+		<div data-role="header" class="heading">
+			<div>
+				<h1>IBM<small>®</small></h1>
+				<h2>Cloud Identity</h2>
+			</div>
+		</div>
+		<div class="content">
+			<div data-role="content" class="header">
+				<p>You have a pending authentication challenge on device @DEVICE_NAME@ (@DEVICE_TYPE@)</p>
+				<form action="@ACTION@" method="post" data-ajax="false">
+					<input type="hidden" name="operation" value="verify">
+					<input id="authStatus" type="hidden" name="authStatus" value="FAILED">
+				</form>
+			</div>
+			<!-- div @RESELECT_HIDDEN@ data-role="content">
+					<form action="@ACTION@" method="post" data-ajax="false">
+						<input type="hidden" name="operation" value="select">
+						Click on the Reselect button to select the different device for authentication.
+						<input type="submit" name="Reselect" value="Reselect">
+					</form>
+				</div -->
+		</div>
+	</div>
+	<script>
+		setTimeout(function () {
+			checkAuthStatus();
+		}, 10000);
+	</script>
+</body>
+
+</html>

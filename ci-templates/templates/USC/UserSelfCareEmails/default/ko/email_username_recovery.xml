@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Email id="default">
+    <Sender>
+       <Value>
+        ibmacct@ibm.com
+       </Value>
+    </Sender>
+    <Subject>
+      <Value>
+        사용자의 사용자 이름 복구 정보
+      </Value>
+    </Subject>
+    <Message>
+      <Value>
+      <![CDATA[<html>
+            <head/>
+            <body>
+	         <div style="font-family: 'Helvetica neue', sans-serif;">
+	            <table cellspacing="0" cellpadding="22" border="0" style="width: 100%; margin-bottom: 10px; top: 0px;left: 0px;" >
+	              <tr style="line-height: 30px; color: white; margin: 0 auto; background-color: #4178be;">
+	                <td style="font-size:24px;padding: 32px 64px 32px 72px;">
+	                                       Big Blue Insurance
+	                </td>
+	              </tr>
+	            </table>
+	         </div>
+	         <div style="font-family: 'Helvetica neue', sans-serif; font-size: 14px; padding: 10px 64px 64px 64px; color: #121212;">
+	                안녕하세요, @FIRST_NAME@님.
+	                <br>
+	                <br>                 
+                    등록 <b>@TENANT@</b>에 대한 귀하의 사용자 이름은 <b>@USERNAME@</b>입니다.   
+                    <br>
+                    <br>
+                    사용자 이름의 복구를 요청하지 않았다면 귀하의 관리자에게 문의하십시오.            
+             </div>
+            </body>
+            </html>
+         ]]>      
+      </Value>
+    </Message>
+</Email>
+</root>

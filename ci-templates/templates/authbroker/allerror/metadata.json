@@ -1,0 +1,34 @@
+{
+   "description": "A proper allerror page to display when error parsing msg.",
+   "id": {
+      "component": "authbroker",
+      "name": "allerror",
+      "revision": 4
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The timestamp when the error occurs.",
+            "key": "@TIMESTAMP@"
+         },
+         {
+            "default": null,
+            "description": "The exception message if any.",
+            "key": "@EXCEPTION_MSG@"
+         },
+         {
+            "default": null,
+            "description": "The Requested IP Address if any.",
+            "key": "@REQ_ADDR@"
+         }
+      ],
+      "required": [
+         {
+            "description": "The detailed error message.",
+            "key": "@ERROR_MESSAGE@"
+         }
+      ]
+   }
+}

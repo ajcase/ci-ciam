@@ -3,11 +3,6 @@ var request = require('request');
 var _ = require('lodash');
 var bbfn = require('../functions.js');
 var router = express.Router();
-var OIDC_BASE_URI = process.env.OIDC_CI_BASE_URI;
-var API_CLIENT_ID = process.env.API_CLIENT_ID;
-var API_SECRET = process.env.API_SECRET;
-var OIDC_TOKEN_URI = OIDC_BASE_URI + '/oidc/endpoint/default';
-var MFAGROUPID = process.env.MFAGROUPID;
 
 function evaluateAttr(attribute) {
   if (attribute == 'true') {
@@ -44,7 +39,7 @@ router.get('/app/dashboard', function(req, res, next) {
 router.get('/app/profile', function(req, res, next) {
   var loggedIn = ((req.session.loggedIn) ? true : false);
   if (loggedIn) {
-    request.get(`${OIDC_TOKEN_URI}/userinfo`, {
+    request.get(process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/userinfo', {
       'auth': {
         'bearer': req.session.accessToken
       }
@@ -55,7 +50,7 @@ router.get('/app/profile', function(req, res, next) {
       var userinfo = JSON.parse(body);
       var userinfo_string = JSON.stringify(userinfo, null, 2);
 
-      request.get(`${OIDC_BASE_URI}/v2.0/Me`, {
+      request.get(process.env.OIDC_CI_BASE_URI + '/v2.0/Me', {
         'auth': {
           'bearer': req.session.accessToken
         }
@@ -68,25 +63,23 @@ router.get('/app/profile', function(req, res, next) {
         var meExt = me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"];
 
         var mfaEnabled = (typeof(_.filter(me.groups, {
-          'id': MFAGROUPID
+          'id': process.env.MFAGROUPID
         }))[0] !== 'undefined') ? true : false;
 
         var meLinked = (typeof me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["linkedAccounts"] != 'undefined') ? true : false;
-        if(meLinked){
+        if (meLinked) {
           var linkedAccounts = me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["linkedAccounts"]
-        }
-        else {
+        } else {
           var linkedAccounts = false
         }
-        var addresses = (typeof me["addresses"] != 'undefined') ? true: false
-        if(addresses){
+        var addresses = (typeof me["addresses"] != 'undefined') ? true : false
+        if (addresses) {
           var hasAddress = (typeof me["addresses"][0]["streetAddress"] !== 'undefined') ? true : false;
         }
         console.log(addresses, hasAddress)
-        if(!linkedAccounts){
+        if (!linkedAccounts) {
           var linkedAccountsTotal = false;
-        }
-        else{
+        } else {
           var linkedAccountsTotal = {
             'facebook': (typeof(_.filter(linkedAccounts, {
               'realm': "www.facebook.com"
@@ -165,7 +158,7 @@ router.post('/app/preferences', function(req, res, next) {
   var data = req.body;
   console.log("Editing preferences for:", userId)
 
-  bbfn.authorize(API_CLIENT_ID, API_SECRET, function(err, body) {
+  bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err, body) {
     if (err) {
       console.log(err);
     } else {
@@ -210,7 +203,7 @@ router.get('/app/forgot-password', function(req, res, next) {
 router.post('/app/forgot-password', function(req, res, next) {
   var user = req.body.emailAddress;
   console.log("User trying to reset password:", req.body.emailAddress)
-  bbfn.authorize(API_CLIENT_ID, API_SECRET, function(err, body) {
+  bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err, body) {
     var accessToken = body.access_token;
     if (err) {
       console.log(err);
@@ -244,7 +237,7 @@ router.post('/app/forgot-password', function(req, res, next) {
                   txnId: body.id,
                   method: "emailotp",
                   userId: userId,
-                  sub:req.body.emailAddress,
+                  sub: req.body.emailAddress,
                   layout: false,
                   button: "Verify"
                 });
@@ -260,7 +253,7 @@ router.post('/app/forgot-password-verify', function(req, res, next) {
   // verify.otp; verify.txnId; verify.method; verify.userId
   var verify = req.body;
   console.log("1.0 OTP Transaction:", verify.txnId)
-  bbfn.authorize(API_CLIENT_ID, API_SECRET, function(err, body) {
+  bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err, body) {
     var accessToken = body.access_token;
     if (err) {
       console.log(err);
@@ -285,7 +278,7 @@ router.post('/app/forgot-password-verify', function(req, res, next) {
                 method: "emailotp",
                 forgotPassword: true,
                 userId: verify.userId,
-                sub:req.body.emailAddress,
+                sub: req.body.emailAddress,
                 button: "Verify",
                 layout: false
               });
@@ -334,11 +327,12 @@ router.post('/app/toggleMfa', function(req, res, next) {
   // form.mfa
   var form = req.body;
 
-  bbfn.authorize(API_CLIENT_ID, API_SECRET, function(err, body) {
+  bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err, body) {
     if (err) {
       console.log(err);
     } else {
       var accessToken = body.access_token;
+
       bbfn.toggleMfa(req.session.userId, form.mfa, accessToken, function(err, body) {
         console.log(body)
         if (body === true) {
@@ -380,7 +374,7 @@ router.post('/app/recover-username', function(req, res, next) {
     'emailAddress': (typeof req.body.emailAddress !== 'undefined') ? req.body.emailAddress : null
   }
   console.log("We've been posted:", recoverVars)
-  bbfn.authorize(API_CLIENT_ID, API_SECRET, function(err, body) {
+  bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err, body) {
     var accessToken = body.access_token
     if (err) {
       console.log(err);
@@ -475,7 +469,7 @@ router.get('/app/enroll/sms', function(req, res, next) {
 router.post('/app/enroll/sms', function(req, res, next) {
   var number = req.body.phone;
 
-  bbfn.authorize(API_CLIENT_ID, API_SECRET, function(err, body) {
+  bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err, body) {
     var accessToken = body.access_token;
     if (err) {
       console.log(err);
@@ -485,16 +479,15 @@ router.post('/app/enroll/sms', function(req, res, next) {
         if (err) {
           console.log(err);
         } else {
-          if(typeof body.messageId != 'undefined' && body.messageId == 'CSIAH0642E')
-          {
+          if (typeof body.messageId != 'undefined' && body.messageId == 'CSIAH0642E') {
             // Bad phone
             res.render('insurance/enroll-sms', {
               layout: false,
               action: '/app/enroll/sms',
               error: true,
-              errorMessage:"You've entered an invalid phone number. Please try again and ensure you include the country code."
+              errorMessage: "You've entered an invalid phone number. Please try again and ensure you include the country code."
             });
-          }else{
+          } else {
             // Good phone
             res.render('insurance/otpverify', {
               title: "Two-factor enrollment",
@@ -519,7 +512,7 @@ router.post('/app/enroll/sms/verify', function(req, res, next) {
   // verify.otp; verify.txnId; verify.method; verify.userId, verify.sub
   var verify = req.body;
   console.log("1.0 OTP Transaction:", verify.txnId)
-  bbfn.authorize(API_CLIENT_ID, API_SECRET, function(err, body) {
+  bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err, body) {
     var accessToken = body.access_token;
     if (err) {
       console.log(err);

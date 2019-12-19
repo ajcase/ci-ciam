@@ -8,6 +8,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var bbfn = require('./functions.js');
 
 // Use Passport with OpenId Connect strategy to
 // Authenticate users with IBM Cloud Identity Connect
@@ -15,47 +16,46 @@ var passport = require('passport')
 var OpenIDStrategy = require('passport-openidconnect').Strategy
 
 var index = require('./routes/index');
+var setup = require('./routes/setup');
 var profile = require('./routes/profile');
 var openaccount = require('./routes/open-account');
 
 function titleCase(string) {
-      var sentence = string.toLowerCase().split(" ");
-      for(var i = 0; i< sentence.length; i++){
-         sentence[i] = sentence[i][0].toUpperCase() + sentence[i].slice(1);
-      }
-   return sentence.join(" ");
-   }
+  var sentence = string.toLowerCase().split(" ");
+  for (var i = 0; i < sentence.length; i++) {
+    sentence[i] = sentence[i][0].toUpperCase() + sentence[i].slice(1);
+  }
+  return sentence.join(" ");
+}
 
 // edit this URL with your base URL for IBM Cloud Identity OIDC default endpoint
-var OIDC_BASE_URI = process.env.OIDC_CI_BASE_URI;
-var OIDC_TOKEN_URI = OIDC_BASE_URI+'/oidc/endpoint/default';
-var APP = process.env.APP;
+var APP = process.env.APP || "Demo Site";
 
 // Configure the OpenId Connect Strategy
 // with credentials obtained from env details (.env)
 passport.use(new OpenIDStrategy({
-  issuer: OIDC_TOKEN_URI,
-  clientID: process.env.OIDC_CLIENT_ID, // from .env file
-  clientSecret: process.env.OIDC_CLIENT_SECRET, // from .env file
-  authorizationURL: `${OIDC_TOKEN_URI}/authorize`, // this won't change
-  userInfoURL: `${OIDC_TOKEN_URI}/userinfo`, // this won't change
-  tokenURL: `${OIDC_TOKEN_URI}/token`, // this won't change
-  callbackURL: process.env.OIDC_REDIRECT_URI, // from .env file
-  passReqToCallback: true
-},
-function(req, issuer, userId, profile, accessToken, refreshToken, params, cb) {
+    issuer: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default',
+    clientID: process.env.OIDC_CLIENT_ID, // from .env file
+    clientSecret: process.env.OIDC_CLIENT_SECRET, // from .env file
+    authorizationURL: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/authorize', // this won't change
+    userInfoURL: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/userinfo', // this won't change
+    tokenURL: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/token', // this won't change
+    callbackURL: process.env.OIDC_REDIRECT_URI, // from .env file
+    passReqToCallback: true
+  },
+  function(req, issuer, userId, profile, accessToken, refreshToken, params, cb) {
 
-  console.log('issuer:', issuer);
-  console.log('userId:', userId);
-  console.log('accessToken:', accessToken);
-  console.log('refreshToken:', refreshToken);
-  console.log('params:', params);
+    console.log('issuer:', issuer);
+    console.log('userId:', userId);
+    console.log('accessToken:', accessToken);
+    console.log('refreshToken:', refreshToken);
+    console.log('params:', params);
 
-  req.session.accessToken = accessToken;
-  req.session.userId = userId;
-  req.session.loggedIn = true;
-  return cb(null, profile);
-}));
+    req.session.accessToken = accessToken;
+    req.session.userId = userId;
+    req.session.loggedIn = true;
+    return cb(null, profile);
+  }));
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -72,7 +72,9 @@ app.set('view engine', 'hbs');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -90,17 +92,18 @@ app.use(passport.session());
 
 // Middleware for checking if a user has been authenticated
 // via Passport and IBM OpenId Connect
-function checkAuthentication(req,res,next){
-  if(req.isAuthenticated()){
-      next();
-  } else{
-      req.session.returnTo = req.url
-      res.redirect("/");
+function checkAuthentication(req, res, next) {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    req.session.returnTo = req.url
+    res.redirect("/");
   }
 }
 app.locals.pageTitle = titleCase(APP);
 app.locals.bodyCSS = APP;
 app.use('/', index);
+app.use('/setup', setup);
 app.use('/app/profile', checkAuthentication, profile);
 app.use('/open-account', openaccount);
 // Only allow authenticated users to access the /users route
@@ -145,19 +148,19 @@ app.get('/oauth/callback', passport.authenticate('openidconnect', {
 
 // Destroy both the local session and
 // revoke the access_token at IBM
-app.get('/logout', function(req, res){
-  request.post(`${OIDC_TOKEN_URI}/revoke`, {
-    'form':{
+app.get('/logout', function(req, res) {
+  request.post(process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/revoke', {
+    'form': {
       'client_id': process.env.OIDC_CLIENT_ID,
       'client_secret': process.env.OIDC_CLIENT_SECRET,
       'token': req.session.accessToken,
       'token_type_hint': 'access_token'
     }
-  },function(err, respose, body){
+  }, function(err, respose, body) {
 
     console.log('Session Revoked at IBM');
     req.session.loggedIn = false;
-    res.redirect('/');
+    res.redirect(process.env.OIDC_CI_BASE_URI + '/idaas/mtfim/sps/idaas/logout');
   });
 });
 
@@ -178,5 +181,23 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+if (process.env.API_CLIENT_ID && process.env.API_SECRET && process.env.MFAGROUP) {
+  bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err, body) {
+    if (err) {
+      console.log(err);
+    } else {
+      apiAccessToken = body.access_token;
+      bbfn.getGroupID(process.env.MFAGROUP, apiAccessToken, (_err,result) => {
+        if (result && result['urn:ietf:params:scim:schemas:extension:ibm:2.0:Group'].groupType == "standard") {
+          process.env.MFAGROUPID = result.id;
+          console.log(`MFA Group ID is ${process.env.MFAGROUPID}`);
+        } else {
+          console.log(`Group ${process.env.MFAGROUP} is invalid`);
+        }
+      });
+    }
+  });
+}
 
 module.exports = app;

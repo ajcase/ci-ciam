@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Subject>
+  <Value>
+    Vaše jednorázové heslo
+  </Value>
+</Subject>
+
+<Message>
+  <Value>
+	<![CDATA[<html>
+		<body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #121212; padding: 12px;">
+			<h1 style="color: #4178BE;">Vaše jednorázové heslo je: </h1>
+			<h2 style="color: #666666;">@OTP_STRING@</h2>
+			<p>Použijte toto jednorázové heslo k dokončení požadavku. Heslu vyprší platnost za @OTP_LIFETIME@ minut(y).</p>
+			<p>Na tento e-mail neodpovídejte.</p>
+		</body>
+	</html>]]>
+  </Value>
+</Message>
+</root>

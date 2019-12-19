@@ -1,0 +1,30 @@
+{
+   "description": "IBM Verify Authentication selection",
+   "id": {
+      "component": "authsvc",
+      "name": "ibmverify_authenticator_selection",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Error message.",
+            "key": "@ERROR_MESSAGE@"
+         },
+         {
+            "default": null,
+            "description": "Action.",
+            "key": "@ACTION@"
+         },
+         {
+            "default": null,
+            "description": "Authenticator id.",
+            "key": "@AUTHENTICATOR_ID@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

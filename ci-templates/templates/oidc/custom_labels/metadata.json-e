@@ -1,0 +1,15 @@
+{
+   "description": "A properties file to specify custom template labels.",
+   "id": {
+      "component": "oidc",
+      "name": "custom_labels",
+      "revision": 1
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+      ]
+   }
+}

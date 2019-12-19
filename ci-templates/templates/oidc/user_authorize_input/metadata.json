@@ -1,0 +1,19 @@
+{
+   "description": "A page to display the user code input form for OIDC device flow.",
+   "id": {
+      "component": "oidc",
+      "name": "user_authorize_input",
+      "revision": 4
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+         {
+            "description": "The form post target URL to send the user code for device flow.",
+            "key": "@ACTION@"
+         }
+      ]
+   }
+}

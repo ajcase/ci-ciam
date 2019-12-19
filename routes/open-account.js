@@ -4,9 +4,6 @@ var _ = require('lodash');
 var json2csv = require('json2csv');
 var bbfn = require('../functions.js');
 var router = express.Router();
-var OIDC_BASE_URI = process.env.OIDC_CI_BASE_URI;
-var API_CLIENT_ID = process.env.API_CLIENT_ID;
-var API_SECRET = process.env.API_SECRET;
 
 function match(a,b){
   if(a === b){
@@ -79,7 +76,7 @@ router.post('/car', function(req, res, next) {
     console.log("Car quote submitted for:", req.session.userEmail);
     console.log("Car form submitted:", data)
 
-    bbfn.authorize(API_CLIENT_ID, API_SECRET, function(err,  body){
+    bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err,  body){
         if (err) {
           console.log(err);
         } else {
@@ -146,7 +143,7 @@ router.post('/car', function(req, res, next) {
                   },
                   'body': JSON.stringify(userInfo)
                 }
-                request.post(`${OIDC_BASE_URI}/v2.0/Users`, options, function(err, response, body){
+                request.post(process.env.OIDC_CI_BASE_URI + '/v2.0/Users', options, function(err, response, body){
                   console.log("Create user:", req.session.userEmail)
                   pbody = JSON.parse(body);
                   console.log("Response code:", response.statusCode);
@@ -254,7 +251,7 @@ router.post('/home', function(req, res, next) {
     var data = req.body;
     console.log("Home quote submitted for:", req.session.userEmail);
     console.log("Home form submitted:", data)
-    bbfn.authorize(API_CLIENT_ID, API_SECRET, function(err,  body){
+    bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err,  body){
         if (err) {
           console.log(err);
         } else {
@@ -320,7 +317,7 @@ router.post('/home', function(req, res, next) {
                   },
                   'body': JSON.stringify(userInfo)
                 }
-                request.post(`${OIDC_BASE_URI}/v2.0/Users`, options, function(err, response, body){
+                request.post(process.env.OIDC_CI_BASE_URI + '/v2.0/Users', options, function(err, response, body){
                   console.log("Create user:", req.session.userEmail)
                   pbody = JSON.parse(body);
                   console.log("Response code:", response.statusCode);
@@ -402,7 +399,7 @@ router.post('/home', function(req, res, next) {
 });
 router.get('/test', function(req, res, next) {
   var email = "jake.johnson@yopmail.com";
-    bbfn.authorize(API_CLIENT_ID, API_SECRET, function(err,  body){
+    bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err,  body){
         if (err) {
           console.log(err);
         } else {

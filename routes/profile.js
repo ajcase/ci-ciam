@@ -1,13 +1,11 @@
 var request = require('request');
 var express = require('express');
 var router = express.Router();
-var OIDC_BASE_URI = process.env.OIDC_CI_BASE_URI;
-var OIDC_TOKEN_URI = OIDC_BASE_URI+'/oidc/endpoint/default';
 
 // GET profile
 router.get('/', function(req, res, next) {
 
-  request.get(`${OIDC_TOKEN_URI}/userinfo`, {
+  request.get(process.env.OIDC_CI_BASE_URI+'/oidc/endpoint/default/userinfo', {
     'auth': {
       'bearer': req.session.accessToken
     }
@@ -18,7 +16,7 @@ router.get('/', function(req, res, next) {
     var userinfo = JSON.parse(body);
     var userinfo_string = JSON.stringify(userinfo, null, 2);
 
-    request.get(`${OIDC_BASE_URI}/v2.0/Me`, {
+    request.get(process.env.OIDC_CI_BASE_URI + '/v2.0/Me', {
       'auth': {
         'bearer': req.session.accessToken
       }
@@ -31,7 +29,7 @@ router.get('/', function(req, res, next) {
       var me_string = JSON.stringify(me, null, 2);
       req.session.userprofile = me;
 
-      request.get(`${OIDC_BASE_URI}/v1.0/attributes`, {
+      request.get(process.env.OIDC_CI_BASE_URI+'/v1.0/attributes', {
         'auth': {
           'bearer': req.session.accessToken
         }

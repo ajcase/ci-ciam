@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!--
+    Macro Substitution Values:
+    REDIRECT_URL: @REDIRECT_URL@
+-->
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Refresh" content="0;url=@REDIRECT_URL@">
+	<base href="/" />
+	<link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>사인인 - IBM Cloud Identity</title>
+	<link rel="stylesheet" href="usc/css/stateless.css" />
+</head>
+
+<body class="tile-background">
+	<div data-role="page" class="cs-content">
+		<div data-role="header" class="heading">
+			<div>
+				<h1>IBM<small>®</small></h1>
+				<h2>Cloud Identity</h2>
+			</div>
+		</div>
+		<div class="content">
+			<div>
+				<p>조직이 이 디바이스를 관리하지 않아 인증서 인증을 완료할 수 없습니다. 기타 로그인 옵션의
+					로그인 선택사항 페이지로 경로 재지정됩니다.</p>
+			</div>
+			<div>
+				<p><b>5초</b> 내에 경로 재지정되지 않으면 <a href="@REDIRECT_URL@">여기</a>를 클릭하십시오.</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

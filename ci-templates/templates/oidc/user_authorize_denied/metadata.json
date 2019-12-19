@@ -1,0 +1,30 @@
+{
+   "description": "A page to display denied user authorization for OIDC device flow.",
+   "id": {
+      "component": "oidc",
+      "name": "user_authorize_denied",
+      "revision": 4
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The user code for this OIDC device flow.",
+            "key": "@OAUTH_CODE@"
+         },
+         {
+            "default": null,
+            "description": "The client (application) name.",
+            "key": "@OAUTH_CLIENT_NAME@"
+         },
+         {
+            "default": null,
+            "description": "The form post target URL to return to the user authorize endpoint.",
+            "key": "@ACTION@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

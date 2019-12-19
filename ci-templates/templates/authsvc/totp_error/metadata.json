@@ -1,0 +1,35 @@
+{
+   "description": "TOTP error. ",
+   "id": {
+      "component": "authsvc",
+      "name": "totp_error",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Error message.",
+            "key": "@ERROR_MESSAGE@"
+         },
+         {
+            "default": null,
+            "description": "Exception message.",
+            "key": "@EXCEPTION_MSG@"
+         },
+         {
+            "default": null,
+            "description": "Req addr.",
+            "key": "@REQ_ADDR@"
+         },
+         {
+            "default": null,
+            "description": "Time stamp.",
+            "key": "@TIMESTAMP@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

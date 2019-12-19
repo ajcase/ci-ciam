@@ -1,0 +1,127 @@
+{
+   "description": "A page to display user consent.",
+   "id": {
+      "component": "oidc",
+      "name": "user_consent",
+      "revision": 5
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Requested redirect URI",
+            "key": "@REDIRECT_URI@"
+         },
+         {
+            "default": null,
+            "description": "Requested state",
+            "key": "@STATE@"
+         },
+         {
+            "default": null,
+            "description": "Requested response type",
+            "key": "@RESPONSE_TYPE@"
+         },
+         {
+            "default": null,
+            "description": "Authenticated user full name",
+            "key": "@FULLNAME@"
+         },
+         {
+            "default": null,
+            "description": "Authenticated user preferred name",
+            "key": "@PREFERNAME@"
+         },
+         {
+            "default": null,
+            "description": "Authenticated user realm name",
+            "key": "@REALMNAME@"
+         },
+         {
+            "default": null,
+            "description": "Requested claim",
+            "key": "@CLAIM@"
+         },
+         {
+            "default": null,
+            "description": "Requested claim locales",
+            "key": "@CLAIM_LOCALES@"
+         },
+         {
+            "default": null,
+            "description": "Requested display",
+            "key": "@DISPLAY@"
+         },
+         {
+            "default": null,
+            "description": "Requested UI locales",
+            "key": "@UI_LOCALES@"
+         },
+         {
+            "default": null,
+            "description": "Requested maximum age",
+            "key": "@MAX_AGE@"
+         },
+         {
+            "default": null,
+            "description": "Entitlement to be consented",
+            "key": "@OAUTH_TOKEN_ENTITLEMENT_REPEAT@"
+         },
+         {
+            "default": null,
+            "description": "Description of entitlement to be consented",
+            "key": "@OAUTH_TOKEN_ENTITLEMENT_DESC_REPEAT@"
+         },
+         {
+            "default": null,
+            "description": "Description of scope to be consented",
+            "key": "@OAUTH_TOKEN_SCOPE_DESC_REPEAT@"
+         },
+         {
+            "default": null,
+            "description": "Other requested parameter name",
+            "key": "@OAUTH_OTHER_PARAM_REPEAT@"
+         },
+         {
+            "default": null,
+            "description": "Other requested parameter value",
+            "key": "@OAUTH_OTHER_PARAM_VALUE_REPEAT@"
+         }
+      ],
+      "required": [
+         {
+            "description": "The form post target url.",
+            "key": "@OAUTH_AUTHORIZE_URI@"
+         },
+         {
+            "description": "The client (application) name",
+            "key": "@OAUTH_CLIENT_COMPANY_NAME@"
+         },
+         {
+            "description": "The client (application) name",
+            "key": "@OAUTH_CLIENT_NAME@"
+         },
+         {
+            "description": "The client type",
+            "key": "@CLIENT_TYPE@"
+         },
+         {
+            "description": "The client Id",
+            "key": "@CLIENT_ID@"
+         },
+         {
+            "description": "The user login Id",
+            "key": "@USERNAME@"
+         },
+         {
+            "description": "Scope to be consented",
+            "key": "@OAUTH_TOKEN_SCOPE_REPEAT@"
+         },
+         {
+            "description": "Consent form verifier",
+            "key": "@CONSENT_FORM_VERIFIER@"
+         }
+      ]
+   }
+}

@@ -1,0 +1,35 @@
+{
+   "description": "E-mail sent to the onwner, when a campaign instance change its status",
+   "id": {
+      "component": "certmgr",
+      "name": "email_certmgr_campaign_change_status_to_owner",
+      "revision": 1
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The reviewer of the campaign",
+            "key": "@CERTIFICATION.STATUS@"
+         },
+         {
+            "default": null,
+            "description": "The previous reviewer, who redirected to the current one",
+            "key": "@CERTIFICATION.OLD_STATUS@"
+         },
+         {
+            "default": null,
+            "description": "The name of the campaign",
+            "key": "@CERTIFICATION.NAME@"
+         },
+         {
+            "default": null,
+            "description": "The ID of the campaign",
+            "key": "@CERTIFICATION.ID@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

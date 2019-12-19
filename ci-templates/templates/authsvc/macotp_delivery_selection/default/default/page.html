@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Big Blue Insurance Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="apple-touch-icon" sizes="180x180" href="DEMO_APPLICATION_URL/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="DEMO_APPLICATION_URL/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="DEMO_APPLICATION_URL/favicon/favicon-16x16.png">
+<link rel="manifest" href="DEMO_APPLICATION_URL/favicon/site.webmanifest">
+<link rel="mask-icon" href="DEMO_APPLICATION_URL/favicon/safari-pinned-tab.svg" color="#7a6f6f">
+<link rel="shortcut icon" href="DEMO_APPLICATION_URL/f8avicon/favicon.ico">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-config" content="DEMO_APPLICATION_URL/favicon/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+<link href="DEMO_APPLICATION_URL/stylesheets/style.css" rel="stylesheet" type="text/css">
+<link href="DEMO_APPLICATION_URL/stylesheets/social.css" rel="stylesheet" type="text/css">
+<link href="DEMO_APPLICATION_URL/stylesheets/overrides.css" rel="stylesheet" type="text/css">
+<style>
+.alert {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+}
+.alert.warning{
+  background-color: #ff9800;
+  margin-bottom:30px;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+</style>
+</head>
+<body class="insurance-page gary-bg">
+	<div class="overlay-background">
+
+      <div class="overlay-content login-wrap">
+
+          <div class="overlay-logo">
+          	<a href="DEMO_APPLICATION_URL/"><img src="DEMO_APPLICATION_URL/images/insurance_logo.svg"></a>
+          </div>
+		<h1>Multi-factor authentication</h1>
+		<p>How would you like to verify it's you?</p>
+		<form method="POST" action="@ACTION@" class="">
+			<input type="hidden" name="operation" value="generate">
+			[RPT otpMethods]
+			<span style="display:inline-block;margin-top:1rem;width:100%">
+				<input type="radio" id="mfa" name="otp.user.otp-method.id" value="@OTP_METHOD_ID@">
+				<label for="mfa">@OTP_METHOD_LABEL@</label>
+			</span>
+			[ERPT otpMethods]
+			<div class="formRow-bottom clearfix">
+				<input class="input-cta" type="submit" value="Continue">
+			</div>
+		</form>
+      </div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
+    <script src="DEMO_APPLICATION_URL/javascripts/init.js"></script>
+    <div class="footer">
+      <div class="container">
+        BigBlue Insurance plc is registered in Finland No.SC327000.Registered Office: The Mound Stokholm EH1 1YZ. Authorised by the Prudential Regulation Authority and regulated by the Financial Conduct Authority and the Prudential Regulation Authority under registration no. 169628.
+      </div>
+    </div>
+</body>
+</html>

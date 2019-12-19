@@ -1,0 +1,15 @@
+{
+   "description": "A proper Login verified page dispalyed",
+   "id": {
+      "component": "authbroker",
+      "name": "login_verified",
+      "revision": 4
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+      ]
+   }
+}
