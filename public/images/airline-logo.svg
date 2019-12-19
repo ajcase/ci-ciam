@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="187px" height="34px" viewBox="0 0 187 34" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>BigBlueJet</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="airline-home" transform="translate(-133.000000, -54.000000)">
+            <g id="BigBlueJet" transform="translate(133.000000, 51.000000)">
+                <text font-family="HelveticaNeue-Thin, Helvetica Neue" font-size="29" font-weight="300" line-spacing="39" fill="#212121">
+                    <tspan x="48" y="28">Big</tspan>
+                    <tspan x="86.715" y="28" font-family="HelveticaNeue, Helvetica Neue" font-weight="normal">Blue</tspan>
+                    <tspan x="144.715" y="28" font-family="HelveticaNeue-Bold, Helvetica Neue" font-weight="bold">Jet</tspan>
+                </text>
+                <path d="M17.7864978,11.8136832 L14.2285342,4.87248581 C14.0299442,4.48498875 14.0504438,4.02499223 14.2849081,3.65624503 C14.5193724,3.28874781 14.9306458,3.06374952 15.3752311,3.06374952 L21.7813593,3 C22.2669438,3 22.7102479,3.26749797 22.926775,3.69124476 L27.0574464,11.7499337 L17.7864978,11.8136832 Z M35.8750975,14.750161 C38.7014812,14.750161 41,16.992644 41,19.7501231 C41,22.5076022 38.7014812,24.7500852 35.8750975,24.7500852 L28.4785819,24.7500852 L22.9219064,35.3212551 C22.7028168,35.737502 22.2620752,36 21.7816155,36 L15.3754874,36 C14.9283396,36 14.515785,35.7725017 14.2826019,35.4012545 C14.0494189,35.0300073 14.0327629,34.5662609 14.2364778,34.1787638 L19.1922585,24.7500852 L5.12568234,24.7500852 C4.57347409,24.7500852 4.0840459,24.4063378 3.90979922,23.8963417 L0.0661223229,12.6464269 C-0.0645626914,12.2651798 0.000779815743,11.846433 0.241650234,11.5201855 C0.483801879,11.1926879 0.870732019,11.0001894 1.28200545,11.0001894 L5.12568234,11.0001894 C5.46648836,11.0001894 5.79191967,11.1314384 6.03150886,11.3664366 L9.49978664,14.750161 L35.8750975,14.750161 Z" id="Combined-Shape" fill="#5AAAFA" fill-rule="evenodd"></path>
+            </g>
+        </g>
+    </g>
+</svg>

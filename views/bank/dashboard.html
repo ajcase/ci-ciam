@@ -1,0 +1,385 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Dashboard - BigBlue Bank</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon/favicon-16x16.png">
+<link rel="manifest" href="../../favicon/site.webmanifest">
+<link rel="mask-icon" href="../../favicon/safari-pinned-tab.svg" color="#7a6f6f">
+<link rel="shortcut icon" href="../../favicon/favicon.ico">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-config" content="../../favicon/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+<link href="../../fonts/fonts.css" rel="stylesheet" type="text/css">
+<link href="../../style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body class="gary-bg">
+	
+	<!--Top Menu-->
+	<div class="topMenu">
+		<div class="container">
+			<ul class="clearfix">
+				 <li><a href="#">Personal</a></li>
+			     <li><a href="#">Small Business</a></li>
+			     <li><a href="#">Wealth Management</a></li>
+			     <li><a href="#">Businesses & Institutes</a></li>
+			</ul>
+		</div>
+	</div>
+	
+	<!--Header-->
+	<div class="header clearfix">
+		<div class="container">
+			<div class="logo"><a href="home.html"><img src="../../images/logo.svg"></a></div>
+            <div class="hamburger-menu">
+            	<span></span>
+                <span></span>
+                <span></span>
+            </div>
+			<div class="header-right">
+				<a href="#" class="contact-btn">Contact Us</a>
+				
+			</div>
+            
+			<div class="main-menu">
+				<ul class="clearfix">
+					 <li><a href="#">Bank Account</a></li>
+					 <li><a href="#">Saving</a></li>
+					 <li><a class = "" id = "sensitive_action_nav" href="transfer-money.html">Transfer Money</a></li>
+					 <li><a href="#">Credit Cards</a></li>
+					 <li><a href="#">Loans</a></li>
+					 <li><a href="#">Investments</a></li>
+					 
+					 <li><a href="#">More</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<!--Banner-->
+	<div class="banner blue-bg">
+		<div class="container">
+			<div class="banner-caption">
+				<h1>My Account</h1>
+			</div>
+		</div>
+	</div>
+	
+    <!--Content Area-->
+	<div class="container">
+		<div class="content_wrap">
+
+			<div class="row">
+				
+				<div class="col-6">
+					<div class="col-content" style="border:0; margin-bottom:60px;">
+						
+						<div class="col-content-head green clearfix">
+							<h2 class="fl">Balance</h2>
+							<div class="fr right-box">USD 10,543.50</div>
+						</div>
+
+						<div class="col-content-main">
+
+							<table>								
+								<tr>
+									<td><strong>Currencies</strong></td>
+									<td></td>
+								</tr>
+
+								<tr>
+									<td>Euro</td>
+									<td>EUR 9,560.09</td>
+								</tr>
+
+								<tr>
+									<td>Pound Sterling</td>
+									<td>GBP 1,267.89</td>
+								</tr>
+
+								<tr>
+									<td>Australian Dollar</td>
+									<td>AUD 14,243.56</td>
+								</tr>
+							</table>
+
+						</div>
+
+						<div class="col-content-main-bottom">
+							<a class="cta-btn" href="transfer-money.html" id="sensitive_action">Transfer Money</a>
+						</div>
+
+					</div>
+				</div>
+
+
+				<div class="col-6">
+					<div class="col-content" style="border:0; margin-bottom:60px;">
+						
+						<div class="col-content-head clearfix">
+							<h2 class="fl">Operations Chart</h2>
+							<div class="fr right-box"><a href="" class="indicator">Approved</a></div>
+						</div>
+
+						<div class="col-content-main">
+
+							<!--Chart-->
+			                	<div class="graph_area">
+			                    	<canvas id="canvas"></canvas>
+			                    </div>
+                			<!--Chart-->
+
+						</div>
+
+
+					</div>
+				</div>
+
+				<div style="clear:both;"></div>
+
+				<div class="col-6">
+					<div class="col-content" style="border:0; margin-bottom:60px;">
+						
+						<div class="col-content-head clearfix">
+							<h2 class="fl">Bank Accounts & Cards</h2>
+							<div class="fr right-box"></div>
+						</div>
+
+						<div class="col-content-main">
+							<table class="puller">
+								
+								<tr>
+									<td><img class="card-logo" src="../../images/mastercard.jpg"></td>
+									<td><h3>Master Card</h3><span>1534 5278 8987 7782</span></td>
+									<td><span class="active">Activated</span></td>
+								</tr>
+
+								<tr>
+									<td colspan="3" class="border" ></td>
+								</tr>
+
+								<tr>
+									<td><img class="card-logo" src="../../images/americanexpress.jpg"></td>
+									<td><h3>American Express</h3><span>1534 5278 8987 7782</span></td>
+									<td><span class="active">Activated</span></td>
+								</tr>
+
+								<tr>
+									<td colspan="3" class="border" ></td>
+								</tr>
+
+								<tr>
+									<td><img class="card-logo" src="../../images/visa.jpg"></td>
+									<td><h3>Visa</h3><span>1534 5278 8987 7782</span></td>
+									<td><span class="not-active">Not Activated</span></td>
+								</tr>
+
+
+							</table>
+
+						</div>
+
+						<div class="col-content-main-bottom">
+							<a class="cta-btn" href="">See All Acounts</a>
+						</div>
+
+
+					</div>
+				</div>
+
+
+
+
+				<div class="col-6">
+					<div class="col-content" style="border:0; margin-bottom:60px;">
+						
+						<div class="col-content-head clearfix">
+							<h2 class="fl">Operations</h2>
+							<div class="fr right-box"></div>
+						</div>
+
+						<div class="col-content-main">
+							
+							<table class="puller">
+								<thead>
+									<tr class="table-head">
+										<th>
+											<span>Revieved</span>
+											<span class="revieved">+3,250.45</span>
+										</th>
+										<th>
+											<span>Deducted</span>
+											<span class="deducted">-706.00</span>
+										</th>
+										<th>
+											<span>Total Sent</span>
+											<span>1,128</span>
+										</th>
+									</tr>
+									<tr>
+										<th colspan="3" class="spacer" ></th>
+									</tr>
+								</thead>
+
+								<tbody>
+								<tr class="table-row">
+									<td>
+										<span>Apr</span>
+										<span>28</span>
+									</td>
+									<td>
+										<h3>Online Payment</h3>
+										<span>Payment Recieved</span>
+									</td>
+									<td>
+										<span>+500,48</span>
+										<span>USD</span>
+									</td>
+								</tr>
+								<tr>
+										<td colspan="3" class="spacer" ></td>
+								</tr>
+
+								<tr class="table-row">
+									<td>
+										<span>Apr</span>
+										<span>29</span>
+									</td>
+									<td>
+										<h3>Project</h3>
+										<span>Payment Recieved</span>
+									</td>
+									<td>
+										<span>+1,050,00</span>
+										<span>USD</span>
+									</td>
+								</tr>
+
+								<tr>
+										<td colspan="3" class="spacer" ></td>
+								</tr>
+
+								<tr class="table-row">
+									<td>
+										<span>Apr</span>
+										<span>30</span>
+									</td>
+									<td>
+										<h3>Studio 88</h3>
+										<span>Canceled</span>
+									</td>
+									<td>
+										<span class="line-through">357,50</span>
+										<span>USD</span>
+									</td>
+								</tr>
+								</tbody>
+
+							</table>
+
+						</div>
+
+						
+
+
+					</div>
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
+	
+	<a href="../security-assessment.html" class="shield" id = "Shield">
+			<img src="../../images/shield.png">
+		</a>
+		
+		
+		
+		
+		<div class="inline-popup">
+        	
+        <div class="fingerprint_container">
+            <div class="fingerprint_wrap">
+                <form>
+                <button class="fingerprint_preview"></button>
+                <h2>Verify with your fingerprint</h2>
+                <div class="info">
+                    <p>The touch ID fingerprints stored on this device can be used to allow verification requests.</p>
+                </div>
+                <button id="touchid_btn" class="touchid_btn">Use Touch ID</button><br>
+                <a href="" class="inline-popup-close">Not Now</a>
+                </form>
+            </div>
+            
+            <div class="bottom-fixed-fingerprint" style="position: absolute; bottom: 20px; background-color: white;right: 20px; left: 20px; padding:20px 0;">
+                <button id="fingerprint-touch-button"></button>
+            </div>
+        </div>
+        
+	</div>
+	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
+    <script src="../../js/Chart.min.js"></script>
+	<script src="../../js/init.js"></script>
+	<script src="../../../internal/js/color-shield-error.js"></script>
+	<script src="../../../internal/js/before-transfer-money.js"></script>
+	<script src="../../../internal/js/fingerprint-to-transfer.js"></script> 
+
+	<script type="text/javascript">
+	var lineChartData = {
+		labels: ["7 Jan", "8 Jan", "9 Jan", "10 Jan", "11 Jan"],
+		datasets: [{
+			fillColor: "rgba(220,220,220,0)",
+			strokeColor: "rgb(90, 170, 250,1)",
+			pointColor: "rgba(90, 170, 250,1)",
+			data: [1000, 200 , 1100 , 500 , 1600]
+		}]
+	
+	}
+	
+	Chart.defaults.global.animationSteps = 30;
+	Chart.defaults.global.tooltipYPadding = 16;
+	Chart.defaults.global.tooltipCornerRadius = 0;
+	Chart.defaults.global.tooltipTitleFontStyle = "normal";
+	Chart.defaults.global.tooltipFillColor = "rgb(33, 33, 33,1)";
+	Chart.defaults.global.animationEasing = "easeOutBounce";
+	Chart.defaults.global.responsive = true;
+	Chart.defaults.global.scaleLineColor = "rgba(215,216,220,0)";
+	Chart.defaults.global.scaleFontSize = 12;
+	
+	var ctx = document.getElementById("canvas").getContext("2d");
+	var LineChartDemo = new Chart(ctx).Line(lineChartData, {
+		pointDotRadius: 5,
+		bezierCurve: false,
+		scaleShowVerticalLines: false,
+		scaleGridLineColor: "rgba(215,216,220,1)"
+	});
+</script>
+    
+</body>
+</html>

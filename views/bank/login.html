@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Login - BigBlue Bank</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon/favicon-16x16.png">
+<link rel="manifest" href="../../favicon/site.webmanifest">
+<link rel="mask-icon" href="../../favicon/safari-pinned-tab.svg" color="#7a6f6f">
+<link rel="shortcut icon" href="../../favicon/favicon.ico">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-config" content="../../favicon/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+<link href="../../fonts/fonts.css" rel="stylesheet" type="text/css">
+<link href="../../style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	
+    <div class="overlay-background">
+    
+    <div class="overlay-content login-wrap">
+    	
+        <div class="overlay-logo">
+        	<a href="home.html"><img src="../../images/logo.svg"></a>
+        </div>
+        
+        <h1>Welcome to <br> Internet Banking!</h1>
+        
+        <form action="dashboard.html" method="post">
+        
+			<div class="formRow">
+				<label>Email</label>
+				<input type="email" placeholder="Email" onFocus="this.placeholder = ''">
+				<div class="inputLine"></div>
+			</div>
+
+			<div class="formRow">
+				<label>Password</label>
+				<input type="password" placeholder="Password" onFocus="this.placeholder = ''">
+                <div class="show-password"></div>
+				<div class="inputLine"></div>
+			</div>
+
+			<div class="formRow-bottom clearfix">
+				<div class="col">
+					<input type="checkbox" id="remember">
+					<label for="remember">Remember me</label>
+				</div>
+
+				<div class="col">
+					<a href="">Forgot Password?</a>
+				</div>
+
+				<div class="clear"></div>
+
+
+				<input class="input-cta" type="submit" value="Login">
+				<p>New to Big Blue Bank?  <a href="open-new-account.html" class="blue" id="open-new-account-link">Open an Account</a></p>
+
+			</div>
+        
+        </form>
+        
+    </div>
+    
+    </div>
+    
+    <a href="../security-assessment.html" class="shield" id = "Shield">
+    	<img src="../../images/shield.png">
+    </a>
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
+	<script src="../../js/init.js"></script>
+	<script src="../../../internal/js/login.js"></script>
+    
+</body>
+</html>

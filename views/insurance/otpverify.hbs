@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{{pageTitle}}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/site.webmanifest">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#7a6f6f">
+<link rel="shortcut icon" href="/f8avicon/favicon.ico">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-config" content="/favicon/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+<link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
+<link href="/stylesheets/social.css" rel="stylesheet" type="text/css">
+<link href="/stylesheets/overrides.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet"
+      href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/default.min.css">
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js"></script>
+</head>
+<body class="insurance-page gary-bg">
+  <div class="overlay-background">
+
+    <div class="overlay-content login-wrap">
+
+        <div class="overlay-logo">
+        	<a href="/"><img src="/images/insurance_logo.svg"></a>
+        </div>
+
+        <h1>{{title}}</h1>
+
+      <form action="{{action}}" method="post">
+      <p>{{message}}</p>
+
+			<div class="formRow">
+				<label>{{correlation}}-</label>
+				<input type="number" name="otp" placeholder="{{correlation}}-" onFocus="this.placeholder = ''">
+				<div class="inputLine"></div>
+			</div>
+      {{#if recoverUsername}}
+      <input type="hidden" name="txnId" value="{{txnId}}">
+      <input type="hidden" name="step" value="{{recoverStep}}">
+      <input type="hidden" name="correlation" value="{{correlation}}">
+      {{/if}}
+      {{#if forgotPassword}}
+      <input type="hidden" name="txnId" value="{{txnId}}">
+      <input type="hidden" name="sub" value="{{sub}}">
+      <input type="hidden" name="method" value="{{method}}">
+      <input type="hidden" name="correlation" value="{{correlation}}">
+      <input type="hidden" name="userId" value="{{userId}}">
+      {{/if}}
+			<div class="formRow-bottom clearfix">
+
+				<div class="clear"></div>
+				<input class="input-cta" type="submit" value="{{button}}">
+        <div class="clear"></div>
+        <p>Remember your password? <a href="/login" class="blue" id="open-new-account-link">Login now</a></p>
+				<p>New to Big Blue Insurance? <a href="/open-account" class="blue" id="open-new-account-link">Get a quote</a></p>
+
+			</div>
+
+        </form>
+
+    </div>
+
+    </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
+  <script src="/javascripts/init.js"></script>
+  <!--Footer-->
+  <div class="footer">
+    <div class="container">
+      BigBlue Insurance plc is registered in Finland No.SC327000.Registered Office: The Mound Stokholm EH1 1YZ. Authorised by the Prudential Regulation Authority and regulated by the Financial Conduct Authority and the Prudential Regulation Authority under registration no. 169628.
+    </div>
+  </div>
+  </body>
+  </html>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="14px" viewBox="0 0 16 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 5</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="airline-home" transform="translate(-284.000000, -464.000000)" stroke="#444444">
+            <g id="Group-5" transform="translate(284.000000, 464.000000)">
+                <path d="M13.5,4.5 L3.5,4.5 L2.5,2.5 L0.5,2.5 L2.5,8.5 L7.5,8.5 L4.5,13.5 L8.5,13.5 L11.5,8.5 L13.5,8.5 C14.605,8.5 15.5,7.605 15.5,6.5 C15.5,5.395 14.605,4.5 13.5,4.5 Z" id="Stroke-1"></path>
+                <polyline id="Stroke-3" points="9.5 2.5 8.5 0.5 5.5 0.5 6.5 2.5"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>

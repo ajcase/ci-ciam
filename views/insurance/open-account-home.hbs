@@ -1,0 +1,113 @@
+<!--Banner-->
+	<div class="banner blue-bg" style="max-height: none;">
+		<div class="container">
+			<div class="banner-caption">
+				<h1>Get insured</h1>
+				<p>Welcome. Apply in minutes.</p>
+			</div>
+		</div>
+	</div>
+
+  	<!--Content Area-->
+	<div class="container">
+		<div class="content-area">
+			<form action="{{action}}" method="post">
+				<div class="input-list clear">
+
+					<h3>Get an instant quote</h3>
+
+					<h4>Home details</h4>
+					<div class="input-list-box">
+						<div class="formRow">
+							<label style="opacity: 1 !important;">What year was the home built?</label>
+							<select id="ageHome" name="ageHome" onFocus="this.placeholder = ''"></select>
+							<div class="inputLine"></div>
+						</div>
+					</div>
+					<div class="input-list-box">
+						<div class="formRow">
+							<label style="opacity: 1 !important;">Your birthday</label>
+							<input type="date" id="birthday" name="birthday" style="color:#111111" onFocus="this.placeholder = ''" {{#if birthday}}value="{{birthday}}" {{/if}}>
+							<div class="inputLine"></div>
+						</div>
+					</div>
+					<div class="input-list-box" style="width:100% !important;">
+						<div class="formRow" style="display:inline-flex">
+							<div style="padding-right:.5rem; width:50%">
+								<label style="opacity: 1 !important;">Your property address</label>
+								<input type="text" name="streetAddress" placeholder="Ex. 1234 Main St" onFocus="this.placeholder = ''">
+								<div class="inputLine"></div>
+							</div>
+							<div style="padding-right:.5rem; width:25%">
+								<label style="opacity: 1 !important;">City</label>
+								<input type="city" name="city" placeholder="New York" onFocus="this.placeholder = ''">
+								<div class="inputLine"></div>
+							</div>
+							<div style="padding-right:.5rem; width:25%">
+								<label style="opacity: 1 !important;">State</label>
+								<input type="state" name="state" placeholder="New York" onFocus="this.placeholder = ''">
+								<div class="inputLine"></div>
+							</div>
+							<div style="padding-right:.5rem; width:25%">
+								<label style="opacity: 1 !important;">Your zip code</label>
+								<input type="zip" name="zip" placeholder="Your zip code" {{#if zip}}value="{{zip}}" {{/if}} onFocus="this.placeholder = ''">
+								<div class="inputLine"></div>
+							</div>
+						</div>
+					</div>
+					<div class="input-list-box" style="padding:10px 35px;">
+							<input type="checkbox" name="thisismyhome" value="true" checked><label for="thisismyhome">I live at this address</label>
+					</div>
+					<div class="input-list-box">
+						<div class="formRow">
+							<label style="opacity: 1 !important;">Construction type</label>
+							<select name="homeType">
+								<option value="none">-- select --</option>
+								<option value="wood">Wood frame</option>
+								<option value="steel">Steel frame</option>
+								<option value="concrete">Concrete frame</option>
+							</select>
+							<div class="inputLine"></div>
+						</div>
+					</div>
+					<div class="input-list-box">
+						<div class="formRow-bottom clearfix">
+							<input class="input-cta" type="submit" value="Get a quote">
+						</div>
+					</div>
+				</div>
+			</form>
+
+		</div>
+	</div>
+    <div style="display: none;" class="fancy-popup" id="fancy-popup">
+    	<div class="popup-title">
+    		<h2>Terms of Use</h2>
+        </div>
+        <ol>
+        	<li>I confirm, for the purposes of this Demo, I will not use as username and password any characters/figures/symbols that form any corporate or personal accounts credentials but rather I will use
+            fictitious ones.</li>
+            <li>I confirm that my use of this Demo is voluntary, at my discretion and I will use it for promoting IBM brand and products as part of working for IBM.</li>
+            <li>I agree that IBM will use the information created by my use of this Demo (typed and behavioral) for its business and research objectives.</li>
+            <li>I agree that IBM is allowed to preserve such information in a cloud environment and to freely transfer such information across borders.</li>
+            <li>The said information generated in this Demo will not be preserved for more than 90 days.</li>
+        </ol>
+	</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.4/dist/jquery.fancybox.min.js"></script>
+	<script>
+		var min = 1950,
+    	max = 2020,
+    	select = document.getElementById('ageHome');
+
+		for (var i = min; i<=max; i++){
+		    var opt = document.createElement('option');
+		    opt.value = i;
+		    opt.innerHTML = i;
+		    select.appendChild(opt);
+		}
+
+		select.value = new Date().getFullYear();
+	</script>
+	<script src="/javascripts/init.js"></script>

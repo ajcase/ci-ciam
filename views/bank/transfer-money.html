@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Transfer Money - BigBlue Bank</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon/favicon-16x16.png">
+<link rel="manifest" href="../../favicon/site.webmanifest">
+<link rel="mask-icon" href="../../favicon/safari-pinned-tab.svg" color="#7a6f6f">
+<link rel="shortcut icon" href="../../favicon/favicon.ico">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-config" content="../../favicon/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+<link href="../../fonts/fonts.css" rel="stylesheet" type="text/css">
+<link href="../../style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body class="gary-bg">
+	
+	<!--Top Menu-->
+	<div class="topMenu">
+		<div class="container">
+			<ul class="clearfix">
+				 <li><a href="#">Personal</a></li>
+			     <li><a href="#">Small Business</a></li>
+			     <li><a href="#">Wealth Management</a></li>
+			     <li><a href="#">Businesses & Institutes</a></li>
+			</ul>
+		</div>
+	</div>
+	
+	<!--Header-->
+	<div class="header clearfix">
+		<div class="container">
+			<div class="logo"><a href="home.html"><img src="../../images/logo.svg"></a></div>
+            <div class="hamburger-menu">
+            	<span></span>
+                <span></span>
+                <span></span>
+            </div>
+			<div class="header-right">
+				<a href="#" class="contact-btn">Contact Us</a>
+			</div>
+            
+			<div class="main-menu">
+				<ul class="clearfix">
+					 <li><a href="dashboard.html">Bank Account</a></li>
+					 <li><a href="#">Saving</a></li>
+					 <li><a href="transfer-money.html">Transfer Money</a></li>
+					 <li><a href="#">Credit Cards</a></li>
+					 <li><a href="#">Loans</a></li>
+					 <li><a href="#">Investments</a></li>
+					 <li><a href="#">More</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<!--Banner-->
+	<div class="banner blue-bg account-banner">
+		<div class="container">
+			<div class="banner-caption">
+				<h1>Transfer Money</h1>
+				<p>Transfer from Account 276583-09 ( $1,2345)</p>
+			</div>
+		</div>
+	</div>
+	
+    <!--Content Area-->
+	<div class="container">
+		<div class="content-area">
+
+			<div class="right-container">
+				
+				<div class="tab-nav">
+					<ul>
+						<li> <input type="radio" checked="checked" name="tab" id="select_payee"> <label for="select_payee">Select Payee</label> </li>
+						<li> <input type="radio" name="tab" id="account_details"> <label for="account_details">Enter Account Details</label> </li>
+					</ul>
+				</div>
+
+				<form action="transfer-successful.html" method="post">
+
+					<div class="formRow">
+						<label>Select Payee</label>
+						<select>
+							<option>Select Payee</option>
+							<option>David James</option>
+							<option>Marry Gold</option>
+							<option>Tony Rogers</option>
+							<option>Beth Golers</option>
+						</select>
+						<div class="inputLine"></div>
+					</div>
+
+					<div class="notification">
+						<a href="manage-payees.html">Manage Payees</a>
+					</div>
+
+					<div class="formRow">
+						<label>Amount (USD)</label>
+						<input type="text" name="" placeholder="Amount (USD)" onFocus="this.placeholder = ''">
+						<div class="inputLine"></div>
+					</div>
+
+					<input type="submit" name="" value="Transfer Money" id="sensitive_action">
+
+					<p>By Clicking this button you agree to <a href="">terms and conditions</a></p>
+
+					<p><a href="">Cancel Transfer</a></p>
+
+				</form>
+
+			</div>
+
+		</div>
+	</div>
+    
+    <a href="../security-assessment.html" class="shield" id="Shield">
+    	<img src="../../images/shield.png">
+    </a>
+	
+	
+	<div class="inline-popup-2">
+        	
+		<div class="fingerprint_container">
+			<div class="fingerprint_wrap">
+				<form>
+					<div class="info">
+						<h3>BigBlue Bank - $125 to David James<h3>
+					</div>
+				<button class="fingerprint_preview"></button>
+				<h2>Verify with your fingerprint</h2>
+				
+				<button id="touchid_btn" class="touchid_btn">Use Touch ID</button><br>
+				<a href="" class="inline-popup-close-2">Not Now</a>
+				</form>
+			</div>
+			
+			<div class="bottom-fixed-fingerprint" style="position: absolute; bottom: 20px; background-color: white;right: 20px; left: 20px; padding:20px 0;">
+				<button id="fingerprint-touch-button"></button>
+			</div>
+		</div>
+		
+	</div>
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
+	<script src="../../js/init.js"></script>
+	<script src="../../../internal/js/color-shield-error.js"></script>
+	<script src="../../../internal/js/transfer-amount-2fa.js"></script>
+	<script src="../../../internal/js/fingerprint-to-transfer.js"></script> 
+    
+</body>
+</html>

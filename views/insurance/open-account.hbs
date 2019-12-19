@@ -1,0 +1,79 @@
+<!--Banner-->
+	<div class="banner blue-bg" style="max-height: none;">
+		<div class="container">
+			<div class="banner-caption">
+				<h1>Get insured</h1>
+				<p>Welcome. Apply in minutes.</p>
+			</div>
+		</div>
+	</div>
+
+  	<!--Content Area-->
+	<div class="container">
+		<div class="content-area">
+			<form action="{{action}}" method="post">
+				<div class="input-list clear">
+					{{#unless loggedIn}}
+					<h3>Create an account an existing provider</h3>
+					<div class="tx--social" style="margin:auto;max-width:600px">
+						<a href="/login-google" class="social-button" id="google-connect"> <span>Google</span></a>
+						<a href="/login-linkedin" class="social-button" id="linkedin-connect"> <span>LinkedIn</span></a>
+					</div>
+					<h3>Or fill out the form below</h3>
+					{{/unless}}
+					{{#if loggedIn}}
+					<h3 style="margin-left:35px;">Person requesting quote</h3>
+					{{/if}}
+					<div class="input-list-box">
+						<div class="formRow">
+							<label>First name</label>
+							<input type="text" name="givenName" placeholder="First name" {{#if loggedIn}}readonly="readonly" value="{{givenName}}" style="color:#9e9e9e"{{/if}} onFocus="this.placeholder = ''">
+							<div class="inputLine"></div>
+						</div>
+					</div>
+					<div class="input-list-box">
+						<div class="formRow">
+							<label>Last name</label>
+							<input type="text" name="familyName" placeholder="Last name" {{#if loggedIn}}readonly="readonly" value="{{familyName}}" style="color:#9e9e9e"{{/if}}onFocus="this.placeholder = ''">
+							<div class="inputLine"></div>
+						</div>
+					</div><div class="input-list-box">
+						<div class="formRow">
+							<label>Email</label>
+							<input type="email" name="email" placeholder="Email" {{#if loggedIn}}readonly="readonly" value="{{email}}" style="color:#9e9e9e"{{/if}} onFocus="this.placeholder = ''">
+							<div class="inputLine"></div>
+						</div>
+					</div>
+					<div class="input-list-box">
+						<div class="formRow-bottom clearfix">
+							<input class="input-cta" type="submit" value="Get a quote">
+						</div>
+					</div>
+					<div style="display:inline-block;margin: 0  35px;">
+							{{#if loggedIn}}<a href="#">I would like to request a quote for someone else.</a>{{/if}}
+							<p>By requesting a quote, you agree to have your information utilized to build your personalized quote. Your inforamtion will be apart of the automatic deletion procedure if the quote is not accepted. Further details on this process is outlined in our <a href="#">terms and conditions</a>.</p>
+					</div>
+				</div>
+
+			</form>
+
+		</div>
+	</div>
+    <div style="display: none;" class="fancy-popup" id="fancy-popup">
+    	<div class="popup-title">
+    		<h2>Terms of Use</h2>
+        </div>
+        <ol>
+        	<li>I confirm, for the purposes of this Demo, I will not use as username and password any characters/figures/symbols that form any corporate or personal accounts credentials but rather I will use
+            fictitious ones.</li>
+            <li>I confirm that my use of this Demo is voluntary, at my discretion and I will use it for promoting IBM brand and products as part of working for IBM.</li>
+            <li>I agree that IBM will use the information created by my use of this Demo (typed and behavioral) for its business and research objectives.</li>
+            <li>I agree that IBM is allowed to preserve such information in a cloud environment and to freely transfer such information across borders.</li>
+            <li>The said information generated in this Demo will not be preserved for more than 90 days.</li>
+        </ol>
+	</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.4/dist/jquery.fancybox.min.js"></script>
+
+	<script src="/javascripts/init.js"></script>

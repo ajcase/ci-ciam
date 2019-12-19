@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{{pageTitle}}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/site.webmanifest">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#7a6f6f">
+<link rel="shortcut icon" href="/f8avicon/favicon.ico">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-config" content="/favicon/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+<link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
+<link href="/stylesheets/social.css" rel="stylesheet" type="text/css">
+<link href="/stylesheets/overrides.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet"
+      href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/default.min.css">
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js"></script>
+</head>
+<body class="{{bodyCSS}}-page gary-bg">
+    <script>hljs.initHighlightingOnLoad();</script>
+    <!--Header-->
+    <div class="header clearfix">
+      <div class="container">
+        <div class="logo"><a href="/"><img src="/images/insurance_logo.svg"></a></div>
+              <div class="hamburger-menu">
+                <span></span>
+                  <span></span>
+                  <span></span>
+              </div>
+        <div class="header-right">
+          <a href="#" class="contact-btn">Contact Us</a>
+          <a href="/open-account" class="open-btn">Get a quote</a>
+          {{#unless loggedIn}}<a href="/login" class="login-btn">Login</a>{{/unless}}
+          {{#if loggedIn}}<a href="/app/profile" class="login-btn" style="margin: 0 10px;">Profile</a>
+          <a href="/logout" class="login-btn">Logout</a>{{/if}}
+        </div>
+
+        <div class="main-menu">
+          <ul class="clearfix">
+             <li><a href="#">Homeowners</a></li>
+             <li><a href="#">Business</a></li>
+             <li><a href="#">Car</a></li>
+             <li><a href="#">Resources</a></li>
+             <li><a href="#">News</a></li>
+             <li><a href="#">Claim Information</a></li>
+                       <li class="menu-cta account"><a href="/open-account">Open an Account</a></li>
+                       <li class="menu-cta login"><a href="/login">Login</a></li>
+             <li><a href="#">More</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    {{{body}}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
+    <script src="/javascripts/init.js"></script>
+    <!--Footer-->
+  	<div class="footer">
+  		<div class="container">
+  			BigBlue Insurance plc is registered in Finland No.SC327000.Registered Office: The Mound Stokholm EH1 1YZ. Authorised by the Prudential Regulation Authority and regulated by the Financial Conduct Authority and the Prudential Regulation Authority under registration no. 169628.
+  		</div>
+  	</div>
+</body>
+</html>

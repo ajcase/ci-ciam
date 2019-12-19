@@ -1,0 +1,34 @@
+	<!--Banner-->
+	<div class="banner blue-bg">
+		<div class="container">
+			<div class="banner-caption">
+
+			</div>
+		</div>
+	</div>
+
+    <!--Content Area-->
+	<div class="container">
+		<div class="content-area">
+
+			<div class="account-container" style="max-width:750px !important;">
+
+				<div class="header-content-row">
+					<div class="icon-box"><img src="/images/account-success.svg"></div>
+				</div>
+
+				<div class="account-content">
+					<h1>Congratulations <br> Your quote is ready and account is setup!</h1>
+
+					<p style="margin-bottom:2rem;display:inline-block;">{{message}}</p>
+					{{#if loggedIn}}
+					<a href="{{profileLink}}" class="cta-btn" style="max-width:500px">Access your account to accept your quote</a>
+					{{/if}}
+					{{#unless loggedIn}}
+					<a href="/login" class="cta-btn" style="max-width:500px">Access your account to accept your quote</a>
+					{{/unless}}
+
+				</div>
+			</div>
+		</div>
+	</div>

@@ -1,0 +1,110 @@
+.bb-card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  max-width: 200px;
+  display: inline-flex;
+  margin: 2rem;
+}
+.bb-card.small{
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  max-width: 200px;
+  display: inline-flex;
+  margin: 1rem 2rem;
+}
+.bb-card h4 {
+  color: #1f1f1f;
+  font-weight:bold;
+  text-align: center;
+
+}
+.bb-row {
+  width:100%;
+  margin-top: 2rem;
+}
+.bb-row.home{
+  width:100%;
+  margin-left:35px;
+}
+.bb-row.small {
+  width:100%;
+  margin-top: 0rem;
+}
+
+.bb-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.bb-container {
+  padding: 2px 16px;
+  width:200px
+}
+.bb-container.small {
+  padding: 2px 16px;
+  width:90px
+}
+.bb-image-car {
+	background-image: url("/images/quote_sprite.svg#auto_selected");
+  min-height:180px !important;
+  display: block;
+}
+.bb-image-car.small {
+	background-image: url("/images/quote_sprite.svg#auto_selected");
+  min-height:60px !important;
+  display: block;
+}
+.bb-image-home {
+	background-image: url("/images/quote_sprite.svg#homeowners_default");
+  min-height:180px !important;
+  display: block;
+}
+.bb-image-home.small {
+	background-image: url("/images/quote_sprite.svg#homeowners_default");
+  min-height:60px !important;
+  display: block;
+}
+.bb-image-life {
+	background-image: url("/images/quote_sprite.svg#life_default");
+  min-height:180px !important;
+  display: block;
+}
+.bb-image-life.small{
+	background-image: url("/images/quote_sprite.svg#life_default");
+  min-height:60px !important;
+  display: block;
+}
+.bb-alert {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+  margin-top:1rem;
+}
+.bb-alert a{
+  color: white;
+}
+.bb-alert.bb-info {
+  background-color: #2196F3;
+}
+.bb-alert.bb-warning {
+  background-color: #ff9800;
+   margin-bottom:30px;
+}
+.bb-closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.bb-inline-input {
+	width: 100px !important;
+	height: 30px !important;
+	line-height: 20px !important;
+  margin: 0 1rem;
+}
+.bb-panel-section {
+	padding: 0 35px;
+}

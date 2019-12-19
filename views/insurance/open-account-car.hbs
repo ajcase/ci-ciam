@@ -1,0 +1,97 @@
+<!--Banner-->
+	<div class="banner blue-bg" style="max-height: none;">
+		<div class="container">
+			<div class="banner-caption">
+				<h1>Get insured</h1>
+				<p>Welcome. Apply in minutes.</p>
+			</div>
+		</div>
+	</div>
+
+  	<!--Content Area-->
+	<div class="container">
+		<div class="content-area">
+			<form action="{{action}}" method="post">
+				<div class="input-list clear">
+
+					<h3>Get an instant quote</h3>
+
+					<h4>Personal details</h4>
+					<div class="input-list-box">
+						<div class="formRow">
+							<label>Your birthday</label>
+							<input type="date" name="birthday" placeholder="Your birthday" {{#if birthday}}value="{{birthday}}" {{/if}} onFocus="this.placeholder = ''">
+
+							<div class="inputLine"></div>
+						</div>
+					</div>
+					<div class="input-list-box">
+						<div class="formRow">
+							<label>Your zip code</label>
+							<input type="zip" name="zip" placeholder="Your zip code" {{#if zip}}value="{{zip}}" {{/if}} onFocus="this.placeholder = ''">
+							<div class="inputLine"></div>
+						</div>
+					</div>
+					<h4>Car information</h4>
+					<div class="input-list-box">
+						<div class="formRow">
+							<label style="opacity: 1 !important;">Make</label>
+							<select name="carMake">
+								<option value="none">-- select --</option>
+								<option value="volvo">Volvo</option>
+								<option value="saab">Saab</option>
+								<option value="mercedes">Mercedes</option>
+								<option value="audi">Audi</option>
+							</select>
+							<div class="inputLine"></div>
+						</div>
+					</div>
+					<div class="input-list-box">
+						<div class="formRow">
+							<label style="opacity: 1 !important;">Model</label>
+							<select name="carModel">
+								<option value="none">-- select --</option>
+								<option value="S100">S100</option>
+								<option value="S200">S200</option>
+								<option value="S200ES">S200ES</option>
+								<option value="S350">S350</option>
+							</select>
+							<div class="inputLine"></div>
+						</div>
+					</div>
+					<div class="input-list-box">
+						<div class="formRow">
+							<label>Year</label>
+							<input type="input" name="carYear" placeholder="Car year" onFocus="this.placeholder = ''">
+							<div class="inputLine"></div>
+						</div>
+					</div>
+					<div class="input-list-box">
+						<div class="formRow-bottom clearfix">
+							<input class="input-cta" type="submit" value="Get a quote">
+						</div>
+					</div>
+				</div>
+
+			</form>
+
+		</div>
+	</div>
+    <div style="display: none;" class="fancy-popup" id="fancy-popup">
+    	<div class="popup-title">
+    		<h2>Terms of Use</h2>
+        </div>
+        <ol>
+        	<li>I confirm, for the purposes of this Demo, I will not use as username and password any characters/figures/symbols that form any corporate or personal accounts credentials but rather I will use
+            fictitious ones.</li>
+            <li>I confirm that my use of this Demo is voluntary, at my discretion and I will use it for promoting IBM brand and products as part of working for IBM.</li>
+            <li>I agree that IBM will use the information created by my use of this Demo (typed and behavioral) for its business and research objectives.</li>
+            <li>I agree that IBM is allowed to preserve such information in a cloud environment and to freely transfer such information across borders.</li>
+            <li>The said information generated in this Demo will not be preserved for more than 90 days.</li>
+        </ol>
+	</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.4/dist/jquery.fancybox.min.js"></script>
+
+	<script src="/javascripts/init.js"></script>
