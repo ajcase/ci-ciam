@@ -346,6 +346,59 @@ router.post('/app/toggleMfa', function(req, res, next) {
     }
   });
 });
+
+/*
+Delete User
+*/
+router.get('/app/deleteme', function(req, res, next) {
+  res.render('insurance/deleteme', {
+    layout: false,
+    name: req.session.userprofile.name.givenName + " " + req.session.userprofile.name.familyName ,
+    action: '/app/deleteme',
+    error: false,
+    errorMessage: ''
+  });
+});
+
+router.post('/app/deleteme', function(req, res, next) {
+  // form.deleteme
+  var form = req.body;
+
+  if (form.name != req.session.userprofile.name.givenName + " " + req.session.userprofile.name.familyName) {
+    res.render('insurance/deleteme', {
+      layout: false,
+      name: req.session.userprofile.name.givenName + " " + req.session.userprofile.name.familyName ,
+      action: '/app/deleteme',
+      error: true,
+      errorMessage: 'Name did not match'
+    });
+  } else {
+    bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err, body) {
+      if (err) {
+        console.log(err);
+      } else {
+        var accessToken = body.access_token;
+
+        bbfn.deleteUser(req.session.userId, accessToken, function(_err, result) {
+          if (result === true) {
+            //success
+            res.redirect('/logout');
+          } else {
+            //fail
+            res.render('insurance/deleteme', {
+              layout: false,
+              name: req.session.userprofile.name.givenName + " " + req.session.userprofile.name.familyName ,
+              action: '/app/deleteme',
+              error: true,
+              errorMessage: 'Delete failed'
+            });
+          }
+        });
+      }
+    });
+  }
+});
+
 /*
 Change password
 */
