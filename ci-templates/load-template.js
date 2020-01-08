@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-// var propread = require('properties-reader');
 var request = require('request');
 var dotenv = require('dotenv');
 var fs = require('fs');
