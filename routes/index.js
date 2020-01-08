@@ -351,13 +351,24 @@ router.post('/app/toggleMfa', function(req, res, next) {
 Delete User
 */
 router.get('/app/deleteme', function(req, res, next) {
-  res.render('insurance/deleteme', {
-    layout: false,
-    name: req.session.userprofile.name.givenName + " " + req.session.userprofile.name.familyName ,
-    action: '/app/deleteme',
-    error: false,
-    errorMessage: ''
-  });
+  console.log(req.session.userprofile);
+  var admin = false;
+  if (req.session.userprofile.groups) {
+    for (group of req.session.userprofile.groups) {
+      if (group.displayName == "admin") admin = true;
+    }
+  }
+  if (admin) {
+    res.redirect('/app/profile');
+  } else {
+    res.render('insurance/deleteme', {
+      layout: false,
+      name: req.session.userprofile.name.givenName + " " + req.session.userprofile.name.familyName,
+      action: '/app/deleteme',
+      error: false,
+      errorMessage: ''
+    });
+  }
 });
 
 router.post('/app/deleteme', function(req, res, next) {
@@ -367,7 +378,7 @@ router.post('/app/deleteme', function(req, res, next) {
   if (form.name != req.session.userprofile.name.givenName + " " + req.session.userprofile.name.familyName) {
     res.render('insurance/deleteme', {
       layout: false,
-      name: req.session.userprofile.name.givenName + " " + req.session.userprofile.name.familyName ,
+      name: req.session.userprofile.name.givenName + " " + req.session.userprofile.name.familyName,
       action: '/app/deleteme',
       error: true,
       errorMessage: 'Name did not match'
@@ -387,7 +398,7 @@ router.post('/app/deleteme', function(req, res, next) {
             //fail
             res.render('insurance/deleteme', {
               layout: false,
-              name: req.session.userprofile.name.givenName + " " + req.session.userprofile.name.familyName ,
+              name: req.session.userprofile.name.givenName + " " + req.session.userprofile.name.familyName,
               action: '/app/deleteme',
               error: true,
               errorMessage: 'Delete failed'
