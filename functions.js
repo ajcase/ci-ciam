@@ -344,6 +344,29 @@ function resetPassword(userId, accessToken, callback) {
   });
 }
 
+function deleteUser(userId, accessToken, callback) {
+  var options = {
+    method: 'DELETE',
+    url: process.env.OIDC_CI_BASE_URI + `/v2.0/Users/${userId}`,
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  };
+
+  console.log("Options JSON:", options)
+
+  request(options, function(error, response, _body) {
+    if (error) throw new Error(error);
+    if (response.statusCode == 204) {
+      console.log(`User Deleted: ${userId}`);
+      callback(null, true);
+    } else {
+      console.log(`Failed to delete user: ${userId}`);
+      callback(null, false);
+    }
+  });
+}
+
 function changePassword(accessToken, pwVars, callback) {
   // Example
   // var pwVars = {
@@ -743,6 +766,7 @@ module.exports = {
   getFullProfile: getFullProfile,
   getQuoteCount: getQuoteCount,
   resetPassword: resetPassword,
+  deleteUser: deleteUser,
   changePassword: changePassword,
   toggleMfa: toggleMfa,
   createAttributes: createAttributes,
