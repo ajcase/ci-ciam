@@ -3,7 +3,7 @@
 <root>
 <Message>
   <Value>
-    Your Big Blue Insurance code is: @CORRELATION@-@OTP@
+    Your TrustMeInsurance code is: @CORRELATION@-@OTP@
   </Value>
 </Message>
 </root>
