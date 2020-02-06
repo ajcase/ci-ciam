@@ -182,7 +182,7 @@ cp dotenv.sample .env
 Edit the *.env* file and complete for your environment:
 
 ```
-OIDC_CI_BASE\_URI=https://xxxxxxxxx.ice.ibmcloud.com
+OIDC_CI_BASE_URI=https://xxxxxxxxx.ice.ibmcloud.com
 OIDC_CLIENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 OIDC_CLIENT_SECRET=xxxxxxxxxx
 OIDC_REDIRECT_URI=http://localhost:3000/oauth/callback
