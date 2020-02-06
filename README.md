@@ -168,7 +168,7 @@ Go into the *ci-ciam* directory and install required packages:
 
 ```
 cd ci-ciam
-git install
+npm install
 ```
 
 ## Create environment file
