@@ -1,6 +1,6 @@
 {
-  "name": "auth-flow",
-  "version": "0.0.0",
+  "name": "ibm-consumer-iam-demo",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
