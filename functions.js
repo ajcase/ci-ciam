@@ -479,7 +479,6 @@ function createCustomAttr(thisAttr, customName, accessToken) {
                 "args": {
                   "name":"${thisAttr.name}"
                 },
-                "ruleId": "11",
                 "datatype":"${thisAttr.type}",
                 "name":"${thisAttr.name}",
                 "description": "Created for Demo App",
@@ -488,7 +487,7 @@ function createCustomAttr(thisAttr, customName, accessToken) {
                   "name":"${customName}",
                   "scimName":"${thisAttr.name}"},
                   "scope":"tenant",
-                  "sourceType":"rule",
+                  "sourceType":"schema",
                   "tags":[]
                 }`
 
