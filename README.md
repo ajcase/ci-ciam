@@ -136,14 +136,15 @@ administrator.
 2.  Complete name (value doesn't matter)
 
 3.  Select the following API access
+    1.  Authenticate Any User
 
-    1.  Manage Access Policies
+    2.  Manage Access Policies
 
-    2.  Manage Attribute Sources
+    3.  Manage Attribute Sources
 
-    3.  Manage Users and Standard Groups
+    4.  Manage Users and Standard Groups
 
-    4.  Manage Templates
+    5.  Manage Templates
 
 4.  Click Save
 
