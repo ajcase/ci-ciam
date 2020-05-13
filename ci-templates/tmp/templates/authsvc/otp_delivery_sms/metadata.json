@@ -1,0 +1,35 @@
+{
+   "description": "OTP delivery SMS.",
+   "id": {
+      "component": "authsvc",
+      "name": "otp_delivery_sms",
+      "revision": 14
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Correlation String.",
+            "key": "@CORRELATION@"
+         },
+         {
+            "default": null,
+            "description": "OTP String.",
+            "key": "@OTP_STRING@"
+         },
+         {
+            "default": null,
+            "description": "OTP.",
+            "key": "@OTP@"
+         },
+         {
+            "default": null,
+            "description": "OTP Lifetime String.",
+            "key": "@OTP_LIFETIME@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

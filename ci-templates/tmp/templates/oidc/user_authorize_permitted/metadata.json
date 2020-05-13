@@ -1,0 +1,40 @@
+{
+   "description": "A page to display permitted user authorization for OIDC device flow.",
+   "id": {
+      "component": "oidc",
+      "name": "user_authorize_permitted",
+      "revision": 5
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The user code for this OIDC device flow.",
+            "key": "@OAUTH_CODE@"
+         },
+         {
+            "default": null,
+            "description": "The client (application) name.",
+            "key": "@OAUTH_CLIENT_NAME@"
+         },
+         {
+            "default": null,
+            "description": "The form post target URL to return to the user authorize endpoint.",
+            "key": "@ACTION@"
+         },
+         {
+            "default": null,
+            "description": "Scopes that were consented",
+            "key": "@OAUTH_TOKEN_SCOPE_REPEAT@"
+         },
+         {
+            "default": null,
+            "description": "Description of the scopes if available",
+            "key": "@OAUTH_TOKEN_SCOPE_DESC_REPEAT@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

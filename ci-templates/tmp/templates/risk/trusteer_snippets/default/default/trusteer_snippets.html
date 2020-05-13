@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html>
+
+   <head>
+      <title>Please Wait Page</title>
+
+<script type = "text/javascript">
+  (function() {
+    document.cookie = "___tk788348=" + encodeURIComponent(Math.random()) + ";path=/;domain=@DOMAIN_NAME@";
+  })();
+</script>
+
+<script type = "text/javascript">
+	function getUserUSI() {
+	  var result = "@TAGVALUE_SESSION_INDEX@";
+	  console.log('getUserUSI called - user_csid: ' + result);
+	  console.log(result);
+	  return result;
+	}
+
+	function mycallback1() {
+	  alert("mycallback1 called");
+	  //Post back to SAML after Trusteer is done
+	  document.myCallback1Form.submit();
+	}
+
+	function mycallback() {
+	  alert("mycallback called");
+	}
+	
+</script>
+
+<script type = "text/javascript">
+  (function(b, f) {
+    var j = b.location.pathname,
+      g = "",
+      k = b[g] != null ? b[g]().t : "",
+      c = {
+        src: encodeURI((b.location.protocol == "https:" ? "https:" : "http:") + "//@TENANT_URL@/trusteer_jct/@SNIPPET_ID@/interface.js?_a=s&_t=" + k + "&_r=" + j + "&_n=" + Math.random()),
+        async: true,
+        type: "text/javascript"
+      },
+      h = "XMLHttpRequest",
+      l = b.navigator.userAgent,
+      d = f.createElement("script"),
+      i = f.getElementsByTagName("head")[0],
+      a;
+    if (!(/msie|trident|edge/i.test(l)) && b[h] && (a = new b[h]()).withCredentials !== undefined) {
+      a.open("GET", c.src, c.async);
+      a.withCredentials = true;
+      a.onreadystatechange = function(e) {
+        if (a.readyState == 4 && a.status == 200) {
+          d.type = "script/meta";
+          d.src = c.src;
+          i.appendChild(d);
+          new Function(a.responseText)()
+        }
+      };
+      a.send()
+    } else {
+      setTimeout(function() {
+        for (var e in c) {
+          d.setAttribute(e, c[e])
+        }
+        i.appendChild(d)
+      }, 0)
+    }
+  })(window, document);
+</script>
+
+<script type = "text/javascript" >
+  (function() {
+    var d = document,
+      c = window,
+      h = c.location.protocol,
+      i = c.location.pathname,
+      j = c.navigator.userAgent,
+      e = "XMLHttpRequest",
+      f = "",
+      k = c[f] != null ? c[f]().t : "",
+      a, l = !(/msie|trident|edge/i.test(j)) && c[e] && (a = new c[e]()).withCredentials !== undefined,
+      b = d.createElement("script"),
+      g = d.getElementsByTagName("head")[0];
+    b.src = encodeURI((h == "https:" ? "https://" : "http://") + "@TENANT_URL@/trusteer_jct/@SNIPPET_ID@/http.js?_a=s&_t=" + k + "&_r=" + i + "&_n=" + Math.random());
+    b.async = true;
+    if (!l) {
+      setTimeout(function() {
+        b.type = "text/javascript";
+        g.appendChild(b)
+      }, 0)
+    } else {
+      a.open("GET", b.src, b.async);
+      a.withCredentials = true;
+      a.onreadystatechange = function(m) {
+        if (a.readyState == 4 && a.status == 200) {
+          b.type = "script/meta";
+          g.appendChild(b);
+          new Function(a.responseText)()
+        }
+      };
+      a.send()
+    }
+  })();
+</script>
+
+<script type = "text/javascript">
+  (function(d, f) {
+    var b = {
+        src: (d.location.protocol == "https:" ? "https:" : "http:") + "//@TENANT_URL@/trusteer_jct/@SNIPPET_ID@/hypermedia.js",
+        async: true,
+        type: "text/javascript"
+      },
+      g = "XMLHttpRequest",
+      i = d.navigator.userAgent,
+      c = f.createElement("script"),
+      h = f.getElementsByTagName("head")[0],
+      a;
+    if (!(/msie|trident|edge/i.test(i)) && d[g] && (a = new d[g]()).withCredentials !== undefined) {
+      a.open("GET", b.src, b.async);
+      a.withCredentials = true;
+      a.onreadystatechange = function(e) {
+        if (a.readyState == 4 && a.status == 200) {
+          c.type = "script/meta";
+          c.src = b.src;
+          h.appendChild(c);
+          new Function(a.responseText)()
+        }
+      };
+      a.send()
+    } else {
+      setTimeout(function() {
+        for (var e in b) {
+          c.setAttribute(e, b[e])
+        }
+        h.appendChild(c)
+      }, 0)
+    }
+  })(window, document);
+</script>
+</head>
+
+<body>
+   <center><h1>Please wait ...</h1></center>
+   <form name="myCallback1Form" action="@TARGET_URL@" method="GET">
+   </form>
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+{
+   "description": "Email templates for Legacy USC operations.  The email template file contains a sender, subject, and contents section for customization.  Macros are replaced in the email before it is sent.  Macros are described below and must start and end with @ sign.",
+   "id": {
+      "component": "USC_LEGACY",
+      "name": "UserSelfCareLegacyEmails",
+      "revision": 3
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+         {
+            "description": "The token that is emailed to the end user.  The macro is used by the email_forgotten_password.xml, email_invite_registation.xml, email_user_registration.xml, and email_verify_token.xml email templates.",
+            "key": "@TOKEN@"
+         },
+         {
+            "description": "The email address of the inviter for registration. The macro is used by the email_invite_registration.xml email template.",
+            "key": "@@INVITER_EMAIL@@"
+         },
+         {
+            "description": "The tenant name. The macro is used by all of the email templates.",
+            "key": "@TENANT@"
+         },
+         {
+            "description": "The user name. The macro is used by the email_user_registration_complete.xml and email_user_registration_preverify.xml email templates.",
+            "key": "@USERNAME@"
+         }
+      ]
+   }
+}

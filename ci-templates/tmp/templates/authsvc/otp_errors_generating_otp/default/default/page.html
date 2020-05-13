@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<!--
+	Macro Substitution Values:
+	REQ_ADDR: @REQ_ADDR@
+	TIMESTAMP: @TIMESTAMP@
+	DETAIL: @DETAIL@
+ -->
+<html ng-app="app">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<base href="/" />
+	<script type="text/javascript" src="ui/assets/_js?include=templates/allError/allError"></script>
+	<link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico" />
+	<title id="title" ng-bind="pageTitle"></title>
+	<link rel="stylesheet" href="usc/css/stateless.css" />
+</head>
+
+<body cs-otp-generate-error detail="@DETAIL@" request-address="@REQ_ADDR@" timestamp="@TIMESTAMP@"></body>
+
+</html>

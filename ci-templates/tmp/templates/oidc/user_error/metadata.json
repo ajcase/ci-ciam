@@ -1,0 +1,23 @@
+{
+   "description": "A page to display authorization error.",
+   "id": {
+      "component": "oidc",
+      "name": "user_error",
+      "revision": 3
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+         {
+            "description": "The error code.",
+            "key": "@ERROR_CODE@"
+         },
+         {
+            "description": "The error description.",
+            "key": "@ERROR_DESCRIPTION@"
+         }
+      ]
+   }
+}

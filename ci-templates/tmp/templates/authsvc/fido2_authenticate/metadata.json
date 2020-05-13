@@ -1,0 +1,29 @@
+{
+   "contentMaxSize": 100,
+   "description": "Fido2 authneticate.",
+   "id": {
+      "component": "authsvc",
+      "name": "fido2_authenticate",
+      "revision": 2
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Fido2 assertion verify state.",
+            "key": "@FIDO2_VERIFY_STATE@"
+         }
+      ],
+      "required": [
+         {
+            "description": "Fido2 assertion options.",
+            "key": "@FIDO2_ASSERTION_OPTIONS@"
+         },
+         {
+            "description": "action.",
+            "key": "@ACTION@"
+         }
+      ]
+   }
+}

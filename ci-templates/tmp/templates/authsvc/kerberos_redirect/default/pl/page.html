@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!--
+    Macro Substitution Values:
+    REDIRECT_URL: @REDIRECT_URL@
+-->
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Refresh" content="0;url=@REDIRECT_URL@">
+	<base href="/" />
+	<link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Logowanie - IBM Cloud Identity</title>
+	<link rel="stylesheet" href="usc/css/stateless.css" />
+</head>
+
+<body class="tile-background">
+	<div data-role="page" class="cs-content">
+		<div data-role="header" class="heading">
+			<div>
+				<h1>IBM<small>®</small></h1>
+				<h2>Cloud Identity</h2>
+			</div>
+		</div>
+		<div class="content">
+			<div>
+				<p>Nie można wykonać uwierzytelniania z użyciem certyfikatu, ponieważ to urządzenie nie jest zarządzane przez daną organizację. Nastąpi teraz przekierowanie do strony wyboru logowania, która pozwala wybrać inne opcje logowania.</p>
+			</div>
+			<div>
+				<p>Jeśli przekierowanie nie zostanie wykonane w ciągu <b>5 sekund</b>, <a href="@REDIRECT_URL@">kliknij tutaj</a>.</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

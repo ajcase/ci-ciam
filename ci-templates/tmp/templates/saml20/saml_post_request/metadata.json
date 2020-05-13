@@ -1,0 +1,29 @@
+{
+   "description": "saml post request",
+   "id": {
+      "component": "saml20",
+      "name": "saml_post_request",
+      "revision": 4
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The form action.",
+            "key": "@TOKEN:form_action@"
+         },
+         {
+            "default": null,
+            "description": "The relay state.",
+            "key": "@TOKEN:RelayState@"
+         }
+      ],
+      "required": [
+         {
+            "description": "The saml request.",
+            "key": "@TOKEN:SamlMessage@"
+         }
+      ]
+   }
+}

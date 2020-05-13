@@ -1,0 +1,29 @@
+{
+   "description": "A proper error page to display when url binding is 404.",
+   "id": {
+      "component": "saml20",
+      "name": "saml_uri_binding_404",
+      "revision": 2
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The timestamp when the error occurs.",
+            "key": "@TIMESTAMP@"
+         },
+         {
+            "default": null,
+            "description": "The exception message if any.",
+            "key": "@EXCEPTION_MESSAGE@"
+         }
+      ],
+      "required": [
+         {
+            "description": "The detailed error message.",
+            "key": "@ERROR_MESSAGE@"
+         }
+      ]
+   }
+}

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<base href="/" />
+	<title id="title" ng-bind="pageTitle"></title>
+	<link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico" />
+	<script type="text/javascript" src="ui/assets/_js?include=templates/otp/otp"></script>
+	<link rel="stylesheet" href="usc/css/stateless.css">
+</head>
+
+<body cs-totp-login action="@ACTION@" action-base-href="" error-message="@ERROR_MESSAGE@" operation-param-name="operation"
+ operation-param-value="verify" otp-login-disabled="@OTP_LOGIN_DISABLED@" otp-param-name="otp">
+
+</html>

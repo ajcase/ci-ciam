@@ -1,0 +1,35 @@
+{
+   "description": "OTP errors, delivery selection.",
+   "id": {
+      "component": "authsvc",
+      "name": "otp_delivery_selection",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Action.",
+            "key": "@ACTION@"
+         },
+         {
+            "default": null,
+            "description": "Method checked.",
+            "key": "@OTP_METHOD_CHECKED@"
+         },
+         {
+            "default": null,
+            "description": "OTP method id.",
+            "key": "@OTP_METHOD_ID@"
+         },
+         {
+            "default": null,
+            "description": "OTP method label.",
+            "key": "@OTP_METHOD_LABEL@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

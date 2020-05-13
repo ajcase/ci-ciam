@@ -1,0 +1,24 @@
+{
+   "description": "A general proper error page for no pro det.",
+   "id": {
+      "component": "commonfim",
+      "name": "generic_noprotdet",
+      "revision": 2
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The timestamp when the error occurs.",
+            "key": "@TIMESTAMP@"
+         }
+      ],
+      "required": [
+         {
+            "description": "The request address.",
+            "key": "@REQ_ADDR@"
+         }
+      ]
+   }
+}

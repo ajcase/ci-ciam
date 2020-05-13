@@ -1,0 +1,50 @@
+{
+   "description": "Maas android login.",
+   "id": {
+      "component": "authsvc",
+      "name": "maasandroid_login",
+      "revision": 14
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Error message.",
+            "key": "@ACTION@"
+         },
+         {
+            "default": null,
+            "description": "Button clicked",
+            "key": "@BTN_CLICKED@"
+         },
+         {
+            "default": null,
+            "description": "Certificate submission url.",
+            "key": "@CERT_SUBMISSION_URL@"
+         },
+         {
+            "default": null,
+            "description": "Message.",
+            "key": "@MESSAGE@"
+         },
+         {
+            "default": null,
+            "description": "Message.",
+            "key": "@WAIT@"
+         },
+         {
+            "default": null,
+            "description": "Message.",
+            "key": "@WITH_XREQWITH@"
+         },
+         {
+            "default": null,
+            "description": "Redirect URL.",
+            "key": "@REDIRECT_URL@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

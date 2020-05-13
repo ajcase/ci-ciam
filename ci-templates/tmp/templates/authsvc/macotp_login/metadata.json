@@ -1,0 +1,40 @@
+{
+   "description": "MACOTP login.",
+   "id": {
+      "component": "authsvc",
+      "name": "macotp_login",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Action.",
+            "key": "@ACTION@"
+         },
+         {
+            "default": null,
+            "description": "Error message.",
+            "key": "@ERROR_MESSAGE@"
+         },
+         {
+            "default": null,
+            "description": "Otp delivery attributes.",
+            "key": "@OTP_DELIVERY_ATTR@"
+         },
+         {
+            "default": null,
+            "description": "Otp hint.",
+            "key": "@OTP_HINT@"
+         },
+         {
+            "default": null,
+            "description": "Otp String.",
+            "key": "@OTP_STRING@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

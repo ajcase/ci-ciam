@@ -1,0 +1,33 @@
+{
+   "description": "unexpected error page to display during access policy execution.",
+   "id": {
+      "component": "saml20",
+      "name": "access_policy_server_error",
+      "revision": 2
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The exception message.",
+            "key": "@EXCEPTION_MSG@"
+         },
+         {
+            "default": null,
+            "description": "The exception stack trace.",
+            "key": "@EXCEPTION_STACK@"
+         }
+      ],
+      "required": [
+         {
+            "description": "The request address.",
+            "key": "@REQ_ADDR@"
+         },
+         {
+            "description": "The timestamp when the error occurs.",
+            "key": "@TIMESTAMP@"
+         }
+      ]
+   }
+}

@@ -1,0 +1,33 @@
+# adopter.properties file
+#
+# Use the adopter properties file to override the tenant properties for User Self Care email verification tokens.  To use this feature
+# pass in an "adopterId" when using the User Self Care API.   
+#
+# The token properties you can set are:
+#  - token expiration in minutes, where the minimum is 10 and the maximum is 10080 minutes (7 days)
+#  - token length, where the minimum is 6 and the maximum is 500
+#  - token character set, where the valid values are "numeric","alpha","alphanumeric"
+# 
+# The properties are in the format:  
+#    adopterId.propertyName = value
+#  
+# Registration token property names:
+#    registerUserTokenExpiration
+#    registerUserTokenLength
+#    registerUserTokenCharset
+#
+# Forgot Password token property names:
+#    forgotPasswordTokenExpiration
+#    forgotPasswordTokenLength
+#    forgotPasswordTokenCharset
+#
+# Invite User token property names:
+#    inviteUserTokenExpiration
+#    inviteUserTokenLength
+#    inviteUserTokenCharset
+#
+# Note: The token generate API uses the registration token settings.
+#
+# Here is an example of using an adopterId of "atlas" and overriding the registration token expiration for 1 day
+#    atlas.registerUserTokenExpiration = 1440
+#

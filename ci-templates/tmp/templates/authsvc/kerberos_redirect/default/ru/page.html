@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!--
+    Macro Substitution Values:
+    REDIRECT_URL: @REDIRECT_URL@
+-->
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Refresh" content="0;url=@REDIRECT_URL@">
+	<base href="/" />
+	<link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Вход в систему - IBM Cloud Identity</title>
+	<link rel="stylesheet" href="usc/css/stateless.css" />
+</head>
+
+<body class="tile-background">
+	<div data-role="page" class="cs-content">
+		<div data-role="header" class="heading">
+			<div>
+				<h1>IBM<small>®</small></h1>
+				<h2>Cloud Identity</h2>
+			</div>
+		</div>
+		<div class="content">
+			<div>
+				<p>Аутентификацию сертификата нельзя выполнить, так как это устройство не управляется вашей организацией. Вы будете перенаправлены
+на страницу Выбор входа в систему для других опций входа в систему.</p>
+			</div>
+			<div>
+				<p>Если вас не перенаправили в течение <b>5 секунд</b>, щелкните <a href="@REDIRECT_URL@">здесь</a>.</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

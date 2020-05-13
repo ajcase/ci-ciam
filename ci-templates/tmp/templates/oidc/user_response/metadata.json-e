@@ -1,0 +1,19 @@
+{
+   "description": "A page to display authorization code when there is no redirect URI.",
+   "id": {
+      "component": "oidc",
+      "name": "user_response",
+      "revision": 1
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+         {
+            "description": "The authorization code.",
+            "key": "@OAUTH_CODE@"
+         }
+      ]
+   }
+}

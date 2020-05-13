@@ -1,0 +1,30 @@
+{
+   "description": "OTP errors, could not validate.",
+   "id": {
+      "component": "authsvc",
+      "name": "otp_errors_could_not_validate",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Details.",
+            "key": "@DETAIL@"
+         },
+         {
+            "default": null,
+            "description": "Error message.",
+            "key": "@REQ_ADDR@"
+         },
+         {
+            "default": null,
+            "description": "Action.",
+            "key": "@TIMESTAMP@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

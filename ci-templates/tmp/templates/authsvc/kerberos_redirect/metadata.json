@@ -1,0 +1,20 @@
+{
+   "description": "Kerberos redirect",
+   "id": {
+      "component": "authsvc",
+      "name": "kerberos_redirect",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Redirect url.",
+            "key": "@REDIRECT_URL@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

@@ -1,0 +1,30 @@
+{
+   "description": "OTP errors, generating otp.",
+   "id": {
+      "component": "authsvc",
+      "name": "otp_errors_generating_otp",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Details.",
+            "key": "@DETAIL@"
+         },
+         {
+            "default": null,
+            "description": "Error message.",
+            "key": "@REQ_ADDR@"
+         },
+         {
+            "default": null,
+            "description": "Action.",
+            "key": "@TIMESTAMP@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}
