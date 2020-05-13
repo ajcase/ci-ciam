@@ -1,0 +1,45 @@
+{
+   "description": "Change Password.",
+   "id": {
+      "component": "authsvc",
+      "name": "basicldapuser_changepassword",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Action taken.",
+            "key": "@ACTION@"
+         },
+         {
+            "default": null,
+            "description": "Error message.",
+            "key": "@ERROR_MESSAGE@"
+         },
+         {
+            "default": null,
+            "description": "Old Passwrod",
+            "key": "@OLDPASSWORD@"
+         },
+         {
+            "default": null,
+            "description": "Passwrod warning.",
+            "key": "@PASSWORDWARNING@"
+         },
+         {
+            "default": null,
+            "description": "User Name.",
+            "key": "@USERNAME@"
+         },
+         {
+            "default": null,
+            "description": "Policy Message.",
+            "key": "@POLICYMESSAGE@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

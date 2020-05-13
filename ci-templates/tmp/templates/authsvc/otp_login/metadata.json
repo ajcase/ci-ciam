@@ -1,0 +1,65 @@
+{
+   "description": "OTP login.",
+   "id": {
+      "component": "authsvc",
+      "name": "otp_login",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Action.",
+            "key": "@ACTION@"
+         },
+         {
+            "default": null,
+            "description": "Display reselect button.",
+            "key": "@DISPLAY_RESELECT_BUTTON@"
+         },
+         {
+            "default": null,
+            "description": "Error message.",
+            "key": "@ERROR_MESSAGE@"
+         },
+         {
+            "default": null,
+            "description": "Mapping rule date.",
+            "key": "@MAPPING_RULE_DATA@"
+         },
+         {
+            "default": null,
+            "description": "OTP delivery attribute.",
+            "key": "@OTP_DELIVERY_ATTR@"
+         },
+         {
+            "default": null,
+            "description": "OTP hint.",
+            "key": "@OTP_HINT@"
+         },
+         {
+            "default": null,
+            "description": "OTP login disabled.",
+            "key": "@OTP_LOGIN_DISABLED@"
+         },
+         {
+            "default": null,
+            "description": "OTP method type",
+            "key": "@OTP_METHOD_TYPE@"
+         },
+         {
+            "default": null,
+            "description": "Regenerate action.",
+            "key": "@REGENERATE_ACTION@"
+         },
+         {
+            "default": null,
+            "description": "Reselect action.",
+            "key": "@RESELECT_ACTION@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

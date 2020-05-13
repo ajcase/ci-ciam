@@ -1,0 +1,39 @@
+{
+   "description": "A proper Login error page to display when error parsing msg.",
+   "id": {
+      "component": "authbroker",
+      "name": "login_error",
+      "revision": 4
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The timestamp when the error occurs.",
+            "key": "@TIMESTAMP@"
+         },
+         {
+            "default": null,
+            "description": "The exception message if any.",
+            "key": "@EXCEPTION_MSG@"
+         },
+         {
+            "default": null,
+            "description": "The Requested IP Address if any.",
+            "key": "@REQ_ADDR@"
+         },
+         {
+            "default": null,
+            "description": "The Login URL if any",
+            "key": "@IDAAS_LOGIN_URL@"
+         }
+      ],
+      "required": [
+         {
+            "description": "The detailed error message.",
+            "key": "@ERROR_MESSAGE@"
+         }
+      ]
+   }
+}

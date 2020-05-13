@@ -1,0 +1,30 @@
+{
+   "description": "Selection page for the MFA type that a user would like to use.",
+   "id": {
+      "component": "authsvc",
+      "name": "combinedmfa_selection",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The url that the selection will be sent to.",
+            "key": "@ACTION@"
+         },
+         {
+            "default": null,
+            "description": "The unique identifier for an MFA type.",
+            "key": "@OTP_METHOD_ID@"
+         },
+         {
+            "default": null,
+            "description": "The localized label that will be displayed to users for an MFA type.",
+            "key": "@OTP_METHOD_LABEL@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

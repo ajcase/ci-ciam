@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Subject>
+  <Value>
+    Sua senha descartável
+  </Value>
+</Subject>
+
+<Message>
+  <Value>
+	<![CDATA[<html>
+		<body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #121212; padding: 12px;">
+			<h1 style="color: #4178BE;">Sua senha descartável (OTP) é: </h1>
+			<h2 style="color: #666666;">@OTP_STRING@</h2>
+			<p>Use essa OTP para concluir sua solicitação. Ela expirará após @OTP_LIFETIME@ minutos.</p>
+			<p>Não responda este email.</p>
+		</body>
+	</html>]]>
+  </Value>
+</Message>
+</root>

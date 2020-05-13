@@ -1,0 +1,29 @@
+{
+   "description": "A proper error page to display when error sending msg.",
+   "id": {
+      "component": "saml20",
+      "name": "error_sending_msg",
+      "revision": 2
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The timestamp when the error occurs.",
+            "key": "@TIMESTAMP@"
+         },
+         {
+            "default": null,
+            "description": "The exception message if any.",
+            "key": "@EXCEPTION_MESSAGE@"
+         }
+      ],
+      "required": [
+         {
+            "description": "The detailed error message.",
+            "key": "@ERROR_MESSAGE@"
+         }
+      ]
+   }
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Message value should be less than 70 characters -->
+<root>
+<Message>
+  <Value>
+    A jelszó: @OTP_STRING@.
+@OTP_LIFETIME@ perc múlva lejár.
+  </Value>
+</Message>
+</root>

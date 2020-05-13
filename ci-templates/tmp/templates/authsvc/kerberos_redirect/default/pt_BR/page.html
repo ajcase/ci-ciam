@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!--
+    Macro Substitution Values:
+    REDIRECT_URL: @REDIRECT_URL@
+-->
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Refresh" content="0;url=@REDIRECT_URL@">
+	<base href="/" />
+	<link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Conectar - IBM Cloud Identity</title>
+	<link rel="stylesheet" href="usc/css/stateless.css" />
+</head>
+
+<body class="tile-background">
+	<div data-role="page" class="cs-content">
+		<div data-role="header" class="heading">
+			<div>
+				<h1>IBM<small>®</small></h1>
+				<h2>Cloud Identity</h2>
+			</div>
+		</div>
+		<div class="content">
+			<div>
+				<p>A autenticação de certificado não pode ser feita porque este dispositivo não é gerenciado por sua organização. Você será redirecionado para a página Seleção de Login para outras opções de login.</p>
+			</div>
+			<div>
+				<p>Caso não seja redirecionado dentro de <b>5 segundos</b>, clique <a href="@REDIRECT_URL@">aqui</a>.</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

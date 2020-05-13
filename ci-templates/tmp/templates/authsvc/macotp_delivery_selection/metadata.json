@@ -1,0 +1,20 @@
+{
+   "description": "MACOTP delivery selection.",
+   "id": {
+      "component": "authsvc",
+      "name": "macotp_delivery_selection",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Action.",
+            "key": "@ACTION@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

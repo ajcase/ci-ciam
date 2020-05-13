@@ -1,0 +1,57 @@
+{
+   "description": "A page for users to enter the answers to their knowledge questions.",
+   "id": {
+      "component": "authsvc",
+      "name": "knowledgequestions_answers",
+      "revision": 1
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The given name of the logged in user",
+            "key": "@USER_GIVEN_NAME@"
+         },
+         {
+            "default": null,
+            "description": "A welcome message",
+            "key": "@WELCOME@"
+         },
+         {
+            "default": null,
+            "description": "A message saying \"Let's make sure it's you\"",
+            "key": "@LETS_MAKE_SURE_ITS_YOU@"
+         },
+         {
+            "default": null,
+            "description": "A message informing users that they must answer the questions correctly in order to proceed",
+            "key": "@CORRECTLY_ANSWER_QUESTIONS@"
+         },
+         {
+            "default": null,
+            "description": "A message for a link that can be clicked in order to use a different 2FA method",
+            "key": "@USER_ANOTHER_METHOD@"
+         },
+         {
+            "default": null,
+            "description": "A message for a link where users can get help",
+            "key": "@NEED_HELP@"
+         }
+      ],
+      "required": [
+         {
+            "description": "The translated question value",
+            "key": "@QUESTION@"
+         },
+         {
+            "description": "The question identifier",
+            "key": "@QUESTION_KEY@"
+         },
+         {
+            "description": "An error message stating what went wrong",
+            "key": "@ERROR_MESSAGE@"
+         }
+      ]
+   }
+}

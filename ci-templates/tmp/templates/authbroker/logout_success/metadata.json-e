@@ -1,0 +1,20 @@
+{
+   "description": "A page to display when user logout successfully.",
+   "id": {
+      "component": "authbroker",
+      "name": "logout_success",
+      "revision": 4
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The IDaaS logout url.",
+            "key": "@IDAAS_LOGOUT_URL@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

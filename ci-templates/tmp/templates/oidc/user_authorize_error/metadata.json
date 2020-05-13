@@ -1,0 +1,35 @@
+{
+   "description": "A page to display errors for OIDC device flow.",
+   "id": {
+      "component": "oidc",
+      "name": "user_authorize_error",
+      "revision": 5
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Error code.",
+            "key": "@ERROR_CODE@"
+         },
+         {
+            "default": null,
+            "description": "Error description.",
+            "key": "@ERROR_DESCRIPTION@"
+         },
+         {
+            "default": null,
+            "description": "The user code for this OIDC device flow.",
+            "key": "@OAUTH_CODE@"
+         },
+         {
+            "default": null,
+            "description": "The form post target URL to return to the user authorize endpoint.",
+            "key": "@ACTION@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

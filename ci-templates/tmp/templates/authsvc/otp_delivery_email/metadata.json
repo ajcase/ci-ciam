@@ -1,0 +1,25 @@
+{
+   "description": "OTP delivery email.",
+   "id": {
+      "component": "authsvc",
+      "name": "otp_delivery_email",
+      "revision": 9
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "OTP String.",
+            "key": "@OTP_STRING@"
+         },
+         {
+            "default": null,
+            "description": "OTP Liftetime String.",
+            "key": "@OTP_LIFETIME@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

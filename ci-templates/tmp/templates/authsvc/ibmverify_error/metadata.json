@@ -1,0 +1,20 @@
+{
+   "description": "IBM Verify error.",
+   "id": {
+      "component": "authsvc",
+      "name": "ibmverify_error",
+      "revision": 15
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Error message.",
+            "key": "@ERROR_MESSAGE@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

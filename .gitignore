@@ -1,7 +1,0 @@
-.env
-*.DS_Store
-node_modules
-!node_modules/passport*
-ci-templates/template.properties
-ci-templates/tmp
-ci-templates/templates.zip

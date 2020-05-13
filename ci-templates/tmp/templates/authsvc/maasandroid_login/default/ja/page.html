@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<!--
+	Macro Substitution Values:
+	ACTION: @ACTION@
+	BTN_CLICKED: @BTN_CLICKED@
+	CERT_SUBMISSION_URL: @CERT_SUBMISSION_URL@
+	MESSAGE: @MESSAGE@
+	WAIT: @WAIT@
+	WITH_XREQWITH: @WITH_XREQWITH@
+    REDIRECT_URL: @REDIRECT_URL@
+-->
+<html>
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    	<base href="/" />
+	<link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	<title>サインイン - IBM Cloud Identity</title>
+	<link rel="stylesheet" href="usc/css/stateless.css" />
+</head>
+<style>
+	.button {
+			font-size: 18px;
+	}
+</style>
+<script type="text/javascript">
+<!--  START NON-TRANSLATABLE  -->
+	function initProcessing() {
+		var btnClicked = "@BTN_CLICKED@";
+		var withHeader = "@WITH_XREQWITH@";
+		if (btnClicked == "0") {
+			// The button is not clicked yet - authentication has not started yet.
+			if (withHeader == "com.fiberlink.maas360.android.securebrowser") {
+				//invokeHref will launch the MaaS360 app, this is for MaaS360 secure browser
+				invokeHref(btnClicked);
+			}
+		} else {
+			// btnCliked is 1, button has been hit earlier - authentication has been started
+			if (withHeader == "0" ) {
+				// invokeHref(1) will show the message and hide the button, it will not launch MaaS360 app
+				invokeHref(btnClicked);
+			}
+		}
+	}
+
+	function invokeHref(clicked) {
+		if (clicked == "0") {
+			try {
+				//click or tap the href
+				document.getElementById("certUrlHref").click();
+			} catch (err) {
+				console.log("Unable to invoke HREF!");
+				console.error(err, err.stack);
+			}
+
+			//set button clicked to true
+			document.getElementById("btnclicked").value = "1";
+		}
+
+		//hide the button
+		document.getElementById("authButtonDiv").style.display = "なし";
+
+		//show the authentication message
+		document.getElementById("authMessage").style.display = "block";
+	}
+
+	function handleWebViewAuth(clicked) {
+		if (clicked == 0) {
+			var withHeader = "@WITH_XREQWITH@";
+			if (withHeader == "0" ) {
+				//This is not web view but needs button click to launch the MaaS360 app
+				//invokeHref will launch MaaS360 app
+				invokeHref(clicked);
+			} else {
+				//This is webview, app launch is not possible, copy the launch URL to clipboard
+				//copy the cert submission URL to clipboard
+				//Manual launch of authentication app is needed
+				var textArea = document.createElement("textarea");
+				textArea.value = "@CERT_SUBMISSION_URL@";
+
+				document.body.appendChild(textArea);
+				textArea.select();
+
+				try {
+					var successful = document.execCommand("copy");
+					var msg = successful ? "successful" : "失敗しました";
+					console.log("Copying text to clipboard was " + msg);
+				} catch (err) {
+					console.log("Unable to copy from clipboard!");
+					console.error(err, err.stack);
+				}
+
+				document.body.removeChild(textArea);
+			}
+
+			//set button clicked to true
+			document.getElementById("btnclicked").value = "1";
+		}
+
+	}
+<!--  END NON-TRANSLATABLE  -->
+</script>
+
+<body class="tile-background" onload="initProcessing()">
+	<div data-role="page" class="cs-content">
+		<div data-role="header" class="heading">
+			<div>
+				<h1>IBM<small>®</small></h1>
+				<h2>Cloud Identity</h2>
+			</div>
+			<div class="cs-select-login-provider-instructions">次を使用してサインイン</div>
+		</div>
+		<div class="content">
+			<div data-role="content" class="header">
+				<p>@MESSAGE@</p>
+				<form action="@ACTION@" method="post" data-ajax="false">
+					<input type="hidden" name="operation" value="verify">
+					<input id="btnclicked" type="hidden" name="btnclicked" value="@BTN_CLICKED@">
+				</form>
+			</div>
+			<div id="topDiv" class="message">
+				<div class="spaced" id="authButtonDiv">
+					<a class="cs-link-button cs-button-primary-deprecated" id="authButton" onclick="handleWebViewAuth(0);" href="javascript:void(0)" >
+						<span class="ng-scope">MaaS360</span>
+					</a>
+				</div>
+				<div class="spaced" id="authMessage" style="display: none; top: 0px; left: 0px; opacity: 1;">
+					<p style="font-size:18px">MaaS360 ユーザー認証の試行中...</p>
+				</div>
+				<div style="display: none; top: 0px; left: 0px; opacity: 0;">
+					<a id="certUrlHref" href="@CERT_SUBMISSION_URL@" class="button cs-button">認証するにはここをクリックします</a>
+					</div>
+				<div class="spaced">
+					<a href="@REDIRECT_URL@">その他のサインイン・オプション</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		setTimeout(function () {
+			document.forms[0].submit();
+		}, @WAIT@);
+	</script>
+</body>
+
+</html>

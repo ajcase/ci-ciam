@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+     Macro Substitution Values:
+         IDAAS_LOGOUT_URL: @IDAAS_LOGOUT_URL@
+ -->
+<html ng-app="app">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<base href="/" />
+	<title id="title" ng-bind="pageTitle"></title>
+	<link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico">
+	<script type="text/javascript" src="ui/assets/_js?include=templates/uiLogout/uiLogout"></script>
+	<link rel="stylesheet" href="usc/css/stateless.css">
+	<img src="@IDAAS_LOGOUT_URL@" style="display:none;" height="1" width="1">
+</head>
+
+<body cs-ui-logout></body>
+
+</html>

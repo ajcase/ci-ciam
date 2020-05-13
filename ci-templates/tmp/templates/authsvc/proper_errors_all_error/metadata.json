@@ -1,0 +1,35 @@
+{
+   "description": "Proper errors all error.",
+   "id": {
+      "component": "authsvc",
+      "name": "proper_errors_all_error",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Error message.",
+            "key": "@ERROR_MESSAGE@"
+         },
+         {
+            "default": null,
+            "description": "Exception message.",
+            "key": "@EXCEPTION_MSG@"
+         },
+         {
+            "default": null,
+            "description": "Req Addr.",
+            "key": "@REQ_ADDR@"
+         },
+         {
+            "default": null,
+            "description": "Time stamp.",
+            "key": "@TIMESTAMP@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

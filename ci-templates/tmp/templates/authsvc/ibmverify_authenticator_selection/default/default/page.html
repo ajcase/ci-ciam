@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<base href="/" />
+	<link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Authenticator Device Selection</title>
+	<script type="text/javascript">
+		function onLoadPage() {
+			showError();
+		}
+
+		function showError() {
+			var elem = document.getElementById("errId");
+			if ("@ERROR_MESSAGE@" == "") {
+				elem.setAttribute("class", "");
+			} else {
+				elem.setAttribute("class", "errorMessage");
+			}
+		}
+	</script>
+	<link rel="stylesheet" href="usc/css/stateless.css" />
+</head>
+
+<body class="tile-background" onload="onLoadPage()">
+	<div data-role="page" class="cs-content">
+		<div data-role="header" class="heading">
+			<div>
+				<h1>IBM<small>®</small></h1>
+				<h2>Cloud Identity</h2>
+			</div>
+		</div>
+		<div class="content">
+			<div id="errId">@ERROR_MESSAGE@</div>
+			<div data-role="content" class="header">
+				<h1 class="pageTitle">Authenticator Device Selection</h1>
+				<div class="instructions">Please select the device for processing the authentication:</div>
+			</div>
+			<div>
+				<form method="POST" action="@ACTION@">
+					<input type="hidden" name="operation" value="generate">
+					<h2 class="sectionTitle">The devices:</h2>
+					<div class="section">
+						<!--  START NON-TRANSLATABLE  -->
+						[RPT authenticators]
+						<div>
+							<input id="@AUTHENTICATOR_ID@" type="radio" name="authenticator.index.id" value="@AUTHENTICATOR_ID@"
+							 @DEVICE_CHECKED@>
+							<label for="@AUTHENTICATOR_ID@">@DEVICE_NAME@ (@DEVICE_TYPE@)</label>
+						</div>
+						[ERPT authenticators]
+						<!--  END NON-TRANSLATABLE  -->
+					</div>
+					<div class="controls">
+						<input class="submitButton" name="Submit" type="submit" value="Submit">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

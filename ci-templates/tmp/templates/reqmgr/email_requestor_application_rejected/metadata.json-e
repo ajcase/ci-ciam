@@ -1,0 +1,65 @@
+{
+   "description": "E-mail sent to the requestor when a requested application has been rejected.",
+   "id": {
+      "component": "reqmgr",
+      "name": "email_requestor_application_rejected",
+      "revision": 4
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The full name of the requestor",
+            "key": "@REQUESTOR.FULLNAME@"
+         },
+         {
+            "default": null,
+            "description": "The ID of the requestor",
+            "key": "@REQUESTOR.ID@"
+         },
+         {
+            "default": null,
+            "description": "The email of the requestor",
+            "key": "@REQUESTOR.EMAIL@"
+         },
+         {
+            "default": null,
+            "description": "The full name of the requestee",
+            "key": "@REQUESTEE.FULLNAME@"
+         },
+         {
+            "default": null,
+            "description": "The ID of the requestee",
+            "key": "@REQUESTEE.ID@"
+         },
+         {
+            "default": null,
+            "description": "The email of the requestee",
+            "key": "@REQUESTEE.EMAIL@"
+         },
+         {
+            "default": null,
+            "description": "The name of the application",
+            "key": "@APPLICATION.NAME@"
+         },
+         {
+            "default": null,
+            "description": "The ID of the application",
+            "key": "@APPLICATION.ID@"
+         },
+         {
+            "default": null,
+            "description": "The ID of the request",
+            "key": "@REQUEST.ID@"
+         },
+         {
+            "default": null,
+            "description": "The justification that is provided by the requestor",
+            "key": "@JUSTIFICATION.TEXT@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

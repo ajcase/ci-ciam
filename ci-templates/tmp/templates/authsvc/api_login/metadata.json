@@ -1,0 +1,25 @@
+{
+   "description": "A proper error page to display when access denied.",
+   "id": {
+      "component": "authsvc",
+      "name": "api_login",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Action taken.",
+            "key": "@ACTION@"
+         },
+         {
+            "default": null,
+            "description": "Error message.",
+            "key": "@ERROR_MESSAGE@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

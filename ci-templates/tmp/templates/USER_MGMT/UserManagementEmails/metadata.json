@@ -1,0 +1,39 @@
+{
+   "description": "Email templates for User Management operations.  The email template file contains a sender, subject, and contents section for customization.  Macros are replaced in the email before it is sent.  Macros are described below and must start and end with @ sign.",
+   "id": {
+      "component": "USER_MGMT",
+      "name": "UserManagementEmails",
+      "revision": 7
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+         {
+            "description": "The tenant name",
+            "key": "@TENANT@"
+         },
+         {
+            "description": "The user name.",
+            "key": "@USERNAME@"
+         },
+         {
+            "description": "The group name.  The group that the end user was added to or removed from.",
+            "key": "@GROUPNAME@"
+         },
+         {
+            "description": "A link to the login page.  When a user is created, then can click the link to login.",
+            "key": "@LOGIN_PAGE_LINK@"
+         },
+         {
+            "description": "The user's password.  When an admin creates a new user, the end user is email their temporary password.",
+            "key": "@PASSWORD@"
+         },
+         {
+            "description": "The attributes changed in a modify user operation displayed as a bunch of html table rows.",
+            "key": "@ATTRS_TABLEROWS@ "
+         }
+      ]
+   }
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>@@LABEL_TITLE_CONSENT@@</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/ui/assets/img/favicon.ico" />
+    <link rel="stylesheet" href="/usc/css/stateless.css">
+    <script>
+      function approveConsent() {
+          document.consentForm.trust_level.value = "permit";
+          document.consentForm.submit();
+      }
+      function denyConsent() {
+          document.consentForm.trust_level.value = "deny";
+          document.consentForm.submit();
+      }
+    </script>
+  </head>
+  <body>
+    <div class="cs-content usc-content usc-user-authorize-permitted">
+      <div data-role="header" class="heading">
+        <div>
+          <h1>IBM<small>®</small></h1>
+          <h2>@@LABEL_PRODUCT@@</h2>
+        </div>
+      </div>
+      <div class="user-authorize-main">
+        <p>@@LABEL_TEXT_CONSENT_CLIENT@@</p>
+        <p><label>@OAUTH_CLIENT_NAME@</label></p>
+        <br/>
+        <p>@@LABEL_TEXT_CONSENT_USER@@</p>
+        <p><label>@PREFERNAME@</label></p>
+        <br/>
+        <form name="consentForm" action="@OAUTH_AUTHORIZE_URI@" method="post">
+          <p>@@LABEL_TEXT_CONSENT_SCOPE@@</p>
+          [RPT oauthTokenScopePreapprovedRepeatable]
+          <input type="hidden" name="scope" value="@OAUTH_TOKEN_SCOPE_REPEAT@"/>
+          <input type="checkbox" name="scope" value="@OAUTH_TOKEN_SCOPE_REPEAT@" checked="checked" disabled/>
+          <label>@OAUTH_TOKEN_SCOPE_DESC_REPEAT@</label>
+          <br/>
+          [ERPT oauthTokenScopePreapprovedRepeatable]
+          [RPT oauthTokenScopeNewApprovalRepeatable]
+          <input type="checkbox" name="scope" value="@OAUTH_TOKEN_SCOPE_REPEAT@" checked="checked"/>
+          <label>@OAUTH_TOKEN_SCOPE_DESC_REPEAT@</label>
+          <br/>
+          [ERPT oauthTokenScopeNewApprovalRepeatable]
+          <br/>
+          <p>@@LABEL_TEXT_CONSENT_ENTITLEMENT@@</p>
+          [RPT oauthTokenEntitlementPreapprovedRepeatable]
+          <input type="hidden" name="entitlement" value="@OAUTH_TOKEN_ENTITLEMENT_REPEAT@"/>
+          <input type="checkbox" name="entitlement" value="@OAUTH_TOKEN_ENTITLEMENT_REPEAT@" checked="checked" disabled/>
+          <label>@OAUTH_TOKEN_ENTITLEMENT_DESC_REPEAT@</label>
+          <br/>
+          [ERPT oauthTokenEntitlementPreapprovedRepeatable]
+          [RPT oauthTokenEntitlementNewApprovalRepeatable]
+          <input type="checkbox" name="entitlement" value="@OAUTH_TOKEN_ENTITLEMENT_REPEAT@" checked="checked"/>
+          <label>@OAUTH_TOKEN_ENTITLEMENT_DESC_REPEAT@</label>
+          <br/>
+          [ERPT oauthTokenEntitlementNewApprovalRepeatable]
+          <br/>
+          <input type="hidden" name="consent_form_verifier" value="@CONSENT_FORM_VERIFIER@"/>
+          <input type="hidden" name="trust_level"/>
+          <br/>
+          <p>@@LABEL_TEXT_CONSENT_APPROVE@@</p>
+          <input type="checkbox" name="save_consent" value="true" checked="checked"/><label>@@LABEL_CHECK_REMEMBER@@</label><br/>
+          <table>
+            <tr>
+              <td><input class="cs-button-primary-deprecated" type="button" value="@@LABEL_BUTTON_PERMIT@@" onclick="approveConsent()"/></td>
+              <td>&nbsp;</td>
+              <td><input class="cs-button-secondary-deprecated" type="button" value="@@LABEL_BUTTON_DENY@@" onclick="denyConsent()"/></td>
+            </tr>
+          </table>
+        </form>
+      </div>
+      <footer class="login-footer" role="contentinfo">
+        <p>@@LABEL_COPYRIGHT@@</p>
+      </footer>
+    </div>
+  </body>
+</html>

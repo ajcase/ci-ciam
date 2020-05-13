@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Consent to federate</title>
+	<link rel="stylesheet" type="text/css" href="/sps/static/styles.css" />
+	<link rel="stylesheet" href="usc/css/stateless.css">
+</head>
+
+<body>
+	<div class="header">
+		<div class="brandingLogo">
+			<img src="/sps/static/ibm-logo.png" />
+		</div>
+	</div>
+	<div class="content">
+		<div class="contentHeader">
+			<h1 class="pageTitle error">Consent to federate</h1>
+			<div class="instructions"></div>
+		</div>
+		<div class="pageContent">
+			<div>
+				<form action="@TOKEN:form_action@" method="post">
+					<div>
+						<p>
+							You may federate your account at <b>@TOKEN:SPDisplayName@</b> (<b>@TOKEN:SPProviderID@</b>) with your account at
+							<b>@TOKEN:IPDisplayName@</b> (<b>@TOKEN:IPProviderID@</b>).<br />
+						</p>
+						<p>
+							<label for="consent">I consent to federation of my accounts: </label><br />
+							<input type="radio" checked name="Consent" value="1" /> Yes. Federate my accounts.<br />
+							<input type="radio" name="Consent" value="0" /> No. Do not federate my accounts.<br />
+							<input type="hidden" name="FIMAction" value="consent" />
+							<input type="submit" value="Send" />
+						</p>
+					</div>
+				</form>
+			</div>
+			<br />
+		</div>
+	</div>
+</body>
+
+</html>
