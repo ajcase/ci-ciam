@@ -39,115 +39,153 @@ router.get('/app/dashboard', function(req, res, next) {
 router.get('/app/profile', function(req, res, next) {
   var loggedIn = ((req.session.loggedIn) ? true : false);
   if (loggedIn) {
-    request.get(process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/userinfo', {
-      'auth': {
-        'bearer': req.session.accessToken
-      }
-    }, function(err, response, body) {
-      console.log('---- User ID token ----')
-      console.log(JSON.parse(body));
+    var userAccessToken = req.session.accessToken;
+    var userId = req.session.userId;
+    var purposeID = process.env.TERMS_PURPOSE_ID;
 
-      var userinfo = JSON.parse(body);
-      var userinfo_string = JSON.stringify(userinfo, null, 2);
+    bbfn.getTerms(purposeID, userId, userAccessToken, function(_err, result) {
+      var termsDSP = result.purposes[purposeID];
+      bbfn.checkTermsDUA(purposeID, termsDSP.accessTypes[0].id, userId, userAccessToken, function(_err, result) {
+        if(result[0].result[0].approved) // The user has already consented.
+        {
+          request.get(process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/userinfo', {
+            'auth': {
+              'bearer': req.session.accessToken
+            }
+          }, function(err, response, body) {
+            console.log('---- User ID token ----')
+            console.log(JSON.parse(body));
+      
+            var userinfo = JSON.parse(body);
+            var userinfo_string = JSON.stringify(userinfo, null, 2);
+      
+            request.get(process.env.OIDC_CI_BASE_URI + '/v2.0/Me', {
+              'auth': {
+                'bearer': req.session.accessToken
+              }
+            }, function(err, response, body) {
+      
+              console.log('---- User profile ----')
+              console.log(JSON.parse(body));
+              var me = JSON.parse(body);
+              req.session.userprofile = me;
+              var meExt = me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"];
+      
+              var mfaEnabled = (typeof(_.filter(me.groups, {
+                'id': process.env.MFAGROUPID
+              }))[0] !== 'undefined') ? true : false;
+      
+              var meLinked = (typeof me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["linkedAccounts"] != 'undefined') ? true : false;
+              if (meLinked) {
+                var linkedAccounts = me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["linkedAccounts"]
+              } else {
+                var linkedAccounts = false
+              }
+              var addresses = (typeof me["addresses"] != 'undefined') ? true : false
+              if (addresses) {
+                var hasAddress = (typeof me["addresses"][0]["streetAddress"] !== 'undefined') ? true : false;
+              }
+              console.log(addresses, hasAddress)
+              if (!linkedAccounts) {
+                var linkedAccountsTotal = false;
+              } else {
+                var linkedAccountsTotal = {
+                  'facebook': (typeof(_.filter(linkedAccounts, {
+                    'realm': "www.facebook.com"
+                  }))[0] !== 'undefined') ? true : false,
+                  'linkedin': (typeof(_.filter(linkedAccounts, {
+                    'realm': "www.linkedin.com"
+                  }))[0] !== 'undefined') ? true : false,
+                  'google': (typeof(_.filter(linkedAccounts, {
+                    'realm': "www.google.com"
+                  }))[0] !== 'undefined') ? true : false
+                }
+              }
+      
+              console.log(linkedAccountsTotal)
+      
+              var customAttributes = me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["customAttributes"]
+      
+              var consentPaperless = (typeof(_.filter(customAttributes, {
+                'name': 'consentPaperless'
+              }))[0] !== 'undefined') ? (_.filter(customAttributes, {
+                'name': 'consentPaperless'
+              }))[0].values.toString() : false;
+              var consentNotifications = (typeof(_.filter(customAttributes, {
+                'name': 'consentNotifications'
+              }))[0] !== 'undefined') ? (_.filter(customAttributes, {
+                'name': 'consentNotifications'
+              }))[0].values.toString() : false;
+              var consentPromotions = (typeof(_.filter(customAttributes, {
+                'name': 'consentPromotions'
+              }))[0] !== 'undefined') ? (_.filter(customAttributes, {
+                'name': 'consentPromotions'
+              }))[0].values.toString() : false;
+              var quoteCount = (typeof(_.filter(customAttributes, {
+                'name': 'quoteCount'
+              }))[0] !== 'undefined') ? (_.filter(customAttributes, {
+                'name': 'quoteCount'
+              }))[0].values.toString() : false;
+      
+              var buildExtProfile = {
+                'car': {
+                  'displayName': "Car",
+                  'value': (typeof(_.filter(customAttributes, {
+                    'name': 'carModel'
+                  }))[0] !== 'undefined') ? `${(_.filter(customAttributes, {'name': 'carYear'}))[0].values.toString()} ${(_.filter(customAttributes, {'name': 'carMake'}))[0].values.toString()} ${(_.filter(customAttributes, {'name': 'carModel'}))[0].values.toString()}` : false,
+                  'status': ((typeof(_.filter(customAttributes, {
+                    'name': 'carModel'
+                  }))[0] !== 'undefined') ? true : false)
+                }
+              }
+              console.log(buildExtProfile)
 
-      request.get(process.env.OIDC_CI_BASE_URI + '/v2.0/Me', {
-        'auth': {
-          'bearer': req.session.accessToken
+              //// BUILD CONSENT
+              // Get current consent for marketing
+              bbfn.getDSP(process.env.MARKETING_PURPOSE_ID, req.session.accessToken, function(_err, result) {
+                var consentMarketingAccessTypeID = result.purposes[process.env.MARKETING_PURPOSE_ID].accessTypes[0].id;
+                bbfn.getDUA(process.env.MARKETING_PURPOSE_ID, consentMarketingAccessTypeID, req.session.accessToken, function(_err, result) {
+                  var consentMarketing = result[0].result[0].approved;
+                  bbfn.getDSP(process.env.PAPERLESS_PURPOSE_ID, req.session.accessToken, function(_err, result) {
+                    var consentPaperlessAccessTypeID = result.purposes[process.env.PAPERLESS_PURPOSE_ID].accessTypes[0].id;
+                    bbfn.getDUA(process.env.PAPERLESS_PURPOSE_ID, consentPaperlessAccessTypeID, req.session.accessToken, function(_err, result) {
+                      var consentPaperless = result[0].result[0].approved;
+                      console.log(`This user has logged consent for
+                      Marketing ${consentMarketing}
+                      Paperless ${consentPaperless}`);
+                      res.render('insurance/profile', {
+                        user: me,
+                        loggedIn: loggedIn,
+                        quotes: quoteCount,
+                        consentMarketing: consentMarketing,
+                        consentPaperless: consentPaperless,
+                        consentPaperlessAccessTypeID: consentPaperlessAccessTypeID,
+                        consentMarketingAccessTypeID: consentMarketingAccessTypeID,
+                        consentAction: "/app/dpcm",
+                        actionCar: "/open-account",
+                        actionHome: "/open-account",
+                        actionLife: "/open-account",
+                        mfaStatus: mfaEnabled,
+                        linkedAccounts: linkedAccountsTotal,
+                        hasAddress: hasAddress,
+                        extProfile: buildExtProfile
+                      });
+                    })
+                  })
+                })
+              })
+              ////
+      
+              
+            });
+          });
         }
-      }, function(err, response, body) {
-
-        console.log('---- User profile ----')
-        console.log(JSON.parse(body));
-        var me = JSON.parse(body);
-        req.session.userprofile = me;
-        var meExt = me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"];
-
-        var mfaEnabled = (typeof(_.filter(me.groups, {
-          'id': process.env.MFAGROUPID
-        }))[0] !== 'undefined') ? true : false;
-
-        var meLinked = (typeof me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["linkedAccounts"] != 'undefined') ? true : false;
-        if (meLinked) {
-          var linkedAccounts = me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["linkedAccounts"]
-        } else {
-          var linkedAccounts = false
+        else{
+          res.redirect("/app/consent/terms")
         }
-        var addresses = (typeof me["addresses"] != 'undefined') ? true : false
-        if (addresses) {
-          var hasAddress = (typeof me["addresses"][0]["streetAddress"] !== 'undefined') ? true : false;
-        }
-        console.log(addresses, hasAddress)
-        if (!linkedAccounts) {
-          var linkedAccountsTotal = false;
-        } else {
-          var linkedAccountsTotal = {
-            'facebook': (typeof(_.filter(linkedAccounts, {
-              'realm': "www.facebook.com"
-            }))[0] !== 'undefined') ? true : false,
-            'linkedin': (typeof(_.filter(linkedAccounts, {
-              'realm': "www.linkedin.com"
-            }))[0] !== 'undefined') ? true : false,
-            'google': (typeof(_.filter(linkedAccounts, {
-              'realm': "www.google.com"
-            }))[0] !== 'undefined') ? true : false
-          }
-        }
-
-        console.log(linkedAccountsTotal)
-
-        var customAttributes = me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["customAttributes"]
-
-        var consentPaperless = (typeof(_.filter(customAttributes, {
-          'name': 'consentPaperless'
-        }))[0] !== 'undefined') ? (_.filter(customAttributes, {
-          'name': 'consentPaperless'
-        }))[0].values.toString() : false;
-        var consentNotifications = (typeof(_.filter(customAttributes, {
-          'name': 'consentNotifications'
-        }))[0] !== 'undefined') ? (_.filter(customAttributes, {
-          'name': 'consentNotifications'
-        }))[0].values.toString() : false;
-        var consentPromotions = (typeof(_.filter(customAttributes, {
-          'name': 'consentPromotions'
-        }))[0] !== 'undefined') ? (_.filter(customAttributes, {
-          'name': 'consentPromotions'
-        }))[0].values.toString() : false;
-        var quoteCount = (typeof(_.filter(customAttributes, {
-          'name': 'quoteCount'
-        }))[0] !== 'undefined') ? (_.filter(customAttributes, {
-          'name': 'quoteCount'
-        }))[0].values.toString() : false;
-
-        var buildExtProfile = {
-          'car': {
-            'displayName': "Car",
-            'value': (typeof(_.filter(customAttributes, {
-              'name': 'carModel'
-            }))[0] !== 'undefined') ? `${(_.filter(customAttributes, {'name': 'carYear'}))[0].values.toString()} ${(_.filter(customAttributes, {'name': 'carMake'}))[0].values.toString()} ${(_.filter(customAttributes, {'name': 'carModel'}))[0].values.toString()}` : false,
-            'status': ((typeof(_.filter(customAttributes, {
-              'name': 'carModel'
-            }))[0] !== 'undefined') ? true : false)
-          }
-        }
-        console.log(buildExtProfile)
-
-        res.render('insurance/profile', {
-          user: me,
-          loggedIn: loggedIn,
-          quotes: quoteCount,
-          consentPromotions: evaluateAttr(consentPromotions),
-          consentPaperless: evaluateAttr(consentPaperless),
-          consentNotifications: evaluateAttr(consentNotifications),
-          actionCar: "/open-account",
-          actionHome: "/open-account",
-          actionLife: "/open-account",
-          mfaStatus: mfaEnabled,
-          linkedAccounts: linkedAccountsTotal,
-          hasAddress: hasAddress,
-          extProfile: buildExtProfile
-        });
       });
     });
+   
   } else {
     res.redirect('/login');
   }
@@ -192,6 +230,33 @@ router.post('/app/preferences', function(req, res, next) {
     }
   });
 });
+
+/*
+DPCM Handling Purposes
+*/
+router.post('/app/dpcm', function(req, res, next) {
+  console.log(req.body)
+  var consentMarketingState = (req.body.consentMarketing) ? 3 : 4;
+  var consentPaperlessState = (req.body.consentPaperless) ? 3 : 4;
+  if(req.body.consentMarketingAccessTypeID || req.body.consentPaperlessAccessTypeID)
+  {
+    bbfn.storeConsent(process.env.MARKETING_PURPOSE_ID, req.body.consentMarketingAccessTypeID, consentMarketingState, req.session.accessToken, function(_err, result) {
+      console.log("Captured on the other end Scotty!")
+    })
+    bbfn.storeConsent(process.env.PAPERLESS_PURPOSE_ID, req.body.consentPaperlessAccessTypeID, consentPaperlessState, req.session.accessToken, function(_err, result) {
+      console.log("Captured on the other end Scotty!")
+    })
+    console.log("Changing preferences: Success")
+    res.redirect('/app/profile')
+  }
+  else{
+    //Something went wrong with the form post
+    console.log("Changing preferences: Something went wrong")
+    res.redirect('/app/profile')
+  }
+});
+
+
 /*
 FORGOT PASSWORD
 */
@@ -346,6 +411,70 @@ router.post('/app/toggleMfa', function(req, res, next) {
     }
   });
 });
+
+/*
+Delete User
+*/
+router.get('/app/deleteme', function(req, res, next) {
+  console.log(req.session.userprofile);
+  var admin = false;
+  if (req.session.userprofile.groups) {
+    for (group of req.session.userprofile.groups) {
+      if (group.displayName == "admin") admin = true;
+    }
+  }
+  if (admin) {
+    res.redirect('/app/profile');
+  } else {
+    res.render('insurance/deleteme', {
+      layout: false,
+      name: req.session.userprofile.name.givenName + " " + req.session.userprofile.name.familyName,
+      action: '/app/deleteme',
+      error: false,
+      errorMessage: ''
+    });
+  }
+});
+
+router.post('/app/deleteme', function(req, res, next) {
+  // form.deleteme
+  var form = req.body;
+
+  if (form.name != req.session.userprofile.name.givenName + " " + req.session.userprofile.name.familyName) {
+    res.render('insurance/deleteme', {
+      layout: false,
+      name: req.session.userprofile.name.givenName + " " + req.session.userprofile.name.familyName,
+      action: '/app/deleteme',
+      error: true,
+      errorMessage: 'Name did not match'
+    });
+  } else {
+    bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err, body) {
+      if (err) {
+        console.log(err);
+      } else {
+        var accessToken = body.access_token;
+
+        bbfn.deleteUser(req.session.userId, accessToken, function(_err, result) {
+          if (result === true) {
+            //success
+            res.redirect('/logout');
+          } else {
+            //fail
+            res.render('insurance/deleteme', {
+              layout: false,
+              name: req.session.userprofile.name.givenName + " " + req.session.userprofile.name.familyName,
+              action: '/app/deleteme',
+              error: true,
+              errorMessage: 'Delete failed'
+            });
+          }
+        });
+      }
+    });
+  }
+});
+
 /*
 Change password
 */

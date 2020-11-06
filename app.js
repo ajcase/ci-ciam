@@ -9,6 +9,40 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var bbfn = require('./functions.js');
+var hbs =  require('hbs');
+
+// register new function for handlebars
+hbs.registerHelper('formatDate', function(badDate) {
+  var dMod = new Date(badDate *1000);
+  return dMod.toLocaleDateString();
+})
+hbs.registerHelper('formatState', function(state) {
+  var stateOpt = {
+    1: "Consent allow",
+    2: "Consent deny",
+    3: "Opt-in",
+    4: "Opt-out",
+    5: "Transparent"
+  }
+  return stateOpt[state];
+})
+hbs.registerHelper('formatAccessType', function(accessType) {
+  if(accessType == "doc_inherit")
+  {
+    return "EULA";
+  }
+  return accessType;
+})
+hbs.registerHelper('formatAttribute', function(attribute) {
+  if(attribute == "")
+  {
+    return "–";
+  }
+  else{
+    return attribute;
+  }
+})
+
 
 // Use Passport with OpenId Connect strategy to
 // Authenticate users with IBM Cloud Identity Connect
@@ -19,6 +53,8 @@ var index = require('./routes/index');
 var setup = require('./routes/setup');
 var profile = require('./routes/profile');
 var openaccount = require('./routes/open-account');
+var accountclaim = require('./routes/account-claim');
+var consent = require('./routes/consent');
 
 function titleCase(string) {
   var sentence = string.toLowerCase().split(" ");
@@ -100,12 +136,15 @@ function checkAuthentication(req, res, next) {
     res.redirect("/");
   }
 }
+
 app.locals.pageTitle = titleCase(APP);
 app.locals.bodyCSS = APP;
 app.use('/', index);
 app.use('/setup', setup);
 app.use('/app/profile', checkAuthentication, profile);
 app.use('/open-account', openaccount);
+app.use('/account-claim', accountclaim);
+app.use('/app/consent', checkAuthentication, consent);
 // Only allow authenticated users to access the /users route
 //app.use('/users', checkAuthentication, users);
 // Only allow authenticated users to access the /users route
@@ -115,7 +154,7 @@ app.use('/open-account', openaccount);
 // they will be returned to the callback handler below
 app.get('/login', passport.authenticate('openidconnect', {
   successReturnToOrRedirect: "/",
-  scope: 'email profile'
+  scope: 'email profile privacyPolicy'
 }));
 app.get('/login-linkedin', passport.authenticate('openidconnect', {
   successReturnToOrRedirect: "/",

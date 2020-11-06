@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="24px" viewBox="0 0 18 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 10</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="airline-home" transform="translate(-398.000000, -391.000000)">
+            <g id="Group-10" transform="translate(399.000000, 392.000000)">
+                <polygon id="Stroke-1" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square" points="0 3.068 8 0.068 16 3.068 16 21.068 0 21.068"></polygon>
+                <path d="M4,7.068 L4,8.068" id="Stroke-3" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square"></path>
+                <path d="M8,7.068 L8,8.068" id="Stroke-4" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square"></path>
+                <path d="M12,7.068 L12,8.068" id="Stroke-5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square"></path>
+                <path d="M4,12.068 L4,13.068" id="Stroke-6" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square"></path>
+                <path d="M8,12.068 L8,13.068" id="Stroke-7" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square"></path>
+                <path d="M12,12.068 L12,13.068" id="Stroke-8" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square"></path>
+                <polygon id="Fill-9" fill="#FFFFFF" points="6 21.068 10 21.068 10 16.068 6 16.068"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

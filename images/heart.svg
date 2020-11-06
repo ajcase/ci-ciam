@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 3</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0 -0.0002 15.9998 -0.0002 15.9998 15.4137439 0 15.4137439"></polygon>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ecommerce-home" transform="translate(-168.000000, -1388.000000)">
+            <g id="Group-3" transform="translate(168.000000, 1388.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="Clip-2"></g>
+                <path d="M4.7998,1.9998 C3.2998,1.9998 1.9998,3.2998 1.9998,4.7998 C1.9998,6.9998 5.4998,10.7998 7.9998,12.9998 C10.0998,11.1008 13.9998,7.1998 13.9998,4.7998 C13.9998,3.1998 12.6998,1.9998 11.1998,1.9998 C10.2998,1.9998 9.4008,2.4998 8.8998,3.2998 C8.4998,3.8998 7.5998,3.8998 7.1998,3.2998 C6.5998,2.4998 5.7998,1.9998 4.7998,1.9998 M7.3998,15.1998 C6.5998,14.4998 -0.0002,8.9998 -0.0002,4.7998 C-0.0002,2.0998 2.1998,-0.0002 4.7998,-0.0002 C5.9998,-0.0002 7.0998,0.4998 7.9998,1.1998 C8.8998,0.3998 9.9998,-0.0002 11.1998,-0.0002 C13.9008,-0.0002 15.9998,2.1998 15.9998,4.7998 C15.9998,8.9998 9.4008,14.4998 8.5998,15.1008 C8.2998,15.4998 7.6998,15.4998 7.3998,15.1998" id="Fill-1" fill="#444444" mask="url(#mask-2)"></path>
+            </g>
+        </g>
+    </g>
+</svg>

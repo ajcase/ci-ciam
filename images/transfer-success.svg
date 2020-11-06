@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="93px" height="86px" viewBox="0 0 93 86" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.3 (67297) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 12</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0 88 94 88 94 0 0 0"></polygon>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Transfer-Successful" transform="translate(-666.000000, -321.000000)">
+            <g id="Group-12" transform="translate(665.000000, 320.000000)">
+                <path d="M14,45 L17.1333333,45 C24.2381667,45 32.2563667,48.9207143 35.9333333,54.4285714 L48.4666667,54.4285714 C54.7552667,54.4285714 61,60.6922857 61,67 L32.8,67" id="Stroke-1" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M58.80632,61 L79.52,61 C90.83,61 92,67.1550926 92,67.1550926 L47.3216,85.0541019 C43.76636,86.457463 39.77276,86.2928143 36.34856,84.6032414 L14,73.4071279" id="Stroke-3" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M73.5,20 C80.403125,20 86,25.596875 86,32.5 C86,39.403125 80.403125,45 73.5,45 C66.596875,45 61,39.403125 61,32.5 C61,25.596875 66.596875,20 73.5,20 Z" id="Stroke-5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square"></path>
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="Clip-8"></g>
+                <polygon id="Stroke-7" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square" mask="url(#mask-2)" points="2 80 14 80 14 39 2 39"></polygon>
+                <path d="M35.5,2 C42.403125,2 48,7.596875 48,14.5 C48,21.403125 42.403125,27 35.5,27 C28.596875,27 23,21.403125 23,14.5 C23,7.596875 28.596875,2 35.5,2 Z" id="Stroke-9" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square" mask="url(#mask-2)"></path>
+                <path d="M33,14 L39,14" id="Stroke-10" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square" mask="url(#mask-2)"></path>
+                <path d="M70,33 L76,33" id="Stroke-11" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square" mask="url(#mask-2)"></path>
+            </g>
+        </g>
+    </g>
+</svg>

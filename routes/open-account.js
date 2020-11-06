@@ -166,7 +166,14 @@ router.post('/car', function(req, res, next) {
               }
               else{
                 var userId = body.id;
-                var customAttributes = (typeof req.session.userprofile["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["customAttributes"] != 'undefined') ? req.session.userprofile["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["customAttributes"] : false;
+                var customAttributes =
+                  typeof req.session.userprofile != "undefined" && req.session.userprofile[
+                    "urn:ietf:params:scim:schemas:extension:ibm:2.0:User"
+                  ]["customAttributes"] != "undefined"
+                    ? req.session.userprofile[
+                        "urn:ietf:params:scim:schemas:extension:ibm:2.0:User"
+                      ]["customAttributes"]
+                    : false;
                 console.log("Custom attributes?", customAttributes)
                 var quoteCount = (!customAttributes) ? 1 : parseInt((_.filter(customAttributes,{ 'name': 'quoteCount' }))[0].values.toString())+1;
                 console.log("This is the current quoteCount:", quoteCount)

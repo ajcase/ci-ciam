@@ -1602,12 +1602,8 @@ select:focus {
 }
 
 .col-content-main table tr.table-row td span{
-	display: block;
-}
-
-.col-content-main table tr.table-row td:nth-child(2){
-	margin-left: -128px;
-	display: block;;
+	font-size: 14px;
+	color: #1D1E20;
 }
 
 .col-content-main table tr.table-row td:first-child span{
@@ -1621,7 +1617,7 @@ select:focus {
 
 .col-content-main table tr.table-row td:last-child span{
 	color: #25D09B;
-	font-size: 18px;
+	font-size: 14px;
 }
 
 .col-content-main table tr.table-row td:last-child span + span{

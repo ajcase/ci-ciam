@@ -344,6 +344,29 @@ function resetPassword(userId, accessToken, callback) {
   });
 }
 
+function deleteUser(userId, accessToken, callback) {
+  var options = {
+    method: 'DELETE',
+    url: process.env.OIDC_CI_BASE_URI + `/v2.0/Users/${userId}`,
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  };
+
+  console.log("Options JSON:", options)
+
+  request(options, function(error, response, _body) {
+    if (error) throw new Error(error);
+    if (response.statusCode == 204) {
+      console.log(`User Deleted: ${userId}`);
+      callback(null, true);
+    } else {
+      console.log(`Failed to delete user: ${userId}`);
+      callback(null, false);
+    }
+  });
+}
+
 function changePassword(accessToken, pwVars, callback) {
   // Example
   // var pwVars = {
@@ -456,7 +479,6 @@ function createCustomAttr(thisAttr, customName, accessToken) {
                 "args": {
                   "name":"${thisAttr.name}"
                 },
-                "ruleId": "11",
                 "datatype":"${thisAttr.type}",
                 "name":"${thisAttr.name}",
                 "description": "Created for Demo App",
@@ -465,7 +487,7 @@ function createCustomAttr(thisAttr, customName, accessToken) {
                   "name":"${customName}",
                   "scimName":"${thisAttr.name}"},
                   "scope":"tenant",
-                  "sourceType":"rule",
+                  "sourceType":"schema",
                   "tags":[]
                 }`
 
@@ -618,6 +640,7 @@ function createGroup(groupName, accessToken, callback) {
       callback(body, false);
     }
   });
+
 }
 
 function getPolicyId(name, accessToken) {
@@ -730,6 +753,228 @@ async function setupMfaPolicy(policyName, mfaGroup, accessToken, callback) {
   callback (null, policyId);
   // continue here
 }
+function findAccount(accountId, accessToken, callback) {
+    var options = {
+      'headers': {
+        'Content-Type': 'application/scim+json',
+        'Authorization': `Bearer ${accessToken}`
+      }
+    }
+    console.log("Lookup accountID:" + accountId);
+    request.get(process.env.OIDC_CI_BASE_URI + `/v2.0/Users?filter=urn:ietf:params:scim:schemas:extension:ibm:2.0:User:customAttributes.accountId eq "${accountId}" and active eq "false"`, options, function(_err, response, body) {
+      pbody = JSON.parse(body);
+      console.log("Response code:", response.statusCode);
+      console.log("Lookup response:", body);
+      if (response.statusCode == 200) {
+        if (pbody.totalResults == 1) { // only 1 allowed to be returned
+          console.log("Returning user record: " + pbody.Resources[0].id);
+          callback(null, pbody.Resources[0]);
+        } else {
+          callback(null, false);
+        }
+      }
+  });
+}
+function createUser(payload, flags, callback) {
+  var options = {
+    'headers': {
+      'Content-Type': 'application/scim+json',
+      'Authorization': `Bearer ${accessToken}`
+    }
+  }
+  console.log("Create user:" + payload.userName);
+  request.post(process.env.OIDC_CI_BASE_URI + `/v2.0/Users`, options, function(_err, response, body) {
+    pbody = JSON.parse(body);
+    console.log("Response code:", response.statusCode);
+    if (response.statusCode == 201) {
+      callback(null, true);
+    } else {
+      callback(null, false);
+    }
+  });
+}
+
+function getTerms(purposeID, subjectId, userAccessToken, callback) {
+  var options = {
+    method: 'POST',
+    url: process.env.OIDC_CI_BASE_URI + '/dpcm/v1.0/privacy/data-subject-presentation',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userAccessToken}`
+    },
+    body: `{
+      "purposeId": [
+          "${purposeID}"
+      ],
+      "subjectId": "${subjectId}"
+    }`
+  };
+  console.log("Terms DPCM Body:", options)
+
+  request(options, function(error, response, body) {
+    var jsonBody = JSON.parse(body);
+      console.log("Got information on consent decision:", jsonBody)
+      if (error) throw new Error(error);
+      callback(null, JSON.parse(body));
+  });
+}
+function checkTermsDUA(purposeID, accessTypeId, subjectId, userAccessToken, callback) {
+  var options = {
+    method: 'POST',
+    url: process.env.OIDC_CI_BASE_URI + '/dpcm/v1.0/privacy/data-usage-approval',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userAccessToken}`
+    },
+    body: `{
+      "items": [
+        {
+            "purposeId": "${purposeID}", 
+            "accessTypeId": "${accessTypeId}"
+        }
+      ],
+      "subjectId": "${subjectId}"
+    }`
+  };
+  console.log(`Terms DPCM DUA for user ${subjectId}:`, options)
+
+  request(options, function(error, response, body) {
+    var jsonBody = JSON.parse(body);
+      console.log("Got current status of consent from DUA:", jsonBody)
+      if (error) throw new Error(error);
+      callback(null, JSON.parse(body));
+  });
+}
+function storeTermsConsent(purposeID, accessTypeId, subjectId, assertTerms, userAccessToken, callback) {
+  console.log("AccessTypeID:", accessTypeId)
+  var options = {
+    method: 'PATCH',
+    url: process.env.OIDC_CI_BASE_URI + '/dpcm/v1.0/privacy/consents',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userAccessToken}`
+    },
+    body: `[
+        {
+            "op": "add",
+            "value": {
+                "purposeId": "${purposeID}", 
+                "accessTypeId": "${accessTypeId}", 
+                "subjectId": "${subjectId}",
+                "state": ${assertTerms}
+            }
+        }
+    ]`
+  };
+  console.log(`Storing term consent for ${subjectId}:`, options)
+
+  request(options, function(error, response, body) {
+      console.log("Consent accepted by Verify")
+      if (error) throw new Error(error);
+      callback(null, true);
+  });
+}
+
+function getDSP(purposeID, userAccessToken, callback) {
+  var options = {
+    method: 'POST',
+    url: process.env.OIDC_CI_BASE_URI + '/dpcm/v1.0/privacy/data-subject-presentation',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userAccessToken}`
+    },
+    body: `{
+      "purposeId": [
+          "${purposeID}"
+      ]
+    }`
+  };
+  console.log("DSP DPCM Body:", options)
+
+  request(options, function(error, response, body) {
+    var jsonBody = JSON.parse(body);
+      console.log("Got information on consent decision:", jsonBody)
+      if (error) throw new Error(error);
+      callback(null, JSON.parse(body));
+  });
+}
+function getDUA(purposeID, accessTypeId, userAccessToken, callback) {
+  var options = {
+    method: 'POST',
+    url: process.env.OIDC_CI_BASE_URI + '/dpcm/v1.0/privacy/data-usage-approval',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userAccessToken}`
+    },
+    body: `{
+      "items": [
+        {
+            "purposeId": "${purposeID}", 
+            "accessTypeId": "${accessTypeId}", 
+            "attributeId": "3"
+        }
+      ]
+    }`
+  };
+  console.log("DUA DPCM Body:", options)
+
+  request(options, function(error, response, body) {
+    var jsonBody = JSON.parse(body);
+      console.log("Got information on consent decision:", jsonBody)
+      if (error) throw new Error(error);
+      callback(null, JSON.parse(body));
+  });
+}
+
+function storeConsent(purposeID, accessTypeId, state, userAccessToken, callback) {
+  var options = {
+    method: 'PATCH',
+    url: process.env.OIDC_CI_BASE_URI + '/dpcm/v1.0/privacy/consents',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userAccessToken}`
+    },
+    body: `[
+      {
+          "op": "add",
+          "value": {
+              "purposeId": "${purposeID}", 
+              "accessTypeId": "${accessTypeId}", 
+              "attributeId": "3",
+              "state": ${state}
+          }
+      }
+  ]`
+  };
+  console.log(`Storing term consent:`, options)
+
+  request(options, function(error, response, body) {
+      console.log("Consent accepted by Verify")
+      if (error) throw new Error(error);
+      callback(null, true);
+  });
+}
+function getAllConsents(userAccessToken, callback) {
+  var options = {
+    method: 'GET',
+    url: process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/consents',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userAccessToken}`
+    }
+  };
+  request(options, function(error, response, body) {
+      if (error) throw new Error(error);
+      callback(null, JSON.parse(body));
+  });
+}
+function titleCase(str) {
+  str = str.toLowerCase().split(' ');
+  for (var i = 0; i < str.length; i++) {
+    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1); 
+  }
+  return str.join(' ');
+}
 
 module.exports = {
   oidcIdToken: oidcIdToken,
@@ -743,11 +988,22 @@ module.exports = {
   getFullProfile: getFullProfile,
   getQuoteCount: getQuoteCount,
   resetPassword: resetPassword,
+  deleteUser: deleteUser,
   changePassword: changePassword,
   toggleMfa: toggleMfa,
   createAttributes: createAttributes,
   setFullProfile: setFullProfile,
   setCustomAttributes: setCustomAttributes,
   createGroup: createGroup,
-  setupMfaPolicy: setupMfaPolicy
+  setupMfaPolicy: setupMfaPolicy,
+  findAccount: findAccount,
+  createUser: createUser,
+  getTerms: getTerms,
+  checkTermsDUA: checkTermsDUA,
+  storeTermsConsent: storeTermsConsent,
+  getDUA: getDUA,
+  getDSP: getDSP,
+  storeConsent: storeConsent,
+  getAllConsents: getAllConsents,
+  titleCase: titleCase
 };

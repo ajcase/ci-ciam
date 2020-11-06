@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 11</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="square">
+        <g id="ecommerce-cart" transform="translate(-1239.000000, -476.000000)" stroke="#444444">
+            <g id="Group-11" transform="translate(1240.000000, 477.000000)">
+                <g id="Group-5" transform="translate(0.000000, 2.782609)">
+                    <polyline id="Stroke-1" points="13.5652174 3.13043478 13.5652174 12.8695652 2.43478261 12.8695652 2.43478261 3.13043478"></polyline>
+                    <path d="M0.347826087,0.347826087 L15.6521739,0.347826087" id="Stroke-3"></path>
+                </g>
+                <path d="M8,8 L8,12.173913" id="Stroke-6"></path>
+                <path d="M5.2173913,8 L5.2173913,12.173913" id="Stroke-7"></path>
+                <path d="M10.7826087,8 L10.7826087,12.173913" id="Stroke-8"></path>
+                <polyline id="Stroke-9" points="5.2173913 3.13043478 5.2173913 0.347826087 10.7826087 0.347826087 10.7826087 3.13043478"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>
