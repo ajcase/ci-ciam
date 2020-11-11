@@ -27,9 +27,9 @@ hbs.registerHelper('formatState', function(state) {
   return stateOpt[state];
 })
 hbs.registerHelper('formatAccessType', function(accessType) {
-  if(accessType == "doc_inherit")
+  if(accessType == "default")
   {
-    return "EULA";
+    return "";
   }
   return accessType;
 })
