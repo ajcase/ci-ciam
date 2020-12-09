@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="14px" viewBox="0 0 15 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 7</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0 14 15 14 15 0 0 0"></polygon>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ecommerce-home" transform="translate(-207.000000, -1388.000000)">
+            <g id="Group-7" transform="translate(207.000000, 1388.000000)">
+                <path d="M1,14 L14,14 C14.552,14 15,13.552 15,13 C15,12.448 14.552,12 14,12 L1,12 C0.448,12 0,12.448 0,13 C0,13.552 0.448,14 1,14" id="Fill-1" fill="#444444"></path>
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="Clip-4"></g>
+                <polygon id="Fill-3" fill="#444444" mask="url(#mask-2)" points="6 10 9 10 9 0 6 0"></polygon>
+                <polygon id="Fill-5" fill="#444444" mask="url(#mask-2)" points="1 10 4 10 4 4 1 4"></polygon>
+                <polygon id="Fill-6" fill="#444444" mask="url(#mask-2)" points="11 10 14 10 14 6 11 6"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -640,6 +640,7 @@ function createGroup(groupName, accessToken, callback) {
       callback(body, false);
     }
   });
+
 }
 
 function getPolicyId(name, accessToken) {
@@ -752,6 +753,53 @@ async function setupMfaPolicy(policyName, mfaGroup, accessToken, callback) {
   callback (null, policyId);
   // continue here
 }
+function findAccount(accountId, accessToken, callback) {
+    var options = {
+      'headers': {
+        'Content-Type': 'application/scim+json',
+        'Authorization': `Bearer ${accessToken}`
+      }
+    }
+    console.log("Lookup accountID:" + accountId);
+    request.get(process.env.OIDC_CI_BASE_URI + `/v2.0/Users?filter=urn:ietf:params:scim:schemas:extension:ibm:2.0:User:customAttributes.accountId eq "${accountId}" and active eq "false"`, options, function(_err, response, body) {
+      pbody = JSON.parse(body);
+      console.log("Response code:", response.statusCode);
+      console.log("Lookup response:", body);
+      if (response.statusCode == 200) {
+        if (pbody.totalResults == 1) { // only 1 allowed to be returned
+          console.log("Returning user record: " + pbody.Resources[0].id);
+          callback(null, pbody.Resources[0]);
+        } else {
+          callback(null, false);
+        }
+      }
+  });
+}
+function createUser(payload, flags, callback) {
+  var options = {
+    'headers': {
+      'Content-Type': 'application/scim+json',
+      'Authorization': `Bearer ${accessToken}`
+    }
+  }
+  console.log("Create user:" + payload.userName);
+  request.post(process.env.OIDC_CI_BASE_URI + `/v2.0/Users`, options, function(_err, response, body) {
+    pbody = JSON.parse(body);
+    console.log("Response code:", response.statusCode);
+    if (response.statusCode == 201) {
+      callback(null, true);
+    } else {
+      callback(null, false);
+    }
+  });
+}
+function titleCase(str) {
+  str = str.toLowerCase().split(' ');
+  for (var i = 0; i < str.length; i++) {
+    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1); 
+  }
+  return str.join(' ');
+}
 
 module.exports = {
   oidcIdToken: oidcIdToken,
@@ -772,5 +820,8 @@ module.exports = {
   setFullProfile: setFullProfile,
   setCustomAttributes: setCustomAttributes,
   createGroup: createGroup,
-  setupMfaPolicy: setupMfaPolicy
+  setupMfaPolicy: setupMfaPolicy,
+  findAccount: findAccount,
+  createUser: createUser,
+  titleCase: titleCase
 };

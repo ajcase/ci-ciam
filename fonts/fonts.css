@@ -1,0 +1,30 @@
+@font-face {
+    font-family: 'helvetica';
+    src: url('helveticaneue-light-webfont.eot');
+    src: url('helveticaneue-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('helveticaneue-light-webfont.woff') format('woff'),
+         url('helveticaneue-light-webfont.ttf') format('truetype'),
+         url('helveticaneue-light-webfont.svg#helvetica_neueregular') format('svg');
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'helvetica';
+    src: url('helveticaneue-roman-webfont.eot');
+    src: url('helveticaneue-roman-webfont.eot?#iefix') format('embedded-opentype'),
+         url('helveticaneue-roman-webfont.woff') format('woff'),
+         url('helveticaneue-roman-webfont.ttf') format('truetype'),
+         url('helveticaneue-roman-webfont.svg#helvetica_neueregular') format('svg');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'helvetica';
+    src: url('helveticaneue-bold-webfont.eot');
+    src: url('helveticaneue-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('helveticaneue-bold-webfont.woff') format('woff'),
+         url('helveticaneue-bold-webfont.ttf') format('truetype'),
+         url('helveticaneue-bold-webfont.svg#helvetica_neuebold') format('svg');
+    font-weight: 700;
+    font-style: normal;
+}

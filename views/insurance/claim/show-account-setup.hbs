@@ -1,0 +1,85 @@
+<!--Banner-->
+<div class="banner blue-bg" style="max-height: none;">
+    <div class="container">
+        <div class="banner-caption">
+            <h1>Claim your account</h1>
+            <p>Go digital. Create your profile today.</p>
+        </div>
+    </div>
+</div>
+
+<!--Content Area-->
+<div class="container">
+    <div class="content-area">
+        <div class="input-list clear">
+            {{#if notExists}}
+                    <h3>Oops, we didn't find an existing account with that account ID</h3>
+                    <p>Would you like to request a quote?</h3>
+                    <a href="/open-account" class="open-btn">Get a quote</a>
+                    <h3 style="padding-top:2rem;">Enter the account number associated with your account.</h3>
+                    <form action="{{action}}" method="post">
+                        <div class="input-list-box">
+                            <div class="formRow">
+                                <label>Account ID</label>
+                                <input type="input" required placeholder="Enter your existing account ID" name="accountId" onFocus="this.placeholder = ''">
+                                <div class="inputLine"></div>
+                            </div>
+                        </div>
+                        <div class="input-list-box">
+                            <div class="formRow-bottom clearfix">
+                                <input class="input-cta" type="submit" value="Lookup account">
+                            </div>
+                        </div>
+                    </form>  
+            {{/if}}
+            {{#unless notExists}}
+                    <h3 style="">Create your account</h3>
+                    <p>We've found your account! Complete the form below to create your account.</p>
+                    <form action="{{action}}" method="post">
+                    <div class="input-list-box">
+                        <div class="formRow">
+                            <label>Account ID</label>
+                            <input disabled type="input" placeholder="Enter your existing account ID" name="accountId" value="{{user.id}}">
+                            <div class="inputLine"></div>
+                        </div>
+                    </div>
+                    <div class="input-list-box">
+						<div class="formRow">
+							<label>First name</label>
+							<input type="text" name="givenName" placeholder="First name" readonly="readonly" value="{{user.name.givenName}}" style="color:#9e9e9e">
+							<div class="inputLine"></div>
+						</div>
+					</div>
+					<div class="input-list-box">
+						<div class="formRow">
+							<label>Last name</label>
+							<input type="text" name="familyName" placeholder="Last name" readonly="readonly" value="{{user.name.familyName}}">
+							<div class="inputLine"></div>
+						</div>
+					</div><div class="input-list-box">
+						<div class="formRow">
+							<label>Email</label>
+							<input type="email" name="email" placeholder="Email" readonly="readonly" value="{{user.emails.0.value}}">
+							<div class="inputLine"></div>
+						</div>
+					</div>
+					<div class="input-list-box">
+						<div class="formRow-bottom clearfix">
+							<input class="input-cta" type="submit" value="Create account">
+						</div>
+					</div>
+					<div style="display:inline-block;margin: 0  35px;">
+						<p>By requesting a quote, you agree to our <a href="#">terms and conditions</a>.</p>
+					</div>
+                    </form>
+            {{/unless}}
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.4/dist/jquery.fancybox.min.js"></script>
+
+<script src="/javascripts/init.js"></script>
+
+    

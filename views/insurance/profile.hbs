@@ -1,193 +1,212 @@
 <!--Banner-->
-	<div class="banner blue-bg" style="max-height: none;">
-		<div class="container">
-			<div class="banner-caption top-bottom-gap">
-				<h1>My Profile</h1>
+<div class="banner blue-bg" style="max-height: none;">
+	<div class="container">
+		<div class="banner-caption top-bottom-gap">
+			<h1>My Profile</h1>
+		</div>
+	</div>
+</div>
+<!--Content Area-->
+<div class="gray-bg">
+	<div class="container">
+		<div class="profile-info">
+			<div class="row">
+				<div class="col-6">
+					<div class="editable-box">
+						<div class="content-head">
+							<h2>Personal info</h2>
+							<a class="edit-icon" href="#"><img src="/images/payeee-edit.svg" alt="edit"></a>
+						</div>
+						<div class="content-info">
+							<ul class="contact-details">
+								<li>
+									<span class="heading">Full name:</span>
+									<span class="details">
+										{{user.name.givenName}} {{user.name.familyName}}
+									</span>
+								</li>
+								<li>
+									<span class="heading">Primary Address:</span>
+									<span class="details">
+										{{#if hasAddress}}
+										{{#each user.addresses}}
+										{{streetAddress}}<br>{{locality}}, {{region}} {{postalCode}}
+										{{/each}}
+										{{/if}}
+										{{#unless hasAddress}}<a href="#">Click here to update</a>{{/unless}}
+
+									</span>
+								</li>
+
+								<li>
+									<span class="heading">Emails:</span>
+									{{#each user.emails}}<span class="details">{{value}}</span>{{/each}}
+								</li>
+								{{#if linkedAccounts.linkedin}}
+								<li>
+									<span class="heading"><img src="/images/linkedin-small.png"
+											style="vertical-align: middle;display:inline;height: 20px"> Linkedin:</span>
+									<span class="details">Enabled</span>
+								</li>
+								{{/if}}
+								{{#if linkedAccounts.facebook}}
+								<li>
+									<span class="heading"><img src="/images/facebook-small.png"
+											style="vertical-align: middle;display:inline;height: 20px"> Facebook:</span>
+									<span class="details">Enabled</span>
+								</li>
+								{{/if}}
+								{{#if linkedAccounts.google}}
+								<li>
+									<span class="heading"><img src="/images/google-small.png"
+											style="vertical-align: middle;display:inline;height: 20px"> Google:</span>
+									<span class="details">Enabled</span>
+								</li>
+								{{/if}}
+								{{#if extProfile.car.status}}
+								<li>
+									<span class="heading">{{extProfile.car.displayName}}:</span>
+									<span class="details">{{extProfile.car.value}}</span>
+								</li>
+								{{/if}}
+							</ul>
+
+						</div>
+						<div class="content-foot">
+							<a href="/app/downloadme">Download my data</a> | <a href="/app/deleteme">Remove my
+								account</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="editable-box">
+						<div class="content-head">
+							<h2>My quotes</h2>
+						</div>
+						<div class="content-info">
+							Start a new quote
+							<div class="bb-row small">
+								<a href="{{actionCar}}">
+									<div class="bb-card small">
+										<div class="bb-container small">
+											<span class="bb-image-car small"></span>
+											<h4>Car</h4>
+										</div>
+									</div>
+								</a>
+								<a href="{{actionHome}}">
+									<div class="bb-card small">
+										<div class="bb-container small">
+											<span class="bb-image-home small"></span>
+											<h4>Home</h4>
+										</div>
+									</div>
+								</a>
+								<a href="{{actionLife}}">
+									<div class="bb-card small">
+										<div class="bb-container small">
+											<span class="bb-image-life small"></span>
+											<h4>Life</h4>
+										</div>
+									</div>
+								</a>
+							</div>
+							{{#if quotes}}
+							<div class="bb-alert bb-info">
+								You have {{quotes}} quotes waiting!<br><a href="#">➡︎ Click here to review your active
+									quotes</a>
+							</div>
+							{{/if}}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div style="clear:both"></div>
+				<div class="col-6">
+					<div class="editable-box">
+						<div class="content-head">
+							<h2>Communication preferences</h2>
+						</div>
+						<div class="content-info">
+							<form action="{{consentAction}}" method="post">
+								<span style="display:inline-block;width:100%">
+									<input type="checkbox" id="consentPaperless" name="consentPaperless" value="true"
+										{{#if consentPaperless}} checked {{/if}}>
+									<label for="consentPaperless">Paperless billing</label>
+									<input type="hidden" name="consentMarketingAccessTypeID" value="{{consentMarketingAccessTypeID}}">
+
+								</span>
+								<span style="display:inline-block;margin-top:1rem;width:100%">
+									<input type="checkbox" id="consentMarketing" name="consentMarketing" value="true"
+										{{#if consentMarketing}} checked {{/if}}>
+									<label for="consentMarketing">I would like to receive communications relating to
+										promotions</label><br>
+									<input type="hidden" name="consentPaperlessAccessTypeID" value="{{consentPaperlessAccessTypeID}}">
+								</span>
+								<input type="submit" value="Save Settings" style="margin-top:2rem">
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-6">
+					<div class="editable-box">
+						<div class="content-head">
+							<h2>Privacy & consent history</h2>
+							<a class="edit-icon" href="./consent"><img style="width:15px" src="/images/security-session.svg" alt="view"></a>
+						</div>
+					</div>
+					<div class="editable-box">
+						<div class="content-head">
+							<h2>Security preferences</h2>
+							<a class="edit-icon" href="#"><img src="/images/payeee-edit.svg" alt="edit"></a>
+						</div>
+						<div class="qa-content">
+							<div class="bb-panel-section">
+								<form method="post" action="/app/toggleMfa">
+									<span style="display:inline-block;margin-top:1rem;width:100%">
+										<input type="checkbox" id="mfa" name="mfa" value="true" {{#if mfaStatus}}
+											checked {{/if}}>
+										<label for="mfa">Enable MFA</label>
+										<input class="bb-inline-input" type="submit" name="submit" value="Save">
+									</span>
+								</form>
+							</div>
+							<ul>
+								{{#if mfaStatus}}
+								<li>Email {{#each user.emails}}<span>{{this.value}}</span>{{/each}}</li>
+								<li>Phone number {{#if user.phoneNumbers}}<span>{{#each user.phoneNumbers}}{{value}}
+										({{type}}){{/each}}</span>{{/if}}{{#unless user.phoneNumbers}}<span><a
+											href="/app/enroll/sms">Enroll now</a></span>{{/unless}}</li>
+
+								{{/if}}
+								<li>Password <span>****** <a href="/app/change-password">Change password</a></span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</div>
 	</div>
-    <!--Content Area-->
-    <div class="gray-bg">
-        <div class="container">
-            <div class="profile-info">
-                <div class="row">
-										<div class="col-6">
-												<div class="editable-box">
-														<div class="content-head">
-																<h2>Personal info</h2>
-																<a class="edit-icon" href="#"><img src="/images/payeee-edit.svg" alt="edit"></a>
-														</div>
-														<div class="content-info">
-															<ul class="contact-details">
-																	<li>
-																		<span class="heading">Full name:</span>
-																			<span class="details">
-																					{{user.name.givenName}} {{user.name.familyName}}
-																			</span>
-																	</li>
-																	<li>
-																			<span class="heading">Primary Address:</span>
-																				<span class="details">
-																						{{#if hasAddress}}
-																							{{#each user.addresses}}
-																								{{streetAddress}}<br>{{locality}}, {{region}} {{postalCode}}
-																							{{/each}}
-																						{{/if}}
-																						{{#unless hasAddress}}<a href="#">Click here to update</a>{{/unless}}
+</div>
 
-																				</span>
-																		</li>
-
-																		<li>
-																			<span class="heading">Emails:</span>
-																				{{#each user.emails}}<span class="details">{{value}}</span>{{/each}}
-																		</li>
-																		{{#if linkedAccounts.linkedin}}
-																		<li>
-																			<span class="heading"><img src="/images/linkedin-small.png" style="vertical-align: middle;display:inline;height: 20px"> Linkedin:</span>
-																				<span class="details">Enabled</span>
-																		</li>
-																		{{/if}}
-																		{{#if linkedAccounts.facebook}}
-																		<li>
-																			<span class="heading"><img src="/images/facebook-small.png" style="vertical-align: middle;display:inline;height: 20px"> Facebook:</span>
-																				<span class="details">Enabled</span>
-																		</li>
-																		{{/if}}
-																		{{#if linkedAccounts.google}}
-																		<li>
-																			<span class="heading"><img src="/images/google-small.png" style="vertical-align: middle;display:inline;height: 20px"> Google:</span>
-																				<span class="details">Enabled</span>
-																		</li>
-																		{{/if}}
-																		{{#if extProfile.car.status}}
-																		<li>
-																			<span class="heading">{{extProfile.car.displayName}}:</span>
-																				<span class="details">{{extProfile.car.value}}</span>
-																		</li>
-																		{{/if}}
-																</ul>
-
-														</div>
-														<div class="content-foot">
-															<a href="/app/downloadme">Download my data</a> | <a href="/app/deleteme">Remove my account</a>
-														</div>
-												</div>
-										</div>
-	                  <div class="col-6">
-												<div class="editable-box">
-														<div class="content-head">
-																<h2>My quotes</h2>
-														</div>
-														<div class="content-info">
-															Start a new quote
-																<div class="bb-row small">
-																	<a href="{{actionCar}}">
-																		<div class="bb-card small">
-																		  <div class="bb-container small">
-																				<span class="bb-image-car small"></span>
-																		    <h4>Car</h4>
-																		  </div>
-																		</div>
-																	</a>
-																	<a href="{{actionHome}}">
-																		<div class="bb-card small">
-																		  <div class="bb-container small">
-																				<span class="bb-image-home small"></span>
-																		    <h4>Home</h4>
-																		  </div>
-																		</div>
-																	</a>
-																	<a href="{{actionLife}}">
-																		<div class="bb-card small">
-																		  <div class="bb-container small">
-																				<span class="bb-image-life small"></span>
-																		    <h4>Life</h4>
-																		  </div>
-																		</div>
-																	</a>
-																</div>
-																{{#if quotes}}
-															<div class="bb-alert bb-info">
-															 You have {{quotes}} quotes waiting!<br><a href="#">➡︎ Click here to review your active quotes</a>
-															</div>
-															{{/if}}
-														</div>
-												</div>
-										</div>
-									</div>
-									<div class="row">
-									<div style="clear:both"></div>
-									<div class="col-6">
-											<div class="editable-box">
-													<div class="content-head">
-															<h2>Communication preferences</h2>
-													</div>
-													<div class="content-info">
-													<form action="/app/preferences" method="post">
-														<span style="display:inline-block;width:100%">
-															<input type="checkbox" id="paperless" name="consentPaperless" value="true" {{#if consentPaperless}} checked {{/if}}>
-															<label for="paperless">Paperless billing</label>
-														</span>
-														<span style="display:inline-block;margin-top:1rem;width:100%">
-															<input type="checkbox" id="promotions" name="consentPromotions" value="true" {{#if consentPromotions}} checked {{/if}}>
-															<label for="promotions">I would like to receive communications relating to promotions</label><br>
-														</span>
-														<span style="display:inline-block;margin-top:1rem;width:100%">
-															<input type="checkbox" id="updates" name="consentNotifications" value="true" {{#if consentNotifications}} checked {{/if}}>
-															<label for="updates">I would like to receive communications relating to updates to my account / services</label><br>
-														</span>
-														<input type="submit" value="Save Settings" style="margin-top:2rem">
-													</form>
-
-													</div>
-											</div>
-									</div>
-
-                  <div class="col-6">
-                      <div class="editable-box">
-                          <div class="content-head">
-                              <h2>Security preferences</h2>
-                              <a class="edit-icon" href="#"><img src="/images/payeee-edit.svg" alt="edit"></a>
-                          </div>
-                          <div class="qa-content">
-														<div class="bb-panel-section">
-															<form method="post" action="/app/toggleMfa">
-																<span style="display:inline-block;margin-top:1rem;width:100%">
-																	<input type="checkbox" id="mfa" name="mfa" value="true" {{#if mfaStatus}} checked {{/if}}>
-																	<label for="mfa">Enable MFA</label>
-																	<input class="bb-inline-input" type="submit" name="submit" value="Save">
-																</span>
-															</form>
-														</div>
-                          	<ul>
-																	{{#if mfaStatus}}
-                              		<li>Email {{#each user.emails}}<span>{{this.value}}</span>{{/each}}</li>
-                                  <li>Phone number {{#if user.phoneNumbers}}<span>{{#each user.phoneNumbers}}{{value}} ({{type}}){{/each}}</span>{{/if}}{{#unless user.phoneNumbers}}<span><a href="/app/enroll/sms">Enroll now</a></span>{{/unless}}</li>
-
-																	{{/if}}
-																	<li>Password <span>****** <a href="/app/change-password">Change password</a></span></li>
-                            </ul>
-                          </div>
-                      </div>
-                  </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div style="display: none;" class="fancy-popup" id="fancy-popup">
-    	<div class="popup-title">
-    		<h2>Terms of Use</h2>
-        </div>
-        <ol>
-        	<li>I confirm, for the purposes of this Demo, I will not use as username and password any characters/figures/symbols that form any corporate or personal accounts credentials but rather I will use
-            fictitious ones.</li>
-            <li>I confirm that my use of this Demo is voluntary, at my discretion and I will use it for promoting IBM brand and products as part of working for IBM.</li>
-            <li>I agree that IBM will use the information created by my use of this Demo (typed and behavioral) for its business and research objectives.</li>
-            <li>I agree that IBM is allowed to preserve such information in a cloud environment and to freely transfer such information across borders.</li>
-            <li>The said information generated in this Demo will not be preserved for more than 90 days.</li>
-        </ol>
+<div style="display: none;" class="fancy-popup" id="fancy-popup">
+	<div class="popup-title">
+		<h2>Terms of Use</h2>
 	</div>
-	<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.4/dist/jquery.fancybox.min.js"></script>
+	<ol>
+		<li>I confirm, for the purposes of this Demo, I will not use as username and password any
+			characters/figures/symbols that form any corporate or personal accounts credentials but rather I will use
+			fictitious ones.</li>
+		<li>I confirm that my use of this Demo is voluntary, at my discretion and I will use it for promoting IBM brand
+			and products as part of working for IBM.</li>
+		<li>I agree that IBM will use the information created by my use of this Demo (typed and behavioral) for its
+			business and research objectives.</li>
+		<li>I agree that IBM is allowed to preserve such information in a cloud environment and to freely transfer such
+			information across borders.</li>
+		<li>The said information generated in this Demo will not be preserved for more than 90 days.</li>
+	</ol>
+</div>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.4/dist/jquery.fancybox.min.js"></script>

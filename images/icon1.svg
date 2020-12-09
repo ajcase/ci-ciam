@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="43px" height="45px" viewBox="0 0 43 45" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 13</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="airline-home" transform="translate(-328.000000, -922.000000)" stroke="#444444">
+            <g id="Group-13" transform="translate(328.000000, 922.000000)">
+                <polyline id="Stroke-1" stroke-linecap="square" points="29.5 35.5 31.5 37.5 35.5 33.5"></polyline>
+                <g id="Group-12">
+                    <path d="M32.5,26.5 C37.471,26.5 41.5,30.529 41.5,35.5 C41.5,40.471 37.471,44.5 32.5,44.5 C27.529,44.5 23.5,40.471 23.5,35.5 C23.5,30.529 27.529,26.5 32.5,26.5 Z" id="Stroke-2" stroke-linecap="square"></path>
+                    <path d="M42.5,14.5 L0.5,14.5" id="Stroke-4"></path>
+                    <path d="M18.5,40.5 L3.5,40.5 C1.843,40.5 0.5,39.157 0.5,37.5 L0.5,7.5 C0.5,5.843 1.843,4.5 3.5,4.5 L39.5,4.5 C41.157,4.5 42.5,5.843 42.5,7.5 L42.5,23.512" id="Stroke-6" stroke-linecap="square"></path>
+                    <path d="M10.5,0.5 L10.5,8.5" id="Stroke-8" stroke-linecap="square"></path>
+                    <path d="M32.5,0.5 L32.5,8.5" id="Stroke-10" stroke-linecap="square"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
