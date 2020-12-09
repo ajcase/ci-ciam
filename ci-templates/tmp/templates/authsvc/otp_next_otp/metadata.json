@@ -1,0 +1,45 @@
+{
+   "description": "OTP login.",
+   "id": {
+      "component": "authsvc",
+      "name": "otp_next_otp",
+      "revision": 7
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Error message.",
+            "key": "@ERROR_MESSAGE@"
+         },
+         {
+            "default": null,
+            "description": "Mapping rule date.",
+            "key": "@MAPPING_RULE_DATA@"
+         },
+         {
+            "default": null,
+            "description": "OTP delivery attribute.",
+            "key": "@OTP_DELIVERY_ATTR@"
+         },
+         {
+            "default": null,
+            "description": "Display reselect button.",
+            "key": "@DISPLAY_RESELECT_BUTTON@"
+         },
+         {
+            "default": null,
+            "description": "Action.",
+            "key": "@ACTION@"
+         },
+         {
+            "default": null,
+            "description": "Reselect action.",
+            "key": "@RESELECT_ACTION@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

@@ -1,0 +1,31 @@
+{
+   "description": "Email templates for USC operations.  The email template file contains a sender, subject, and contents section for customization.  Macros are replaced in the email before it is sent.  Macros are described below and must start and end with @ sign.",
+   "id": {
+      "component": "USC",
+      "name": "UserSelfCareEmails",
+      "revision": 4
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+         {
+            "description": "The token that is emailed to the end user.",
+            "key": "@TOKEN@"
+         },
+         {
+            "description": "A link to the change password page.  This link is built internally to the runtime change password html page.",
+            "key": "@CHANGE_PASSWORD_LINK@"
+         },
+         {
+            "description": "The first name of the user.",
+            "key": "@FIRST_NAME@"
+         },
+         {
+            "description": "The tenant name.",
+            "key": "@TENANT@"
+         }
+      ]
+   }
+}

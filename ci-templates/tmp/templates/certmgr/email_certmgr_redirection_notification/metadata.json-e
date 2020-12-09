@@ -1,0 +1,65 @@
+{
+   "description": "E-mail sent to the new reviewer in case of redirection",
+   "id": {
+      "component": "certmgr",
+      "name": "email_certmgr_redirection_notification",
+      "revision": 1
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Hyperlink to USC for executing the review",
+            "key": "@USC.HYPELINK@"
+         },
+         {
+            "default": null,
+            "description": "The reviewer of the campaign",
+            "key": "@CERTIFICATION.REVIEWER@"
+         },
+         {
+            "default": null,
+            "description": "The previous reviewer, who redirected to the current one",
+            "key": "@CERTIFICATION.PREVIOUS_REVIEWER@"
+         },
+         {
+            "default": null,
+            "description": "The name of the campaign",
+            "key": "@CERTIFICATION.NAME@"
+         },
+         {
+            "default": null,
+            "description": "The ID of the campaign",
+            "key": "@CERTIFICATION.ID@"
+         },
+         {
+            "default": null,
+            "description": "The starting date of the campaign",
+            "key": "@CERTIFICATION.STARTDATE@"
+         },
+         {
+            "default": null,
+            "description": "The end date of the campaign",
+            "key": "@CERTIFICATION.ENDDATE@"
+         },
+         {
+            "default": null,
+            "description": "The number of items for this reviewer in this campaign",
+            "key": "@CERTIFICATION.ITEMSTOREVIEW@"
+         },
+         {
+            "default": null,
+            "description": "The action that will be taken, at signoff, in case the items are not reviewed",
+            "key": "@CERTIFICATION.OVERDUEACTION@"
+         },
+         {
+            "default": null,
+            "description": "The type of the campaign",
+            "key": "@CERTIFICATION.TYPE@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

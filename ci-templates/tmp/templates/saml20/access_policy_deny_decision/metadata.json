@@ -1,0 +1,20 @@
+{
+   "description": "An access denied page to display when challenge not fulfilled during access policy execution.",
+   "id": {
+      "component": "saml20",
+      "name": "access_policy_deny_decision",
+      "revision": 2
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The timestamp when the error occurs.",
+            "key": "@TIMESTAMP@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

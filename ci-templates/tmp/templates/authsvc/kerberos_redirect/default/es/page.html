@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!--
+    Macro Substitution Values:
+    REDIRECT_URL: @REDIRECT_URL@
+-->
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Refresh" content="0;url=@REDIRECT_URL@">
+	<base href="/" />
+	<link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Inicio de sesión - IBM Cloud Identity</title>
+	<link rel="stylesheet" href="usc/css/stateless.css" />
+</head>
+
+<body class="tile-background">
+	<div data-role="page" class="cs-content">
+		<div data-role="header" class="heading">
+			<div>
+				<h1>IBM<small>®</small></h1>
+				<h2>Cloud Identity</h2>
+			</div>
+		</div>
+		<div class="content">
+			<div>
+				<p>La autenticación de certificado no se puede realizar porque este dispositivo no está gestionado por su organización. Se le redirigirá a la página
+					de selección de inicio de sesión para otras opciones de inicio de sesión.</p>
+			</div>
+			<div>
+				<p>Si en <b>5 segundos</b> no se le ha redirigido a la página nueva, pulse <a href="@REDIRECT_URL@">aquí</a>.</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

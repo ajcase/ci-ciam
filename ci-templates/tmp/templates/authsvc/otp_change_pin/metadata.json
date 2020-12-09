@@ -1,0 +1,40 @@
+{
+   "description": "OTP errors, change pin.",
+   "id": {
+      "component": "authsvc",
+      "name": "otp_change_pin",
+      "revision": 7
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Error message.",
+            "key": "@ERROR_MESSAGE@"
+         },
+         {
+            "default": null,
+            "description": "Mapping rule date.",
+            "key": "@MAPPING_RULE_DATA@"
+         },
+         {
+            "default": null,
+            "description": "Display selection button.",
+            "key": "@DISPLAY_RESELECT_BUTTON@"
+         },
+         {
+            "default": null,
+            "description": "Action.",
+            "key": "@ACTION@"
+         },
+         {
+            "default": null,
+            "description": "Reselect action.",
+            "key": "@RESELECT_ACTION@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

@@ -1,0 +1,31 @@
+{
+   "description": "A proper error page to display when consent to federate.",
+   "id": {
+      "component": "saml20",
+      "name": "consent_to_federate",
+      "revision": 2
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+         {
+            "description": "SP name.",
+            "key": "@TOKEN:SPDisplayName@"
+         },
+         {
+            "description": "SP ID.",
+            "key": "@TOKEN:SPProviderID@"
+         },
+         {
+            "description": "IP name.",
+            "key": "@TOKEN:IPDisplayName@"
+         },
+         {
+            "description": "SP ID.",
+            "key": "@TOKEN:IPProviderID@"
+         }
+      ]
+   }
+}

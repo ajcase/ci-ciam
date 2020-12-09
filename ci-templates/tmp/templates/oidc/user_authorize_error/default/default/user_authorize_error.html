@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>@@LABEL_TITLE_USERAUTH_RESULT@@</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/ui/assets/img/favicon.ico" />
+    <link rel="stylesheet" href="/usc/css/stateless.css">
+  </head>
+  <body>
+    <div class="cs-content usc-content usc-user-authorize-error">
+      <div data-role="header" class="heading">
+        <div>
+          <h1>IBM<small>®</small></h1>
+          <h2>@@LABEL_PRODUCT@@</h2>
+        </div>
+      </div>
+      <div class="user-authorize-main">
+        <p>@@LABEL_TEXT_USERAUTH_ERROR(@OAUTH_CODE@)@@</p>
+        <br/>
+        <p>@ERROR_DESCRIPTION@</p>
+        <br/>
+        <form action="@ACTION@" method="get">
+          <input type="submit" value="@@LABEL_BUTTON_ENTER_ANOTHER@@" class="button"/>
+        </form>
+      </div>
+      <footer class="login-footer" role="contentinfo">
+        <p>@@LABEL_COPYRIGHT@@</p>
+      </footer>
+    </div>
+  </body>
+</html>

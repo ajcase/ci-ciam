@@ -1,0 +1,30 @@
+{
+   "description": "TOTP login.",
+   "id": {
+      "component": "authsvc",
+      "name": "totp_login",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Action",
+            "key": "@ACTION@"
+         },
+         {
+            "default": null,
+            "description": "Error message.",
+            "key": "@ERROR_MESSAGE@"
+         },
+         {
+            "default": null,
+            "description": "OTP login disabled.",
+            "key": "@OTP_LOGIN_DISABLED@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

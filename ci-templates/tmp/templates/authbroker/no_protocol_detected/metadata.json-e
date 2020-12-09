@@ -1,0 +1,25 @@
+{
+   "description": "A proper error message with no protocol detected error message.",
+   "id": {
+      "component": "authbroker",
+      "name": "no_protocol_detected",
+      "revision": 4
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The timestamp when the error occurs.",
+            "key": "@TIMESTAMP@"
+         },
+         {
+            "default": null,
+            "description": "The Requested IP Address if any.",
+            "key": "@REQ_ADDR@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

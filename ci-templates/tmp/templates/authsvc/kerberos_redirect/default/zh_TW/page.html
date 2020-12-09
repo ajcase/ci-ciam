@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!--
+    Macro Substitution Values:
+    REDIRECT_URL: @REDIRECT_URL@
+-->
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Refresh" content="0;url=@REDIRECT_URL@">
+	<base href="/" />
+	<link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>登入 - IBM Cloud Identity</title>
+	<link rel="stylesheet" href="usc/css/stateless.css" />
+</head>
+
+<body class="tile-background">
+	<div data-role="page" class="cs-content">
+		<div data-role="header" class="heading">
+			<div>
+				<h1>IBM<small>®</small></h1>
+				<h2>Cloud Identity</h2>
+			</div>
+		</div>
+		<div class="content">
+			<div>
+				<p>無法執行憑證鑑別，因為您的組織不管理此裝置。您將會被重新導向至「登入選擇頁面」以進行其他登入選項。</p>
+			</div>
+			<div>
+				<p>如果您未在 <b>5 秒</b>內被重新導向，請按一下<a href="@REDIRECT_URL@">這裡</a>。</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

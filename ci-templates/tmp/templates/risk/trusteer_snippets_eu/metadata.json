@@ -1,0 +1,55 @@
+{
+   "description": "A page to store the Risk Trusteer eu snippets",
+   "id": {
+      "component": "risk",
+      "name": "trusteer_snippets_eu",
+      "revision": 3
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+         {
+            "description": "The tenant url.",
+            "key": "@TENANT_URL@"
+         },
+         {
+            "description": "The trusteer snippet id.",
+            "key": "@SNIPPET_ID@"
+         },
+         {
+            "description": "The domain name.",
+            "key": "@DOMAIN_NAME@"
+         },
+         {
+            "description": "The customer session from iv-creds.",
+            "key": "@TAGVALUE_SESSION_INDEX@"
+         },
+         {
+            "description": "The target url to submit to.",
+            "key": "@TARGET_URL@"
+         },
+         {
+            "description": "The target url query parameters to post.",
+            "key": "@TARGET_URL_QUERY_PARAMETERS@"
+         },
+         {
+            "description": "The Trusteer junction to be used by the front end.",
+            "key": "@TRUSTEER_JUNCTION@"
+         },
+         {
+            "description": "The Malware detection js name.",
+            "key": "@MALWARE_DETECTION_JS_NAME@"
+         },
+         {
+            "description": "The Passive detection js name.",
+            "key": "@PASSIVE_DETECTION_JS_NAME@"
+         },
+         {
+            "description": "The Criminal detection js name.",
+            "key": "@CRIMINAL_DETECTION_JS_NAME@"
+         }
+      ]
+   }
+}

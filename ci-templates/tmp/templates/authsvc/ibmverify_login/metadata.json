@@ -1,0 +1,20 @@
+{
+   "description": "IBM Verify login.",
+   "id": {
+      "component": "authsvc",
+      "name": "ibmverify_login",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Action.",
+            "key": "@ACTION@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

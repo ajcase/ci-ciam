@@ -1,0 +1,20 @@
+{
+   "description": "A general proper error page for access denied.",
+   "id": {
+      "component": "commonfim",
+      "name": "generic_access_denied",
+      "revision": 2
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The timestamp when the error occurs.",
+            "key": "@TIMESTAMP@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

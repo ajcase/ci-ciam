@@ -1,0 +1,20 @@
+{
+   "description": "Maas android error",
+   "id": {
+      "component": "authsvc",
+      "name": "maasandroid_error",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Error message.",
+            "key": "@ERROR_MESSAGE@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

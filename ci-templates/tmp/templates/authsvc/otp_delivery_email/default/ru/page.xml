@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Subject>
+  <Value>
+    Ваш одноразовый пароль
+  </Value>
+</Subject>
+
+<Message>
+  <Value>
+	<![CDATA[<html>
+		<body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #121212; padding: 12px;">
+			<h1 style="color: #4178BE;">Ваш одноразовый пароль (OTP): </h1>
+			<h2 style="color: #666666;">@OTP_STRING@</h2>
+			<p>Используйте этот OTP, чтобы завершить требование. Срок действия - @OTP_LIFETIME@ минут.</p>
+			<p>Не отвечайте на это письмо.</p>
+		</body>
+	</html>]]>
+  </Value>
+</Message>
+</root>

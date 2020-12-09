@@ -1,0 +1,30 @@
+{
+   "description": "A proper missing copmponent message displayed",
+   "id": {
+      "component": "authbroker",
+      "name": "missing_component",
+      "revision": 3
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The timestamp when the error occurs.",
+            "key": "@TIMESTAMP@"
+         },
+         {
+            "default": null,
+            "description": "The Requested IP Address if any.",
+            "key": "@REQ_ADDR@"
+         },
+         {
+            "default": null,
+            "description": "The Detail description displayed if any.",
+            "key": "@DETAIL@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

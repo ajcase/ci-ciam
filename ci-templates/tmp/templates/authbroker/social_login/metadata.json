@@ -1,0 +1,55 @@
+{
+   "description": "A Login Page to login via Social Login Provider.",
+   "id": {
+      "component": "authbroker",
+      "name": "social_login",
+      "revision": 5
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The Social Login Provider Id.",
+            "key": "@SOCIAL_LOGIN_PROVIDER_ID@"
+         },
+         {
+            "default": null,
+            "description": "The Social Login Provider URL.",
+            "key": "@SOCIAL_LOGIN_PROVIDER_URL@"
+         },
+         {
+            "default": null,
+            "description": "A JSON representation of the id sources to display",
+            "key": "@ID_SOURCES@"
+         },
+         {
+            "default": null,
+            "description": "A label for non-passwordless signin options",
+            "key": "@ALTERNATE_SIGNIN@"
+         },
+         {
+            "default": null,
+            "description": "A label for the username input",
+            "key": "@USERNAME@"
+         },
+         {
+            "default": null,
+            "description": "A label for the password input",
+            "key": "@PASSWORD@"
+         },
+         {
+            "default": null,
+            "description": "A label for the initial alternate id source drop down",
+            "key": "@OPTION_SELECT@"
+         },
+         {
+            "default": null,
+            "description": "A label for the cloud directory form submit button",
+            "key": "@SIGNIN@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

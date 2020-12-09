@@ -1,0 +1,35 @@
+{
+   "description": "A page to store the Risk Trusteer snippets",
+   "id": {
+      "component": "risk",
+      "name": "trusteer_snippets",
+      "revision": 4
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+         {
+            "description": "The tenant url.",
+            "key": "@TENANT_URL@"
+         },
+         {
+            "description": "The trusteer snippet id.",
+            "key": "@SNIPPET_ID@"
+         },
+         {
+            "description": "The domain name.",
+            "key": "@DOMAIN_NAME@"
+         },
+         {
+            "description": "The customer session from iv-creds.",
+            "key": "@TAGVALUE_SESSION_INDEX@"
+         },
+         {
+            "description": "The target url to submit to.",
+            "key": "@TARGET_URL@"
+         }
+      ]
+   }
+}

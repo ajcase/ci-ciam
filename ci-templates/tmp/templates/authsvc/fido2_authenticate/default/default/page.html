@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+	<base href="/" />
+	<link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico" />
+	<title>Verify - IBM Cloud Identity</title>
+	<link rel="stylesheet" href="usc/css/stateless.css">
+	<script src="https://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
+	<script type="text/javascript">
+	//START NON-TRANSLATABLE
+		var serverOptions = @FIDO2_ASSERTION_OPTIONS@;
+		var assertionResponseObject;
+		var verifyState = "@FIDO2_VERIFY_STATE@";//Macro being used in first factor
+		
+		function showhideCancelLink(){
+			if (verifyState == "login"){
+				document.getElementById("abortSection").style.display = "none";
+			}
+		}
+
+		function failedStepup(er) {
+			console.log("failed in assertion.");
+			console.log(er);
+			document.getElementById("errorMsg").innerHTML = "FIDO2 authentication failed.";
+
+		}
+
+		function onLoadPage() {
+		
+			showhideCancelLink();
+
+			//console.log("rspStatus: " + rspStatus);
+			if (serverOptions != undefined) {
+				// all ok - let's invoke the WebAuthn API to authenticate
+				console.log("Received assertion options: " + JSON.stringify(serverOptions));
+
+				// remove the status and errorMessage keys
+				delete serverOptions["status"];
+				delete serverOptions["errorMessage"];
+
+				// potential modifications to the serverOptions based on the selected registration
+
+				// we filter the allowCredentials list to include only the authenticator being tested. 
+				// If i < 0, then we use whatever the server sent
+				if (i >= 0 && serverOptions["allowCredentials"] != null) {
+					var newAllowCredentials = [];
+					for (var j = 0; j < serverOptions.allowCredentials.length && newAllowCredentials.length == 0; j++) {
+						if (serverOptions.allowCredentials[j].id == userData.credentials[i].attributes.credentialId) {
+							newAllowCredentials.push(serverOptions.allowCredentials[j]);
+						}
+					}
+					serverOptions.allowCredentials = newAllowCredentials;
+				}
+
+				// massage some of the b64u fields into the required ArrayBuffer types
+				var b64uChallenge = serverOptions.challenge;
+				serverOptions.challenge = new Uint8Array(b64toBA(b64utob64(b64uChallenge)));
+				if (serverOptions["allowCredentials"] != null && serverOptions["allowCredentials"].length > 0) {
+					for (var i = 0; i < serverOptions["allowCredentials"].length; i++) {
+						var b64uCID = serverOptions.allowCredentials[i].id;
+						serverOptions.allowCredentials[i].id = new Uint8Array(b64toBA(b64utob64(b64uCID)));
+					}
+				}
+				var credRequestOptions = {
+					"publicKey": serverOptions
+				};
+				console.log("calling navigator.credentials.get with: " + JSON.stringify(credRequestOptions));
+
+				// call the webauthn API
+				var promise = navigator.credentials.get(credRequestOptions);
+				promise.catch(failedStepup);
+				promise.then(successStepUp);
+
+			} else {
+				console.log("Unable to obtain assertion options. " + serverOptions);
+				console.log("Unable to obtain assertion options. ");
+			}
+		}
+
+
+
+		function successStepUp(authenticateResponse) {
+
+			// success
+			console.log("Received from authenticator: " + JSON.stringify(authenticateResponse));
+
+			// marshall the important parts of the response into an object which we send to the server for validation
+			var clientDataJSONB64u = hextob64u(BAtohex(new Uint8Array(authenticateResponse.response.clientDataJSON)));
+			var authenticatorDataCBORB64u = hextob64u(BAtohex(new Uint8Array(authenticateResponse.response
+				.authenticatorData)));
+			var signatureB64u = hextob64u(BAtohex(new Uint8Array(authenticateResponse.response.signature)));
+			var userHandleB64U = hextob64u(BAtohex(new Uint8Array(authenticateResponse.response.userHandle)));
+			var clientExtensionResults = authenticateResponse.getClientExtensionResults();
+
+			assertionResponseObject = {};
+			assertionResponseObject["id"] = authenticateResponse.id;
+			assertionResponseObject["rawId"] = authenticateResponse.id;
+			assertionResponseObject["type"] = "public-key";
+			assertionResponseObject["response"] = {
+				"clientDataJSON": clientDataJSONB64u,
+				"authenticatorData": authenticatorDataCBORB64u,
+				"signature": signatureB64u,
+				"userHandle": userHandleB64U,
+			};
+
+			// if there are extensions results, include those
+			//if (clientExtensionResults != null) {
+			//assertionResponseObject["getClientExtensionResults"] = clientExtensionResults;
+			//}
+
+			// send to server for result processing
+			console.log("Sending to server: " + JSON.stringify(assertionResponseObject));
+
+			var payload = JSON.stringify(assertionResponseObject);
+			// send to server for result processing
+			console.log("Sending to server: " + payload);
+			document.getElementById("authenticateForm").assertionResponse.value = payload;
+
+			document.getElementById("authenticateForm").submit();
+		}
+	//END NON-TRANSLATABLE
+	</script>
+</head>
+
+<body onload="onLoadPage()">
+	<div class="cs-content">
+		<div class="heading">
+			<div>
+				<h1 id="ibm-header" class="ng-binding">IBM<small class="r">®</small></h1>
+				<h2 id="product-header" class="ng-binding">State Farm POC</h2>
+			</div>
+		</div>
+		<div class='content'>
+			<div class="cs-select-login-provider-instructions">FIDO2 Verification</div>
+			<div class="instructions">Verify with FIDO2 Token. Please plug-in your registered security device and follow
+				the on-screen prompt.</div>
+			<div class="fido-device-image"></div>
+			<div id="errorMsg"></div>
+		</div>
+		<div>
+			<div>
+				<form id="authenticateForm" method="POST" action="@ACTION@">
+					<input type="hidden" name="operation" value="authenticate">
+					<input type="hidden" name="assertionResponse" value="">
+				</form>
+			</div>
+			<div class="use-another-method" id="abortSection">
+			   <a href="@ACTION@&operation=cancel">Use another method</a>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

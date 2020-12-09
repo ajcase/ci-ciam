@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+        <link rel='shortcut icon' type='image/x-icon' href='/ui/assets/img/favicon.ico' />
+        <script type="text/javascript" src="/ui/assets/_js?include=templates/otp/otp"></script>
+        <link rel='stylesheet' href='/usc/css/stateless.css'>
+        <title>Sign In - IBM Cloud Identity</title>
+    </head>
+
+    <body>
+        <div class='cs-content'>
+            <div class='bx--modal-header'>
+                <p class='bx--type-delta'>@WELCOME@, @USER_GIVEN_NAME@</p>
+                <p class='bx--type-beta'>@LETS_MAKE_SURE_ITS_YOU@</p>
+            </div>
+            <div class='verify-message'>@CORRECTLY_ANSWER_QUESTIONS@</div>
+            <div class="top-spaced error-message" ng-if="errorMessage">
+                <span id="cs-error-message">@ERROR_MESSAGE@</span>
+            </div>
+            <div class='right-panel'>
+                <form class="knowledge-questions" method="POST" action="@ACTION@">
+                    [RPT questions]
+                    <div class="question-answer">
+                        <div class="question">
+                            <span class="bx--list-box__label" for="downshift-1-input">@QUESTION@</span>
+                        </div>
+                        <div class="answer">
+                            <input id="@QUESTION_KEY@" placeholder="answer" type="" class="bx--text-input" name="@QUESTION_KEY@" autocomplete="off">
+                        </div>
+                    </div>
+                    [ERPT questions]
+                    
+                    <input type="hidden" name="operation" value="verify">
+
+                    <div class="use-another-method">
+                        <a href="@ACTION@&operation=restart">@USE_ANOTHER_METHOD@</a>
+                    </div>
+                    
+                    <input type="submit" class="cs-button bx--btn bx--btn--primary" value="Verify">
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

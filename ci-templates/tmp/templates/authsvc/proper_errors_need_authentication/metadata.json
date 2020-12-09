@@ -1,0 +1,25 @@
+{
+   "description": "Proper errors need authentication",
+   "id": {
+      "component": "authsvc",
+      "name": "proper_errors_need_authentication",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "Req Addr.",
+            "key": "@REQ_ADDR@"
+         },
+         {
+            "default": null,
+            "description": "Time stamp.",
+            "key": "@TIMESTAMP@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

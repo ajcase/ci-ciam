@@ -1,0 +1,19 @@
+{
+   "description": "A page to display when challenge user decision during access policy execution.",
+   "id": {
+      "component": "saml20",
+      "name": "access_policy_challenge_decision",
+      "revision": 2
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+         {
+            "description": "The action.",
+            "key": "@ACTION@"
+         }
+      ]
+   }
+}
