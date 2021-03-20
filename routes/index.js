@@ -161,7 +161,8 @@ router.get('/app/profile', function(req, res, next) {
             items: [
               {
                 purposeId: process.env.MARKETING_PURPOSE_ID,
-                accessTypeId: process.env.READ_ACCESS_TYPE
+                accessTypeId: process.env.READ_ACCESS_TYPE,
+                attributeId: process.env.EMAIL_ATTRIBUTE_ID
               },
               {
                 purposeId: process.env.PAPERLESS_PURPOSE_ID,
@@ -261,6 +262,7 @@ router.post('/app/dpcm', function(req, res, next) {
     {
       purposeId: process.env.MARKETING_PURPOSE_ID,
       accessTypeId: process.env.READ_ACCESS_TYPE,
+      attributeId: process.env.EMAIL_ATTRIBUTE_ID,
       state: (req.body.consentMarketing) ? 3 : 4,
     },
     {
