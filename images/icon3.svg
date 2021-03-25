@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="44px" height="44px" viewBox="0 0 44 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 11</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="airline-home" transform="translate(-1068.000000, -923.000000)" stroke="#444444">
+            <g id="Group-11" transform="translate(1068.000000, 923.000000)">
+                <polyline id="Stroke-1" points="26.3353 9.1721 5.5003 1.4921 1.5003 5.4161 18.6543 16.8521"></polyline>
+                <path d="M8.7504,29.0466 L1.5794,28.4946 C0.6534,28.4236 0.1394,29.5426 0.7954,30.1986 L5.2194,34.6226" id="Stroke-3"></path>
+                <polyline id="Stroke-5" points="34.8207 17.657 42.5007 38.492 38.5767 42.492 27.1397 25.338"></polyline>
+                <path d="M14.9452,35.2419 L15.4972,42.4129 C15.5682,43.3389 14.4492,43.8529 13.7932,43.1969 L9.3692,38.7729" id="Stroke-7"></path>
+                <path d="M21.1864,31.2908 L5.5424,41.1938 C3.7574,42.2658 1.7274,40.2348 2.7984,38.4498 L12.7014,22.8058 L32.2574,3.2488 C34.6004,0.9058 41.0704,-0.4232 42.7424,1.2488 C44.3984,2.9048 43.0854,9.3908 40.7424,11.7338 L21.1864,31.2908 Z" id="Stroke-9" stroke-linecap="square"></path>
+            </g>
+        </g>
+    </g>
+</svg>

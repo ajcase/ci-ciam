@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="52px" viewBox="0 0 48 52" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 9</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="airline-manage-account" transform="translate(-456.000000, -1434.000000)">
+            <g id="Group-9" transform="translate(456.000000, 1435.000000)">
+                <polyline id="Stroke-1" stroke="#9E6146" points="22.5533793 16.7285 15.7125517 0.000166666667 0.816 0.000166666667 10.4971034 23.6751667"></polyline>
+                <polyline id="Stroke-3" stroke="#9E6146" points="25.4241103 16.7285 32.2649379 0.000166666667 47.1614897 0.000166666667 37.4803862 23.6751667"></polyline>
+                <path d="M23.9887448,16.6666667 C33.1286069,16.6666667 40.540469,24.1283333 40.540469,33.3333333 C40.540469,42.5366667 33.1286069,50 23.9887448,50 C14.8488828,50 7.43702069,42.5366667 7.43702069,33.3333333 C7.43702069,24.1283333 14.8488828,16.6666667 23.9887448,16.6666667 Z" id="Stroke-5" stroke="#9E6146" stroke-linecap="square"></path>
+                <polygon id="Fill-7" fill="#9E6146" points="23.9887448 25.0968333 26.6469517 30.5185 32.5890207 31.3885 28.2888828 35.6101667 29.3035034 41.5701667 23.9887448 38.7568333 18.6739862 41.5701667 19.6886069 35.6101667 15.388469 31.3885 21.3305379 30.5185"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

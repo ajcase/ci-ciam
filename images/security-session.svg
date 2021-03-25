@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="23px" viewBox="0 0 22 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.3 (67297) - http://www.bohemiancoding.com/sketch -->
+    <title>Combined Shape</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Security-Assesment---All-OK" transform="translate(-578.000000, -344.000000)" fill="#5AAAFA">
+            <path d="M589,357 L583,357 L583,355 L588,355 L588,350 L590,350 L590,356 C590,356.553 589.552,357 589,357 Z M598,356 L600,356 C600,362.065 595.065,367 589,367 C582.935,367 578,362.065 578,356 C578,349.935 582.935,345 589,345 C591.545,345 593.957,345.862 595.907,347.442 L599.562,344 L599.993,353.209 L590.826,352.226 L594.43,348.833 C592.873,347.65 590.989,347 589,347 C584.037,347 580,351.037 580,356 C580,360.963 584.037,365 589,365 C593.963,365 598,360.963 598,356 Z" id="Combined-Shape"></path>
+        </g>
+    </g>
+</svg>

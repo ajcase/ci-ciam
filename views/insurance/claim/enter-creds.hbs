@@ -1,0 +1,42 @@
+<!--Banner-->
+<div class="banner blue-bg" style="max-height: none;">
+    <div class="container">
+        <div class="banner-caption">
+            <h1>Claim your account</h1>
+            <p>Go digital. Create your profile today.</p>
+        </div>
+    </div>
+</div>
+
+<!--Content Area-->
+<div class="container">
+    <div class="content-area">
+        <form action="{{action}}" method="post">
+            <div class="input-list clear">
+                
+                <h3 style="margin-left:35px;">Enter the account number associated with your account.</h3>
+                
+                <div class="input-list-box">
+                    <div class="formRow">
+                        <label>Account ID</label>
+                        <input type="input" required placeholder="Enter your existing account ID" name="accountId" onFocus="this.placeholder = ''">
+                        <div class="inputLine"></div>
+                    </div>
+                </div>
+                <div class="input-list-box">
+                    <div class="formRow-bottom clearfix">
+                        <input class="input-cta" type="submit" value="Lookup account">
+                    </div>
+                </div>
+              
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.4/dist/jquery.fancybox.min.js"></script>
+
+<script src="/javascripts/init.js"></script>

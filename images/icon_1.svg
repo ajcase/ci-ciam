@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="46px" height="40px" viewBox="0 0 46 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 4</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0 40 46 40 46 0 0 0"></polygon>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home---Widget" transform="translate(-135.000000, -947.000000)">
+            <g id="Group-4" transform="translate(135.000000, 947.000000)">
+                <polyline id="Stroke-1" stroke="#00468C" stroke-width="2" points="34.9902 16.2798 40.0002 18.9998 45.0002 11.9998"></polyline>
+                <polyline id="Stroke-3" stroke="#00468C" stroke-width="2" points="1 20 5 23 9 16 15 27 19 19 23 22 27.178 17.183"></polyline>
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="Clip-6"></g>
+                <polygon id="Stroke-5" stroke="#00468C" stroke-width="2" stroke-linecap="square" mask="url(#mask-2)" points="1 39 45 39 45 1 1 1"></polygon>
+                <path d="M31,25 L31,39" id="Stroke-7" stroke="#00468C" stroke-width="2" stroke-linecap="square" mask="url(#mask-2)"></path>
+                <path d="M31,1 L31,12" id="Stroke-8" stroke="#00468C" stroke-width="2" stroke-linecap="square" mask="url(#mask-2)"></path>
+                <path d="M31,12 C33.209,12 35,13.791 35,16 C35,18.209 33.209,20 31,20 C28.791,20 27,18.209 27,16 C27,13.791 28.791,12 31,12 Z" id="Stroke-9" stroke="#00468C" stroke-width="2" stroke-linecap="square" mask="url(#mask-2)"></path>
+            </g>
+        </g>
+    </g>
+</svg>

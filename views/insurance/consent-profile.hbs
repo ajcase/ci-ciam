@@ -1,0 +1,67 @@
+<!--Banner-->
+<div class="banner blue-bg" style="max-height: none;">
+    <div class="container">
+        <div class="banner-caption top-bottom-gap">
+            <h1>Privacy & consent</h1>
+        </div>
+    </div>
+</div>
+<!--Content Area-->
+<div class="gray-bg">
+    <div class="container">
+        <div class="profile-info">
+            <div class="row">
+                <div class="col-12">
+                    <div class="editable-box">
+                        <div class="content-head">
+                            <h2>View what you have consented to</h2>
+                            </div>
+                        <div class="col-content-main">
+                           <table>
+                               <tr class="table-head">
+                                   <th style="width:30%;font-weight:bold;">Purpose/agreement</th>
+                                   <th style="width:15%;font-weight:bold;">Attribute</th>
+                                   <th style="width:15%;font-weight:bold;">Access type</th>
+                                   <th style="width:15%;font-weight:bold;">Current state</th>
+                                   <th style="width:15%;font-weight:bold;text-align:right;">Consented on</th>
+                               </tr>
+                               {{#each consent}}
+                               <tr class="table-row">
+                                   <td><span>{{this.purposeName}} (Version {{this.purposeVersion}})</span></td>
+                                   <td><span>{{formatAttribute this.attributeName}}</span></td>
+                                   <td><span>{{formatAccessType this.accessTypeName}}</span></td>
+                                   <td><span>{{formatState this.state}}</span></td>
+                                   <td><span>{{formatDate this.lastModifiedTime}}</span></td>
+                               </tr>
+                               {{/each}}
+                               
+                            </table>
+                        </div>
+                        <div class="content-foot">
+                            <p>Return to <a href="/app/profile" class="blue" id="open-new-account-link">profile</a></p>
+                        </div>
+                    </div>
+                </div>         
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="display: none;" class="fancy-popup" id="fancy-popup">
+    <div class="popup-title">
+        <h2>Terms of Use</h2>
+    </div>
+    <ol>
+        <li>I confirm, for the purposes of this Demo, I will not use as username and password any
+            characters/figures/symbols that form any corporate or personal accounts credentials but rather I will use
+            fictitious ones.</li>
+        <li>I confirm that my use of this Demo is voluntary, at my discretion and I will use it for promoting IBM brand
+            and products as part of working for IBM.</li>
+        <li>I agree that IBM will use the information created by my use of this Demo (typed and behavioral) for its
+            business and research objectives.</li>
+        <li>I agree that IBM is allowed to preserve such information in a cloud environment and to freely transfer such
+            information across borders.</li>
+        <li>The said information generated in this Demo will not be preserved for more than 90 days.</li>
+    </ol>
+</div>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.4/dist/jquery.fancybox.min.js"></script>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="14px" viewBox="0 0 16 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 6</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0 0.7004 16 0.7004 16 10 0 10"></polygon>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="airline-review-flights" transform="translate(-195.000000, -893.000000)">
+            <g id="Group-6" transform="translate(195.000000, 893.000000)">
+                <path d="M15,0 L1,0 C0.4,0 0,0.4 0,1 L0,2.4 L8,6.9 L16,2.5 L16,1 C16,0.4 15.6,0 15,0" id="Fill-1" fill="#FFFFFF"></path>
+                <g id="Group-5" transform="translate(0.000000, 4.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Clip-4"></g>
+                    <path d="M7.5,4.9004 L0,0.7004 L0,9.0004 C0,9.5994 0.4,10.0004 1,10.0004 L15,10.0004 C15.6,10.0004 16,9.5994 16,9.0004 L16,0.7004 L8.5,4.9004 C8.22,5.0404 7.78,5.0404 7.5,4.9004" id="Fill-3" fill="#FFFFFF" mask="url(#mask-2)"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

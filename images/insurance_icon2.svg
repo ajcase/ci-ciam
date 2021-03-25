@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="46px" height="40px" viewBox="0 0 46 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 15</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Insurance-Home" transform="translate(-456.000000, -1118.000000)" stroke="#00468C" stroke-width="2">
+            <g id="Group-15" transform="translate(457.000000, 1119.000000)">
+                <path d="M40,15 L38.231,1.736 C38.099,0.742 37.251,0 36.249,0 L7.751,0 C6.749,0 5.901,0.742 5.769,1.736 L4,15" id="Stroke-1"></path>
+                <polyline id="Stroke-3" stroke-linecap="square" points="12 32 12 38 3 38 3 32"></polyline>
+                <polyline id="Stroke-5" stroke-linecap="square" points="41 32 41 38 32 38 32 32"></polyline>
+                <path d="M44,32 L0,32 L0,21.403 C0,20.495 0.309,19.613 0.877,18.904 L4,15 L40,15 L43.123,18.904 C43.691,19.614 44,20.495 44,21.403 L44,32 Z" id="Stroke-7" stroke-linecap="square"></path>
+                <path d="M36,21 C37.657,21 39,22.343 39,24 C39,25.657 37.657,27 36,27 C34.343,27 33,25.657 33,24 C33,22.343 34.343,21 36,21 Z" id="Stroke-9" stroke-linecap="square"></path>
+                <path d="M8,21 C9.657,21 11,22.343 11,24 C11,25.657 9.657,27 8,27 C6.343,27 5,25.657 5,24 C5,22.343 6.343,21 8,21 Z" id="Stroke-11" stroke-linecap="square"></path>
+                <path d="M19,24 L25,24" id="Stroke-13" stroke-linecap="square"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Setup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/favicon/site.webmanifest">
+  <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#7a6f6f">
+  <link rel="shortcut icon" href="/favicon/favicon.ico">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-config" content="/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+  <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/social.css" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/overrides.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/default.min.css">
+  <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js"></script>
+</head>
+
+<body class="sa_body gary-bg">
+  <div class="overlay-background">
+
+    <div class="overlay-content login-wrap">
+
+      <div class="overlay-logo">
+        <img src="/images/ibm_security_black.png">
+      </div>
+
+      <h1>Initial Setup</h1>
+
+      <form action="/setup" method="post">
+        <p>Enter information to initialize API Client</p>
+        {{#if error}}
+          <div class="bb-alert bb-warning">
+            <span class="bb-closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            {{errorMessage}}
+          </div>
+        {{/if}}
+        <div class="formRow">
+          <label>CI Tenant Base URL</label>
+          <input type="text" required placeholder="Base URI" name="baseUri" onFocus="this.placeholder = ''" value="{{baseUri}}">
+          <div class="inputLine"></div>
+        </div>
+        <div class="formRow">
+          <label>Privileged API Client ID</label>
+          <input type="text" required placeholder="API Client ID" name="APIclientId" onFocus="this.placeholder = ''" value="{{APIclientId}}">
+          <div class="inputLine"></div>
+        </div>
+        <div class="formRow">
+          <label>Privileged API Client Secret</label>
+          <input type="password" placeholder="API Client Secret" name="APIclientSecret" onFocus="this.placeholder = ''">
+          <div class="inputLine"></div>
+        </div>
+        <div class="formRow">
+          <label>OIDC App Client ID</label>
+          <input type="text" required placeholder="OIDC App Client ID" name="OIDCclientId" onFocus="this.placeholder = ''" value="{{OIDCclientId}}">
+          <div class="inputLine"></div>
+        </div>
+        <div class="formRow">
+          <label>OIDC App Client Secret</label>
+          <input type="password" placeholder="OIDC App Client Secret" name="OIDCclientSecret" onFocus="this.placeholder = ''">
+          <div class="inputLine"></div>
+        </div>
+        <div class="formRow">
+          <label>OIDC Redirect URI</label>
+          <input type="text" required placeholder="OIDC Redirect URI" name="OIDCredirectUri" onFocus="this.placeholder = ''" value="{{OIDCredirectUri}}">
+          <div class="inputLine"></div>
+        </div>
+        <div class="formRow">
+          <label>MFA Group</label>
+          <input type="text" required placeholder="MFA Group Name" name="MFAgroup" onFocus="this.placeholder = ''" value="{{MFAgroup}}">
+          <div class="inputLine"></div>
+        </div>
+        <span style="display:inline-block;margin-top:1rem;width:100%">
+          <input type="checkbox" id="createObjects" name="createObjects">
+          <label for="createObjects">Create Group/Attributes/Policy Now</label><br>
+        </span>
+        <div class="formRow-bottom clearfix">
+          <div class="clear"></div>
+          <input class="input-cta" type="submit" value="Submit">
+          <div class="clear"></div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
+  <script src="/javascripts/init.js"></script>
+</body>
+
+</html>
