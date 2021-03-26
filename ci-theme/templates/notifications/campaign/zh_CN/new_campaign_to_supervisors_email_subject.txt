@@ -1,0 +1,1 @@
+您已被指派为营销活动 @CERTIFICATION.NAME@ 的主管。此营销活动将于 @CERTIFICATION.ENDDATE@ 结束。

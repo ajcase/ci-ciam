@@ -1,0 +1,1 @@
+Jako nadzorca kampanii @CERTIFICATION.OLD_REVIEWER@ eskalował do ciebie niektóre rekordy dla kampanii @CERTIFICATION.NAME@. Data zakończenia kampanii: @CERTIFICATION.ENDDATE@.

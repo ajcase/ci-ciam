@@ -1,0 +1,1 @@
+Sie sind der Kampagne @CERTIFICATION.NAME@ als Supervisor zugeordnet. Diese Kampagne endet am @CERTIFICATION.ENDDATE@.
