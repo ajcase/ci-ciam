@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>TrustMeInsurance Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="apple-touch-icon" sizes="180x180" href="DEMO_APPLICATION_URL/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="DEMO_APPLICATION_URL/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="DEMO_APPLICATION_URL/favicon/favicon-16x16.png">
+<link rel="manifest" href="DEMO_APPLICATION_URL/favicon/site.webmanifest">
+<link rel="mask-icon" href="DEMO_APPLICATION_URL/favicon/safari-pinned-tab.svg" color="#7a6f6f">
+<link rel="shortcut icon" href="DEMO_APPLICATION_URL/f8avicon/favicon.ico">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-config" content="DEMO_APPLICATION_URL/favicon/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+<link href="DEMO_APPLICATION_URL/stylesheets/style.css" rel="stylesheet" type="text/css">
+<link href="DEMO_APPLICATION_URL/stylesheets/social.css" rel="stylesheet" type="text/css">
+<link href="DEMO_APPLICATION_URL/stylesheets/overrides.css" rel="stylesheet" type="text/css">
+<script>
+const idSources = @ID_SOURCES@;
+
+function setAction(){
+  for(let i = 0; i < idSources.length; i++) {
+        const idSource = idSources[i];
+
+        if(idSource.type === 'CLOUDDIRECTORY') {
+            cloudDirectoryIdSource = idSource;
+            document.getElementById('cloud-directory-form').action = idSource.loginUrl;
+        }
+    }
+}
+</script>
+</head>
+<body class="insurance-page gary-bg" onload="setAction()">
+  <div class="overlay-background">
+
+      <div class="overlay-content login-wrap">
+
+          <div class="overlay-logo">
+          	<a href="DEMO_APPLICATION_URL/"><img src="DEMO_APPLICATION_URL/images/insurance_logo.svg"></a>
+          </div>
+
+
+          <div style="width:100%; text-align:center">
+          <div class="tx--social" style="margin:auto;max-width:600px">
+						<a href="CI_TENANT_URL/idaas/mtfim/sps/idaas/login/google?identity_source_id=GOOGLE_ID_SOURCE_ID&app_login=true" class="social-button" id="google-connect"> <span>Google</span></a>
+						<a href="CI_TENANT_URL/idaas/mtfim/sps/idaas/login/linkedin?identity_source_id=LINKEDIN_ID_SOURCE_ID&app_login=true" class="social-button" id="linkedin-connect"> <span>LinkedIn</span></a>
+					</div>
+          <p>OR</p>
+        </div>
+
+        <form id="cloud-directory-form" method="post">
+
+    			<div class="formRow">
+    				<label>Email</label>
+    				<input type="email" name="username" placeholder="Email" onFocus="this.placeholder = ''" value="@LOGIN_HINT@">
+            <div class="inputLine"></div>
+    			</div>
+
+    			<div class="formRow">
+    				<label>Password</label>
+    				<input type="password" name="password" placeholder="Password" onFocus="this.placeholder = ''">
+                    <div class="show-password"></div>
+    				<div class="inputLine"></div>
+    			</div>
+
+    			<div class="formRow-bottom clearfix">
+    				<div class="col">
+    					<input type="checkbox" id="remember">
+    					<label for="remember">Remember me</label>
+    				</div>
+
+    				<div class="col">
+    					<a href="DEMO_APPLICATION_URL/app/forgot-username">Forgot username?</a><br>
+              <a href="DEMO_APPLICATION_URL/app/forgot-password">Forgot password?</a>
+    				</div>
+
+    				<div class="clear"></div>
+            <input type="hidden" name="operation" value="verify">
+    				<input class="input-cta" type="submit" value="Login">
+    				<p>@ALTERNATE_SIGNIN@New to TrustMeInsurance?  <a href="DEMO_APPLICATION_URL/open-account" class="blue" id="open-new-account-link">Open an Account</a>
+            </p>
+    			</div>
+
+        </form>
+
+      </div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
+    <script src="DEMO_APPLICATION_URL/javascripts/init.js"></script>
+    <div class="footer">
+      <div class="container">
+        TrustMeInsurance plc is registered in Finland No.SC327000.Registered Office: The Mound Stokholm EH1 1YZ. Authorised by the Prudential Regulation Authority and regulated by the Financial Conduct Authority and the Prudential Regulation Authority under registration no. 169628.
+      </div>
+    </div>
+</body>
+</html>

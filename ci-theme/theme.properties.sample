@@ -1,0 +1,5 @@
+CI_TENANT_URL=https://yourtenantname.verify.ibm.com
+DEMO_APPLICATION_URL=http://localhost:3000
+GOOGLE_ID_SOURCE_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+LINKEDIN_ID_SOURCE_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+THEME_NAME=TrustMeInsurance

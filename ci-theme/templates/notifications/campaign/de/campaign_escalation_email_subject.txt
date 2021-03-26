@@ -1,0 +1,1 @@
+Als Kampagnensupervisor hat @CERTIFICATION.OLD_REVIEWER@ einige Datensätze für die Kampagne @CERTIFICATION.NAME@ an Sie eskaliert. Diese Kampagne endet am @CERTIFICATION.ENDDATE@.

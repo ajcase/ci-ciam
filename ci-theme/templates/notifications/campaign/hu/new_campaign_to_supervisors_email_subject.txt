@@ -1,0 +1,1 @@
+Ön a(z) @CERTIFICATION.NAME@ kampány hozzárendelt ellenőre. A kampány befejeződátuma: @CERTIFICATION.ENDDATE@.

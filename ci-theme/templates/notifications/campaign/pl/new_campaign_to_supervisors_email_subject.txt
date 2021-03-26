@@ -1,0 +1,1 @@
+Użytkownik został przypisany jako nadzorca do kampanii @CERTIFICATION.NAME@. Data zakończenia kampanii: @CERTIFICATION.ENDDATE@.

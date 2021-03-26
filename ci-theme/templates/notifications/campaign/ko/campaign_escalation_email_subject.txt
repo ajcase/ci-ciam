@@ -1,0 +1,1 @@
+캠페인 감독자로서 @CERTIFICATION.OLD_REVIEWER@는 @CERTIFICATION.NAME@ 캠페인에 대한 일부 레코드를 사용자에게 에스컬레이션했습니다. 이 캠페인은 @CERTIFICATION.ENDDATE@에 종료됩니다.
