@@ -1,0 +1,1 @@
+已將您指派為行銷活動 @CERTIFICATION.NAME@ 的監督者。此行銷活動將於 @CERTIFICATION.ENDDATE@ 結束。

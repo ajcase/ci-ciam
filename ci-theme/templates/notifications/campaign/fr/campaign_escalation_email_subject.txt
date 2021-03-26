@@ -1,0 +1,1 @@
+En tant que superviseur de la campagne, @CERTIFICATION.OLD_REVIEWER@ vous a transféré des enregistrements pour la campagne @CERTIFICATION.NAME@. Cette campagne prend fin le @CERTIFICATION.ENDDATE@.

@@ -3,9 +3,9 @@
 
 - [**Introduction**](#introduction)
   - [Demonstration Components](#demonstration-components)
-- [**Cloud Identity Setup**](#cloud-identity-setup)
+- [**Verify Setup**](#verify-setup)
   - [Identity Sources](#identity-sources)
-  - [Create an Application in Cloud Identity](#create-an-application-in-cloud-identity)
+  - [Create an Application in Verify](#create-an-application-in-verify)
   - [Create an API Client](#create-an-api-client)
 - [**Setup NodeJS Application**](#setup-nodejs-application)
   - [Clone Repository from GitHub](#clone-repository-from-github)
@@ -19,12 +19,12 @@
 - [**Configure Template Pages**](#configure-template-pages)
   - [Create and complete properties file](#create-and-complete-properties-file)
   - [Run script to create template ZIP file](#run-script-to-create-template-zip-file)
-  - [Upload ZIP to Cloud Identity](#upload-zip-to-cloud-identity)
+  - [Upload ZIP to Verify](#upload-zip-to-verify)
 
 # Introduction
 
 This repository contains assets required to set up a Consumer IAM Demonstration using
-the provided NodeJS application and an IBM Cloud Identity tenant.
+the provided NodeJS application and an IBM Security Verify tenant.
 
 ## Demonstration Components
 The demonstration environment contains the following components:
@@ -38,17 +38,17 @@ in a container environment, or on a hosted service.
 
 These instructions assume a local installation of Node Package Manager (npm).
 
-### IBM Cloud Identity
+### IBM Security Verify
 
-IBM Cloud Identity is an Identity-as-a-Service (IDaaS) and Authentication-as-a-Service (AaaS) platform.  In this demonstration system it provides all of the authentication and identity services
+IBM Security Verify is an Identity-as-a-Service (IDaaS) and Authentication-as-a-Service (AaaS) platform.  In this demonstration system it provides all of the authentication and identity services
 required by the demonstration application.  Integration is via REST API.
 
-If you do not have an IBM Cloud Identity tenant, you must complete at
-least Exercises 1 and 2 from the [IBM Cloud Identity Basics Cookbook](https://ibm.biz/cloudidcookbook) as a pre-requisite for this cookbook.
+If you do not have an Verify tenant, you must complete at
+least Exercises 1 and 2 from the [IBM Security Verify Basics Cookbook](https://ibm.biz/cloudidcookbook) as a pre-requisite for this cookbook.
 
 ### Google
 
-Google is used as an example Social Sign-On provider.  It is integrated with the demonstration application via IBM Cloud Identity.  You will need a Google account so that you can register your IBM Cloud Identity tenant as an application.
+Google is used as an example Social Sign-On provider.  It is integrated with the demonstration application via Verify.  You will need a Google account so that you can register your Verify tenant as an application.
 
 Note: When creating the application definition on Google, note that you need
 to enable the "People API". If you do not do this you will get errors
@@ -56,9 +56,9 @@ during single sign-on.
 
 ### LinkedIn
 
-LinkedIn is used as an example Social Sign-On provider.  It is integrated with the demonstration application via IBM Cloud Identity.  You will need a LinkedIn account so that you can register your IBM Cloud Identity tenant as an application.
+LinkedIn is used as an example Social Sign-On provider.  It is integrated with the demonstration application via Verify.  You will need a LinkedIn account so that you can register your Verify tenant as an application.
 
-# Cloud Identity Setup
+# Verify Setup
 
 ## Identity Sources
 
@@ -67,11 +67,11 @@ Make sure the *Primary Identity Source* is set to **Cloud Directory**.
 ### Create Identity Sources for Google and LinkedIn
 
 This requires you to have an account for these services and create
-application definitions for Cloud Identity. You will need to provide
+application definitions for Verify. You will need to provide
 re-direct URIs as part of this which are given in the CI Console (along
 with link to the developer consoles of the services). When application
 definitions are created, you will get Client/App ID and Secret which you
-will enter into the Cloud Identity Identity Source definition.
+will enter into the Verify Identity Source definition.
 
 Set the following for Identity Linking:
 
@@ -82,12 +82,11 @@ Set the following for Identity Linking:
   - Just-in-time Provisioning: On
 
 After saving each Identity Source, go back into its properties and make
-a note of the Identity Source ID. This is needed when updating the Cloud
-Identity template pages.
+a note of the Identity Source ID. This is needed when updating the Verify template pages.
 
-## Create an Application in Cloud Identity
+## Create an Application in Verify
 
-Login to your Cloud Identity tenant administrator console as an
+Login to your Verify tenant administrator console as an
 administrator.
 
 1.  Go to Applications menu and click Add application
@@ -128,7 +127,7 @@ administrator.
 
 ## Create an API Client
 
-Login to your Cloud Identity tenant administrator console as an
+Login to your Verify tenant administrator console as an
 administrator.
 
 1.  Go to Configuration menu, API Access tab and click Add API client
@@ -159,7 +158,7 @@ In the directory where you want the repo clone directory to be created, run
 this command:
 
 ```
-git clone https://github.com/iamdemoing/ci-ciam.git
+git clone https://github.com/ajcase/ci-ciam.git
 ```
 
 ## Install Packages
@@ -182,15 +181,23 @@ cp dotenv.sample .env
 Edit the *.env* file and complete for your environment:
 
 ```
-OIDC_CI_BASE_URI=https://xxxxxxxxx.ice.ibmcloud.com
-OIDC_CLIENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-OIDC_CLIENT_SECRET=xxxxxxxxxx
+OIDC_CI_BASE_URI=https://xxxxxxxx.ice.ibmcloud.com
+OIDC_CLIENT_ID=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+OIDC_CLIENT_SECRET=XXXXXXXXXX
 OIDC_REDIRECT_URI=http://localhost:3000/oauth/callback
-API_CLIENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-API_SECRET=xxxxxxxxxx
+API_CLIENT_ID=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+API_SECRET=XXXXXXXXXX
 APP=insurance
 MFAGROUP=MFAGroup
 ALLOW_DYNAMIC_SETUP=true
+MARKETING_PURPOSE_ID=
+PAPERLESS_PURPOSE_ID=
+READ_ACCESS_TYPE=
+TERMS_PURPOSE_ID=
+DEFAULT_ACCESS_TYPE=default
+EMAIL_ATTRIBUTE_ID=3
+THEME_NAME=TrustMeInsurance
+THEME_DESC="Theme for TrustMeInsurance demo CIAM app"
 ```
 
 Save the file and close the editor.
@@ -212,7 +219,7 @@ window open.
 
 Use a browser to connect to the following URL:
 
-**https://localhost:3000/setup**
+**http://localhost:3000/setup**
 
 Select the **Create Group/Attributes/Policy** checkbox at the bottom of
 the page and click **Submit**.
@@ -223,7 +230,7 @@ MFA Group.
 
 ## Apply MFA Access Policy to Application
 
-Login to your Cloud Identity tenant administrator console as an
+Login to your Verify tenant administrator console as an
 administrator.
 
 1.  Go to Applications menu and edit the Consumer App definition
@@ -252,72 +259,91 @@ ALLOW_DYNAMIC_SETUP=false
 
 Restart the application.
 
-# Configure Template Pages
+# Configure Application Theme
 
-This is optional. The demonstration environment works without this
-step but you will see the standard Cloud Identity pages when performing
-login or logout.
+This is optional. When you configure an application in IBM Security Verify, you can apply a *theme* so that your brand displays on login and logout pages. 
+Configuring a theme for an app will only affect the look & feel when accessing that app. Other access to the tenant is not affected.
 
-If you replace the template pages this will affect all access to the
-tenant.
-
-Many assets in the template pages are loaded from the NodeJS server. If
+Note: many assets in the theme pages are loaded from the NodeJS server. If
 this server is not available (it's not running or can't be reached by
 the client) then the pages will not render properly.
 
 ## Create and complete properties file
 
-Go to the ci-templates directory and make a copy of the sample
+Go to the ci-theme directory and make a copy of the sample
 properties file:
 
 ```
-cd ci-templates
-cp template.properties.sample template.properties
+cd ci-theme
+cp theme.properties.sample theme.properties
 ```
 
 Edit the properties file and complete for your environment:
 
 ```
-CI_TENANT_URL=https://xxxxxxx.ice.ibmcloud.com
+CI_TENANT_URL=https://xxxxxxx.verify.ibm.com
 DEMO_APPLICATION_URL=http://localhost:3000
 GOOGLE_ID_SOURCE_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 LINKEDIN_ID_SOURCE_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+THEME_NAME=TrustMeInsurance
 ```
 
 The Google and LinkedIn ID sources can be found in the Identity Source
-properties in the Cloud Identity admin console.
+properties in the Verify admin console.
 
-## Run script to create template ZIP file
+## Run script to create theme ZIP file
 
-Run the script to replace variables in the template files and save a ZIP
+Navigate to the ci-theme directory.
+Then run the script below to replace variables in the theme files and save a ZIP
 file for uploading:
 
 ```
-fix-templates.sh
+cd ci-theme
+./fix-theme.sh
 ```
-
-## Upload ZIP to Cloud Identity
-
-Run the following command to upload the branding to your Cloud Identity
-tenant. This command reads Cloud Identity and API Client ID and Secret
-from the .env file in parent directory.
+This will result in a great number of messages like the below. This is ok.
 
 ```
-node load-template.js templates.zip
+...
+
+updating: templates/notifications/user_management/login/es/user_password_reset_email.xml.bak (deflated 59%)
+updating: templates/notifications/user_management/login/es/user_password_change_not_show_email.xml.bak (deflated 57%)
+updating: templates/notifications/user_management/login/es/access_denied_email.html (deflated 58%)
+updating: templates/notifications/user_management/login/es/mfa_sign_in_attempt_email.html (deflated 61%)
+updating: templates/notifications/user_management/login/es/user_password_reset_email.xml (deflated 59%)
 ```
 
-If you need to reset the branding, use this command:
+## Register theme in Verify
+
+Navigate to the ci-theme directory.
+Then run the following command to register the theme to your Verify tenant. This command use the .env file in parent directory. The .env file contains the configuration for your Verify tenant.
 
 ```
-node load-template.js reset
+node manage-theme.js register
 ```
+## Configure your app for the theme
+
+Login to your Verify tenant administrator console as an
+administrator.
+
+1. Go to the hamburger menu and select Applications
+2. Edit the settings of the Custom Application by clicking the settings wheel. 
+3. On the General tab: set the Theme to the newly registered theme.
+4. Click Save
+
+Note: to reset the theme to the default Verify theme simply select "default" as the app theme.
+
+## Modifying the theme
+
+Please see **README-Theme.md** in the *ci-theme* directory for a guide on how to modify the theme.
+
 
 # License
 
 The contents of this repository are open-source under the Apache 2.0 licence.
 
 ```
-Copyright 2020 International Business Machines
+Copyright 2021 International Business Machines
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

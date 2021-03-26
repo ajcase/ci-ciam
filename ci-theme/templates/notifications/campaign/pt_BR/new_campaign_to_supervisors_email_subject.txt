@@ -1,0 +1,1 @@
+Você é um supervisor designado para a campanha @CERTIFICATION.NAME@. Essa campanha terminará em @CERTIFICATION.ENDDATE@.

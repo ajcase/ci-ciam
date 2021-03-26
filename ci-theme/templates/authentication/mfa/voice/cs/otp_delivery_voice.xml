@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <Message>
+    <Value>Vaše přístupové heslo je @OTP@. @BREAK@ Použijte jej k dokončení vašeho požadavku.</Value>
+  </Message>
+</root>
