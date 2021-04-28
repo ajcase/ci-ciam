@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<base href='/' />
+	<meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+	<title>TrustMeInsurance Login</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="apple-touch-icon" sizes="180x180" href="DEMO_APPLICATION_URL/favicon/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="DEMO_APPLICATION_URL/favicon/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="DEMO_APPLICATION_URL/favicon/favicon-16x16.png">
+	<link rel="manifest" href="DEMO_APPLICATION_URL/favicon/site.webmanifest">
+	<link rel="mask-icon" href="DEMO_APPLICATION_URL/favicon/safari-pinned-tab.svg" color="#7a6f6f">
+	<link rel="shortcut icon" href="DEMO_APPLICATION_URL/f8avicon/favicon.ico">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-config" content="DEMO_APPLICATION_URL/favicon/browserconfig.xml">
+	<meta name="theme-color" content="#ffffff">
+
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+	<link href="DEMO_APPLICATION_URL/stylesheets/style.css" rel="stylesheet" type="text/css">
+	<link href="DEMO_APPLICATION_URL/stylesheets/social.css" rel="stylesheet" type="text/css">
+	<link href="DEMO_APPLICATION_URL/stylesheets/overrides.css" rel="stylesheet" type="text/css">
+	<link rel='stylesheet' href='/usc/css/stateless.css'>
+	<link rel='stylesheet' href='/profile/static/registration.css?version=@REGISTRATION_VERSION@'>
+	<link rel='stylesheet' href='/template/v1.0/static/theme.css?themeId=@THEME_ID@' />
+</head>
+
+<body class="insurance-page gary-bg" onload="setAction()" style="background-image: none">
+	<div class="overlay-background">
+
+		<div class="overlay-content login-wrap">
+
+			<div class="overlay-logo">
+				<a href="DEMO_APPLICATION_URL/"><img src="DEMO_APPLICATION_URL/images/insurance_logo.svg"></a>
+			</div>
+
+
+			<div class='registration'>
+				@REGISTRATION_FORM@
+			</div>
+
+		</div>
+
+	</div>
+	<!-- Do not remove, may affect functionality -->
+	<div id="loader" class="bx--loading-overlay">
+		<div data-loading class="bx--loading">
+			<svg class="bx--loading__svg" viewBox="-75 -75 150 150">
+				<title>Loading</title>
+				<circle class="bx--loading__stroke" cx="0" cy="0" r="37.5" />
+			</svg>
+		</div>
+	</div>
+	<!-- Do not remove, may affect functionality -->
+	<script type="text/javascript" src="/profile/static/carbon-components.min.js"></script>
+	<script type="text/javascript" src="/profile/static/registration.js?version=@REGISTRATION_VERSION@"></script>
+	<script type="text/javascript" src="/usc/js/ieCheck.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
+	<script src="DEMO_APPLICATION_URL/javascripts/init.js"></script>
+</body>
+
+</html>
