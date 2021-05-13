@@ -1,21 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<!--
-     Macro Substitution Values:
-         IDAAS_LOGOUT_URL: @IDAAS_LOGOUT_URL@
- -->
-<html ng-app="app">
+<html>
 
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<base href="/" />
-	<title id="title" ng-bind="pageTitle"></title>
-	<link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico">
-	<script type="text/javascript" src="ui/assets/_js?include=templates/uiLogout/uiLogout"></script>
-	<link rel="stylesheet" href="usc/css/stateless.css">
-	<img src="@IDAAS_LOGOUT_URL@" style="display:none;" height="1" width="1">
+<meta charset="utf-8">
+<title>$$LOGOUT_OK_TITLE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="apple-touch-icon" sizes="180x180" href="$DEMO_APPLICATION_URL$/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="$DEMO_APPLICATION_URL$/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="$DEMO_APPLICATION_URL$/favicon/favicon-16x16.png">
+<link rel="manifest" href="$DEMO_APPLICATION_URL$/favicon/site.webmanifest">
+<link rel="mask-icon" href="$DEMO_APPLICATION_URL$/favicon/safari-pinned-tab.svg" color="#7a6f6f">
+<link rel="shortcut icon" href="$DEMO_APPLICATION_URL$/f8avicon/favicon.ico">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-config" content="$DEMO_APPLICATION_URL$/favicon/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+<link href="$DEMO_APPLICATION_URL$/stylesheets/style.css" rel="stylesheet" type="text/css">
+<link href="$DEMO_APPLICATION_URL$/stylesheets/social.css" rel="stylesheet" type="text/css">
+<link href="$DEMO_APPLICATION_URL$/stylesheets/overrides.css" rel="stylesheet" type="text/css">
+
+<!-- Load the Verify-specific stylesheets -->
+<link rel="stylesheet" href="/idaas/mtfim/static/styles.css">
+<link rel="stylesheet" href="/template/v1.0/static/theme.css?themeId=@THEME_ID@" />
 </head>
 
-<body cs-ui-logout></body>
 
+<body class="insurance-page gary-bg">
+  <div class="overlay-background">
+      <div class="overlay-content login-wrap">
+          <div class="overlay-logo">
+          	<a href="$DEMO_APPLICATION_URL$/"><img src="$DEMO_APPLICATION_URL$/images/insurance_logo.svg"></a>
+          </div>
+		<div class="content">
+			<span id="sign-out-successful-message">$LOGOUT_OK_SIGNOUT_SUCCESSFUL$</span>
+			<div class="separator"></div>
+    		<a href="$DEMO_APPLICATION_URL$" class="blue" id="cs-button-return-home">$LOGOUT_OK_RETURN_HOME$</a>
+		</div>
+      </div>
+    <div class="footer">
+      <div class="container">
+        @PAGE_FOOTER@
+      </div>
+    </div>
+    </div>
+    <script language="JavaScript">
+	    sessionStorage.clear();
+	    localStorage.clear();
+    </script>
+</body>
 </html>

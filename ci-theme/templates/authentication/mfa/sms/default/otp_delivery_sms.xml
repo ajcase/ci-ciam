@@ -3,7 +3,7 @@
 <root>
 <Message>
   <Value>
-    Your TrustMeInsurance code is: @CORRELATION@-@OTP@
+    Your passcode is: @CORRELATION@-@OTP@. It expires in @OTP_LIFETIME@ minutes.
   </Value>
 </Message>
 </root>

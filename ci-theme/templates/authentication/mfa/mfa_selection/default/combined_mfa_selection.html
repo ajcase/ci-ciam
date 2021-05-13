@@ -1,82 +1,99 @@
-<!doctype html>
+<!DOCTYPE html>
+<!--
+	These are the macros for user info
+	NAME: @NAME@
+	FAMILY_NAME: @FAMILY_NAME@
+	GIVEN_NAME: @GIVEN_NAME@
+	PREFERRED_USERNAME: @PREFERRED_USERNAME@
+-->
 <html>
 <head>
-<meta charset="utf-8">
-<title>TrustMeInsurance Login</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link rel="apple-touch-icon" sizes="180x180" href="DEMO_APPLICATION_URL/favicon/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="DEMO_APPLICATION_URL/favicon/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="DEMO_APPLICATION_URL/favicon/favicon-16x16.png">
-<link rel="manifest" href="DEMO_APPLICATION_URL/favicon/site.webmanifest">
-<link rel="mask-icon" href="DEMO_APPLICATION_URL/favicon/safari-pinned-tab.svg" color="#7a6f6f">
-<link rel="shortcut icon" href="DEMO_APPLICATION_URL/f8avicon/favicon.ico">
-<meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-config" content="DEMO_APPLICATION_URL/favicon/browserconfig.xml">
-<meta name="theme-color" content="#ffffff">
-
-<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-<link href="DEMO_APPLICATION_URL/stylesheets/style.css" rel="stylesheet" type="text/css">
-<link href="DEMO_APPLICATION_URL/stylesheets/social.css" rel="stylesheet" type="text/css">
-<link href="DEMO_APPLICATION_URL/stylesheets/overrides.css" rel="stylesheet" type="text/css">
-<style>
-.alert {
-  padding: 20px;
-  background-color: #f44336;
-  color: white;
-}
-.alert.warning{
-  background-color: #ff9800;
-  margin-bottom:30px;
-}
-
-.closebtn {
-  margin-left: 15px;
-  color: white;
-  font-weight: bold;
-  float: right;
-  font-size: 22px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.closebtn:hover {
-  color: black;
-}
-</style>
+	<title id="title">$OTP_DELIVERY_SELECTION_TITLE$</title>
+	<base href="/" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<link rel="shortcut icon" type="image/x-icon" href="usc/favicon.ico" />
+	<link rel="stylesheet" href="usc/css/stateless.css" />
+	<link rel="stylesheet" href="/template/v1.0/static/theme.css?themeId=@THEME_ID@" />
+	<script>
+		// START NON-TRANSLATABLE
+		const action = "@ACTION@";
+		const themeId = "@THEME_ID@";
+		
+		var methods = []
+		/**
+		 * method object interface:
+		 * {
+		 * 	methodLabel: string
+		 * 	methodType: string
+		 * 	methodId: string
+		 * }
+		 */
+		
+		[RPT otpMethods]
+		var method = {}
+		method.methodLabel = "@OTP_METHOD_LABEL@"
+		method.methodId = "@OTP_METHOD_ID@"
+		method.methodType = "@OTP_METHOD_ID@".split('_')[0]
+		// method.methodChecked = "@OTP_METHOD_CHECKED@"		// Removing the property as it is not being used anywhere in page
+		methods.push(method)
+		[ERPT otpMethods]
+		
+		var otpTypeEmail = "$OTP_METHOD_TYPE_EMAIL$";
+		var otpTypeSMS = "$OTP_METHOD_TYPE_SMS$";
+		var otpTypeVerify = "$OTP_METHOD_TYPE_VERIFY$";
+		var otpTypeTotp = "$OTP_METHOD_TYPE_TOTP$";
+		var otpTypeKQ = "$OTP_METHOD_TYPE_KQ$";
+		var otpTypeFido2 = "$OTP_METHOD_TYPE_FIDO2$";
+		var otpTypeVoiceOTP = "$OTP_METHOD_TYPE_VOICE_OTP$";
+		
+		var otpActionEmail = "$OTP_METHOD_ACTION_EMAIL$";
+		var otpActionSMS = "$OTP_METHOD_ACTION_SMS$";
+		var otpActionVerfiy = "$OTP_METHOD_ACTION_VERIFY$";
+		var otpActionTotp = "$OTP_METHOD_ACTION_TOTP$";
+		var otpActionKQ = "$OTP_METHOD_ACTION_KQ$";
+		var otpActionFido2 = "$OTP_METHOD_ACTION_FIDO2$";
+		var otpActionVoiceOTP = "$OTP_METHOD_ACTION_VOICE_OTP$";
+		// END NON-TRANSLATABLE
+	</script>
 </head>
-<body class="insurance-page gary-bg">
-	<div class="overlay-background">
 
-      <div class="overlay-content login-wrap">
+<!--cs-otp-delivery-selection currently has styling attached in stateless.css -->
+<body cs-otp-delivery-selection>
+	<div class='cs-content'>
+		@PAGE_HEADER@
+		<div class='bx--modal-header'>
+			<p class='bx--type-delta'>$OTP_DELIVERY_SELECTION_TWO_STEP_VERIFICATION$</p>
+			<p class='bx--type-beta' data-ci-id="choose-method-label">$OTP_DELIVERY_SELECTION_CHOOSE_METHOD$</p>
+		</div>
+		<div class='verify-message'>$OTP_DELIVERY_SELECTION_HOW_VERIFY$</div>
+		<div id="method-containers" class='right-panel'>
+			<!-- OTP methods HTML is currently Javascript generated, see inline script -->
+		</div>
+		<!-- Copyright IBM Corp. 2016, 2018 This source code is licensed under the Apache-2.0 license found in the LICENSE file in the root directory of this source tree. -->
 
-          <div class="overlay-logo">
-          	<a href="DEMO_APPLICATION_URL/"><img src="DEMO_APPLICATION_URL/images/insurance_logo.svg"></a>
-          </div>
-		<h1>Two-factor authentication</h1>
-		<p>How would you like to verify it's you?</p>
-		<form method="POST" action="@ACTION@" class="">
-			<input type="hidden" name="operation" value="generate">
-			[RPT otpMethods]
-			<span style="display:inline-block;margin-top:1rem;width:100%">
-				<input type="radio" id="mfa" name="otp.user.otp-method.id" value="@OTP_METHOD_ID@">
-				<label for="mfa">@OTP_METHOD_LABEL@</label>
-			</span>
-			[ERPT otpMethods]
-			<div class="formRow-bottom clearfix">
-				<input class="input-cta" type="submit" value="Continue">
+		<div>
+			<div id="help-modal-container" aria-label="Need help?" class="bx--modal" role="presentation" tabindex="-1">
+				<div role="dialog" class="bx--modal-container" aria-label="Need help?" aria-modal="true">
+					<div class="bx--modal-header">
+						<button class="bx--modal-close" type="button" title="close the modal" aria-label="close the modal" onclick="closeHelpModal(event)">
+							<svg focusable="false" preserveAspectRatio="xMidYMid meet" aria-label="close the modal" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" role="img" class="bx--modal-close__icon" style="will-change: transform;"><path d="M24 9.4L22.6 8 16 14.6 9.4 8 8 9.4l6.6 6.6L8 22.6 9.4 24l6.6-6.6 6.6 6.6 1.4-1.4-6.6-6.6L24 9.4z"></path></svg>
+						</button>
+						<h3 class="bx--modal-header__heading">$HELP_NEED_HELP$ </h3>
+					</div>
+					<div class="bx--modal-content"><p>$HELP_CONTACT_HELP_DESK$ </p>
+					</div>
+				</div>
 			</div>
+			<div class="help-message">$HELP_CANNOT_USE$ <a href="#" onclick="openHelpModal(event)">$HELP_GET_HELP$ </a></div>
+		</div>
+		@PAGE_FOOTER@
+		<form id="combined-form" method="POST" action="">
+			<input type="hidden" name="operation" value="generate">
+			<input id="delivery-selection-input" type="hidden" name="otp.user.otp-method.id" value="">
 		</form>
-      </div>
-
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
-    <script src="DEMO_APPLICATION_URL/javascripts/init.js"></script>
-    <div class="footer">
-      <div class="container">
-        TrustMeInsurance plc is registered in Finland No.SC327000.Registered Office: The Mound Stokholm EH1 1YZ. Authorised by the Prudential Regulation Authority and regulated by the Financial Conduct Authority and the Prudential Regulation Authority under registration no. 169628.
-      </div>
-    </div>
+	</div>
+	<!-- Please do not move JS code from here, it may affect functionality -->
+	<script type="text/javascript" src="/authsvc/mtfim/sps/static/common.js"></script>
+	<script type="text/javascript" src="/authsvc/mtfim/sps/static/combinedmfa_selection.js"></script>
 </body>
 </html>

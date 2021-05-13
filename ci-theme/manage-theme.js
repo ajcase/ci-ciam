@@ -7,7 +7,11 @@
  *    Lists the currently registered themes
  *  register:
  *    Upload/register the theme for this app.
- *    Note: For this to work you must delete the existing theme using "node manage-theme.js delete"
+ *    Note: For this to work the theme may not exist. Verify this by using "node manage-theme.js list".
+ *    If needed: delete the existing theme using "node manage-theme.js delete"
+ *  update:
+ *    Upload/update the theme for this app.
+ *    Note: For this to work the theme must exist. Verify this by using "node manage-theme.js list"
  *  delete:
  *    Delete the TrustMeInsurance theme.
  *    For this to work you must configure all apps such that they do not use the theme
@@ -104,49 +108,100 @@ function registerTheme(accessToken) {
     //var themeFilename=process.env.THEME_NAME + ".zip"; 
     console.log("Registering theme for " + process.env.THEME_NAME + " using file " + zipfileName);
 
-    // See if the zip file is there
-    var templateFile = undefined;
-    try {
-      templateFile = fs.createReadStream(zipfileName);
-    } catch(e) {console.log(e);reject(e)}
 
-    if (templateFile === undefined) {
-      console.log("Cannot access file " + zipfileName);
-      reject("Cannot access file " + zipfileName);
-    }
+    templateFile = fs.createReadStream(zipfileName);
 
-    // Register the theme
-    var options = {
-      method: 'POST',
-      url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes',
-      headers: {
-        'Authorization': 'Bearer ' + accessToken,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      formData: {
-        'files': {
-          'value': templateFile,
-          'options': {
-            'filename': themeFilename
-          }
-        },
-        'configuration': themeConfig
-      }
-    };
-    console.log("Making API call...");
-    request(options, (error, response, _body) => {
-      if (error) {
-        reject(error);
-      } else {
-        if (response.statusCode == 201) {
-          console.log("Successfully registered theme " + process.env.THEME_NAME);
-          resolve(true);
-        } else reject(response);
-      }
+    templateFile.on('error', function(error) {
+      console.log("ERROR: Cannot access file " + zipfileName);
+      // console.log("Detailed error: " + error.stack);
+      reject(error);
     });
-  });
+
+    templateFile.on('end',function() {
+      // Register the theme
+      var options = {
+        method: 'POST',
+        url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes',
+        headers: {
+          'Authorization': 'Bearer ' + accessToken,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        formData: {
+          'files': {
+            'value': templateFile,
+            'options': {
+              'filename': themeFilename
+            }
+          },
+          'configuration': themeConfig
+        }
+      };
+      console.log("Making API call...");
+      request(options, (error, response, _body) => {
+        if (error) {
+          reject(error);
+        } else {
+          if (response.statusCode == 201) {
+            console.log("Successfully registered theme " + process.env.THEME_NAME);
+            resolve(true);
+          } else reject(response);
+        }
+      });
+    });
+  }).catch(error => console.log("ERROR details: \n\t" + error.stack));
 }
 
+function updateTheme(accessToken,themeID) {
+  // Update the theme
+  return new Promise((resolve, reject) => {  
+   
+    var zipfileName=process.env.THEME_NAME + ".zip";
+    var themeConfig='{"name": "' + process.env.THEME_NAME + '", "description": "' + process.env.THEME_DESC + '"}';
+    var themeFilename='"' + process.env.THEME_NAME + ".zip" + '"'; 
+    //var themeFilename=process.env.THEME_NAME + ".zip"; 
+    console.log("Updating theme for " + process.env.THEME_NAME + " using file " + zipfileName);
+
+    templateFile = fs.createReadStream(zipfileName);
+
+    templateFile.on('error', function(error) {
+      console.log("ERROR: Cannot access file " + zipfileName);
+      // console.log("Detailed error: " + error.stack);
+      reject(error);
+    });
+
+    //templateFile.on('end',function() {
+      // Update the theme
+      var options = {
+        method: 'PUT',
+        url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes/' + themeID,
+        headers: {
+          'Authorization': 'Bearer ' + accessToken,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        formData: {
+          'files': {
+            'value': templateFile,
+            'options': {
+              'filename': themeFilename
+            }
+          },
+          'configuration': themeConfig
+        }
+      };
+      console.log("Making API call...");
+      request(options, (error, response, _body) => {
+        if (error) {
+          reject(error);
+        } else {
+          if (response.statusCode == 204) {
+            // console.log("Successfully updated theme id " + themeID);
+            resolve(true);
+          } else reject(response);
+        }
+      });
+    //});
+  }).catch(error => console.log("ERROR details: \n\t" + error.stack));
+}
 
 
 function deleteTheme(accessToken,themeID) {
@@ -195,6 +250,23 @@ async function deleteMyTheme(accessToken,themes) {
     return (themefound);
   }
 
+async function updateMyTheme(accessToken,themes) {
+    // Only async functions can call other functions with "await"
+    // themes contains the parsed JSON content of the body of the response to GET /v1.0/branding/themes
+    themefound=false;
+    for (i=0;i < themes.total;i++) {
+      reg=themes.themeRegistrations[i];
+      if (reg.name == process.env.THEME_NAME) {
+        // There's an existing theme for this app: update this theme
+        themefound=true;
+        var result = await updateTheme(accessToken, reg.id);
+        if (result) console.log("Successfully updated theme '" + process.env.THEME_NAME + "'");
+        else console.log("Failed to update theme " + process.env.THEME_NAME);
+      }
+    }
+    if (!themefound) console.log("Cannot update theme " + process.env.THEME_NAME + ". It does not exist.");
+    return (themefound);
+  }
 
 
 /*
@@ -216,6 +288,9 @@ async function main(action) {
     case "delete":
       await deleteMyTheme(tokenData.access_token,themesData);
       break;
+    case "update":
+      await updateMyTheme(tokenData.access_token,themesData);
+      break;
     default:
       // code block
   }
@@ -229,7 +304,7 @@ async function main(action) {
 args = process.argv;
 
 if (args.length != 3) {
-  console.log("Usage: node " + filenameOnly(args[1]) + " list | register | delete ");
+  console.log("Usage: node " + filenameOnly(args[1]) + " list | register | update | delete ");
 } else {
   main(args[2]);
 }

@@ -185,6 +185,45 @@ app.get('/oauth/callback', passport.authenticate('openidconnect', {
   failureRedirect: '/'
 }))
 
+function getThemeId(accessToken,callback) {
+  // Get the themeId that is set for the app the theme 
+   
+    console.log("Querying theme for " + process.env.APP_NAME);
+
+    // Get the app's themeID
+    var options = {
+        method: 'GET',
+        url: process.env.OIDC_CI_BASE_URI + '/v1.0/applications/',
+        headers: {
+          'Authorization': 'Bearer ' + accessToken,
+          'Content-Type': 'application/json'
+        },
+        qs: {
+          'limit': 1,
+          'search': 'name="' + process.env.APP_NAME + '"'
+        },
+      };
+      console.log("Making API call to /v1.0/applications/ with token " + accessToken + " ...");
+      request(options, (error, response, _body) => {
+        if (error) {
+          return(error);
+        } else {
+          console.log("HTTP response code is: "+response.statusCode);
+          //let bodyObj=JSON.parse(response.body);
+          //console.log("HTTP body is: " + response.body);
+          if (response.statusCode == 200) {
+            console.log("HTTP 200: Successfully retrieved app data");
+            let bodyObj=JSON.parse(response.body);
+            let themeId=bodyObj._embedded.applications[0].customization.themeId;
+            console.log("themeId in JSON body = " + themeId);
+            callback(themeId);
+            return (true)        
+          } else return(response.body);
+        }
+      });
+}
+
+
 // Destroy both the local session and
 // revoke the access_token at IBM
 app.get('/logout', function(req, res) {
@@ -199,9 +238,14 @@ app.get('/logout', function(req, res) {
 
     console.log('Session Revoked at IBM');
     req.session.loggedIn = false;
-    res.redirect(process.env.OIDC_CI_BASE_URI + '/idaas/mtfim/sps/idaas/logout');
+    console.log('process.env.THEME_ID in /logout is: ' + process.env.THEME_ID);
+    req.session.loggedIn = false;
+    res.redirect(process.env.OIDC_CI_BASE_URI + '/idaas/mtfim/sps/idaas/logout' + '?themeId=' + process.env.THEME_ID);
+
   });
 });
+
+
 
 // catch error
 app.use(function(req, res, next) {
@@ -221,12 +265,14 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-if (process.env.API_CLIENT_ID && process.env.API_SECRET && process.env.MFAGROUP) {
+if (process.env.API_CLIENT_ID && process.env.API_SECRET && process.env.MFAGROUP && process.env.APP_NAME) {
+  // Get access token for privileged API access
   bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err, body) {
     if (err) {
       console.log(err);
     } else {
       apiAccessToken = body.access_token;
+      // Get the MFA group's id
       bbfn.getGroupID(process.env.MFAGROUP, apiAccessToken, (_err,result) => {
         if (result && result['urn:ietf:params:scim:schemas:extension:ibm:2.0:Group'].groupType == "standard") {
           process.env.MFAGROUPID = result.id;
@@ -235,8 +281,29 @@ if (process.env.API_CLIENT_ID && process.env.API_SECRET && process.env.MFAGROUP)
           console.log(`Group ${process.env.MFAGROUP} is invalid`);
         }
       });
+      // Get the ThemeId based on the app name
+      getThemeId(apiAccessToken, function(themeId) {
+      process.env.THEME_ID = themeId;
+      console.log('themeId returned by getThemeId is: ' + themeId);
+      });
     }
   });
 }
+
+/*
+if (process.env.API_CLIENT_ID && process.env.API_SECRET && process.env.APP_NAME) {  
+  bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err, body) {
+    if (err) {
+      console.log(err);
+    } else {
+      apiAccessToken = body.access_token;
+      getThemeId(apiAccessToken, function(themeId) {
+         process.env.THEME_ID = themeId;
+         console.log('themeId returned by getThemeId is: ' + themeId);
+      });
+    };
+  });
+};
+*/
 
 module.exports = app;

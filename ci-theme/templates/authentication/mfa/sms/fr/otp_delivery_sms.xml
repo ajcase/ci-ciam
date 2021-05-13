@@ -3,8 +3,7 @@
 <root>
 <Message>
   <Value>
-    Votre code est : @OTP_STRING@.
-Il expirera dans @OTP_LIFETIME@ minutes.
+    Votre code d'accès est : @CORRELATION@-@OTP@. Il expirera dans @OTP_LIFETIME@ minutes.
   </Value>
 </Message>
 </root>
