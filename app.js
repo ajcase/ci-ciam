@@ -214,8 +214,14 @@ function getThemeId(accessToken,callback) {
           if (response.statusCode == 200) {
             console.log("HTTP 200: Successfully retrieved app data");
             let bodyObj=JSON.parse(response.body);
-            let themeId=bodyObj._embedded.applications[0].customization.themeId;
-            console.log("themeId in JSON body = " + themeId);
+      if (bodyObj._embedded.applications[0].customization != undefined) {
+    // A custom theme is set.
+              var themeId=bodyObj._embedded.applications[0].customization.themeId;
+              console.log("themeId in JSON body = " + themeId);
+            } else {
+    var themeId="default";
+              console.log("themeId set to default");
+     }
             callback(themeId);
             return (true)        
           } else return(response.body);
@@ -289,21 +295,5 @@ if (process.env.API_CLIENT_ID && process.env.API_SECRET && process.env.MFAGROUP 
     }
   });
 }
-
-/*
-if (process.env.API_CLIENT_ID && process.env.API_SECRET && process.env.APP_NAME) {  
-  bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err, body) {
-    if (err) {
-      console.log(err);
-    } else {
-      apiAccessToken = body.access_token;
-      getThemeId(apiAccessToken, function(themeId) {
-         process.env.THEME_ID = themeId;
-         console.log('themeId returned by getThemeId is: ' + themeId);
-      });
-    };
-  });
-};
-*/
 
 module.exports = app;

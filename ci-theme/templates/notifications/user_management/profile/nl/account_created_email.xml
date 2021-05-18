@@ -8,7 +8,7 @@
     </Sender>
     <Subject>
       <Value>
-        Your $PRODUCT_NAME$ account is ready to go.
+        Je $PRODUCT_NAME$ account klaar voor gebruik!
       </Value>
     </Subject>
 
@@ -17,7 +17,7 @@
         <![CDATA[<html>
          <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Account Created</title>
+        <title>Account Aangemaakt</title>
          </head>
         <body>
            <div style="font-family: 'Helvetica neue', sans-serif;">
@@ -32,9 +32,9 @@
              </table>
           </div>
           <div style="font-family: 'Helvetica neue', sans-serif; font-size: 14px; padding: 10px 64px 64px 64px; color: #121212;">
-            <p style="padding-bottom: 12px;font-size: 16px">Your account for $PRODUCT_NAME$ was created.</p>
-            <p style="padding-bottom: 12px; line-height: 24px">Your temporary password is: <b>@PASSWORD@</b><br>After you log in, you must change your password.</p>
-            <p style="padding-bottom: 12px; line-height: 24px">Click the link to log in: <a href="$DEMO_APPLICATION_URL$/login">$DEMO_APPLICATION_URL$/login</a></p> 
+            <p style="padding-bottom: 12px;font-size: 16px">Je account voor $PRODUCT_NAME$ is aangemaakt.</p>
+            <p style="padding-bottom: 12px; line-height: 24px">Je voorlopig wachtwoord is: <b>@PASSWORD@</b><br>Nadat je bent ingelogd, moet je dit wachtwoord wijzigen.</p>
+            <p style="padding-bottom: 12px; line-height: 24px">Klik op deze link om in te loggen: <a href="$DEMO_APPLICATION_URL$/login">$DEMO_APPLICATION_URL$/login</a></p> 
          </div>
      
         </body>

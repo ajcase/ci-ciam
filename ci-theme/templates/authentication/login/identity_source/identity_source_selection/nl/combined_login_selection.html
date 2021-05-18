@@ -57,17 +57,6 @@ function getIdSourcesData(){
 }
 </script>
 
-<script>
-  function DoSubmit(){
-    let brand="$BRAND_ID$";
-    document.getElementById('cloud-directory-form').username.value = document.getElementById('cloud-directory-form').realusername.value + "@" + brand;
-    return true;
-  }
-  function CalcUsername(){
-    let brand="$BRAND_ID$";
-    return(document.getElementById('cloud-directory-form').username.value + "@" + brand);
-  }
-</script>
 
 </head>
 <body class="insurance-page gary-bg" onload="getIdSourcesData()">
@@ -91,11 +80,7 @@ function getIdSourcesData(){
 
     			<div class="formRow">
     				<label>$LOGIN_USER_NAME$</label>
-            <!--
-              This input has no "name"-tag and so will not be send. See: https://www.w3schools.com/html/html_forms.asp
-              Instead it will be used to determine the username with a suffix
-            -->
-    				<input type="email" id="realusername" placeholder="$LOGIN_USER_NAME$" onFocus="this.placeholder = ''" value="@LOGIN_HINT@">
+    				<input type="email" name="username" placeholder="$LOGIN_USER_NAME$" onFocus="this.placeholder = ''" value="@LOGIN_HINT@">
             	<div class="inputLine"></div>
     			</div>
 
@@ -123,8 +108,7 @@ function getIdSourcesData(){
 
     				<div class="clear"></div>
             <input type="hidden" name="operation" value="verify">
-            <input type="hidden" name="username">
-    				<input class="input-cta" type="submit" value="$LOGIN_BUTTON$" onclick="DoSubmit()">
+    				<input class="input-cta" type="submit" value="$LOGIN_BUTTON$">
     				<p>$REGISTER_ACCOUNT$  <a href="$DEMO_APPLICATION_URL$/open-account" class="blue" id="open-new-account-link">$OPEN_AN_ACCOUNT$</a>
             </p>
     			</div>

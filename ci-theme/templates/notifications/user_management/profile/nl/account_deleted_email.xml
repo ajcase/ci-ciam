@@ -8,18 +8,18 @@
     </Sender>
     <Subject>
       <Value>
-        Your $PRODUCT_NAME$ account is ready to go.
+        Je $PRODUCT_NAME$ account is verwijderd.
       </Value>
     </Subject>
 
     <Message>
       <Value>
-        <![CDATA[<html>
-         <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Account Created</title>
-         </head>
-        <body>
+      <![CDATA[<html>
+            <head>
+            	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    		    <title>Account Verwijderd</title>
+    		</head>
+    	   <body>
            <div style="font-family: 'Helvetica neue', sans-serif;">
              <table cellspacing="0" cellpadding="22" border="0" style="width: 100%; margin-bottom: 10px; top: 0px;left: 0px;" >
                <tr style="line-height: 30px; color: white; margin: 0 auto; background-color: #f7f9f9;">
@@ -32,13 +32,11 @@
              </table>
           </div>
           <div style="font-family: 'Helvetica neue', sans-serif; font-size: 14px; padding: 10px 64px 64px 64px; color: #121212;">
-            <p style="padding-bottom: 12px;font-size: 16px">Your account for $PRODUCT_NAME$ was created.</p>
-            <p style="padding-bottom: 12px; line-height: 24px">Your temporary password is: <b>@PASSWORD@</b><br>After you log in, you must change your password.</p>
-            <p style="padding-bottom: 12px; line-height: 24px">Click the link to log in: <a href="$DEMO_APPLICATION_URL$/login">$DEMO_APPLICATION_URL$/login</a></p> 
+                <p>Je $PRODUCT_NAME$ account <b>@USERNAME@</b> is verwijderd.</p>
+                <p>Breng je systeembeheerder op de hoogte als je vermoed dat dit ten onrechte is gebeurd.</p>	
          </div>
-     
-        </body>
-            </html>
+        </body>  	
+        </html>
          ]]>
       </Value>
     </Message>

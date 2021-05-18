@@ -74,8 +74,16 @@ router.post('/car', function(req, res, next) {
     var loggedIn = ((req.session.loggedIn) ? true : false);
     var data = req.body;
     console.log("Car quote submitted for:", req.session.userEmail);
-    console.log("Car form submitted:", data)
-
+    console.log("Car form submitted:", data);
+    
+    var brandIdvalue=process.env.BRAND_ID;
+    if (brandIdvalue == "false") {
+      var brandIdsuffix = "";
+    } else {
+      var brandIdsuffix = "@" + brandIdvalue;
+    }
+    console.log("BrandIdvalue:", brandIdvalue);
+    
     bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err,  body){
         if (err) {
           console.log(err);
@@ -89,7 +97,7 @@ router.post('/car', function(req, res, next) {
                       "urn:ietf:params:scim:schemas:core:2.0:User",
                           "urn:ietf:params:scim:schemas:extension:ibm:2.0:User",
                     ],
-                    "userName": req.session.userEmail,
+                    "userName": req.session.userEmail + brandIdsuffix,
                     "name": {
                       "familyName": req.session.familyName,
                       "givenName": req.session.givenName
@@ -130,18 +138,26 @@ router.post('/car', function(req, res, next) {
                         {
               		        "name": "quoteCount",
               		        "values": [1]
-              		      }
+              		      },
+                        {
+                          "name": "brandId",
+                          "values": [brandIdvalue]
+                        }
               		    ]
                     }
                   }
 
                 console.log("User creation information:", userInfo)
+                // Peter V: note the themeId query parameter!
                 var options = {
                   'headers': {
                     'Content-Type':'application/scim+json',
                     'Authorization': `Bearer ${accessToken}`
                   },
-                  'body': JSON.stringify(userInfo)
+                  'body': JSON.stringify(userInfo),
+                  'qs': {
+                    'themeId': process.env.THEME_ID
+                  },
                 }
                 request.post(process.env.OIDC_CI_BASE_URI + '/v2.0/Users', options, function(err, response, body){
                   console.log("Create user:", req.session.userEmail)
@@ -166,6 +182,7 @@ router.post('/car', function(req, res, next) {
               }
               else{
                 var userId = body.id;
+
                 var customAttributes =
                   typeof req.session.userprofile != "undefined" && req.session.userprofile[
                     "urn:ietf:params:scim:schemas:extension:ibm:2.0:User"
@@ -193,6 +210,11 @@ router.post('/car', function(req, res, next) {
                     	"op":"add",
                     	"path":"urn:ietf:params:scim:schemas:extension:ibm:2.0:User:customAttributes",
                     	"value": [{"name": "carMake","values":["${data.carMake}"]}]
+                    },
+                    {
+                      "op":"add",
+                      "path":"urn:ietf:params:scim:schemas:extension:ibm:2.0:User:customAttributes",
+                      "value": [{"name": "brandId","values":["${brandIdvalue}"]}]
                     },
                     {
                     	"op":"add",
@@ -322,7 +344,10 @@ router.post('/home', function(req, res, next) {
                     'Content-Type':'application/scim+json',
                     'Authorization': `Bearer ${accessToken}`
                   },
-                  'body': JSON.stringify(userInfo)
+                  'body': JSON.stringify(userInfo),
+                  'qs': {
+                    'themeId': process.env.THEME_ID
+                  },
                 }
                 request.post(process.env.OIDC_CI_BASE_URI + '/v2.0/Users', options, function(err, response, body){
                   console.log("Create user:", req.session.userEmail)

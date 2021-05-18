@@ -81,8 +81,14 @@ Set the following for Identity Linking:
 
   - Just-in-time Provisioning: On
 
-After saving each Identity Source, go back into its properties and make
-a note of the Identity Source ID. This is needed when updating the Verify template pages.
+### Create Data & Privacy items
+
+1. Create purpose "Communications"
+2. Create purpose "Paperless Billing"
+3. Create EULA "Terms"
+
+!!**TO BE COMPLETED with details**!!
+
 
 ## Create an Application in Verify
 
@@ -115,40 +121,34 @@ administrator.
 
     8.  Click Save
 
-5.  In entitlements tab:
+5.  In the API Access tab:
+
+	1. 	Edit the API key that was created for the app
+	2. Check "Configure API Access"
+	3. Select the following API access
+
+		    - Manage access policies
+		    - Manage attribute sources
+		    - Manage users and standard Groups
+		    - Manage templates
+		    - Manage privacy purposes and EULA
+		    - Manage privacy consents
+
+6.  In entitlements tab:
 
     1.  Select: All users are entitled to this application
 
     2.  Click Save
 
-6.  Return to Sign-on tab:
+7. In Privacy tab:
 
-    1.  Make a note of (Application)Client ID and Client Secret
+   Add EULA "Terms", purpose "Paperless Billing" and "Communications". These were 
+   configured in the section "Create Data & Privacy items".
 
-## Create an API Client
-
-Login to your Verify tenant administrator console as an
-administrator.
-
-1.  Go to Configuration menu, API Access tab and click Add API client
-
-2.  Complete name (value doesn't matter)
-
-3.  Select the following API access
-
-    1.  Manage Access Policies
-
-    2.  Manage Attribute Sources
-
-    3.  Manage Users and Standard Groups
-
-    4.  Manage Templates
-
-4.  Click Save
-
-5.  Select new client and edit
+8.  Return to Sign-on tab:
 
     1.  Make a note of Client ID and Client Secret
+
 
 # Setup NodeJS Application
 

@@ -103,6 +103,10 @@ router.post('/', function(req, res, next) {
               "type": "string"
             },
             {
+              "name": "brandId",
+              "type": "string"
+            },
+            {
               "name": "carYear",
               "type": "string"
             },
