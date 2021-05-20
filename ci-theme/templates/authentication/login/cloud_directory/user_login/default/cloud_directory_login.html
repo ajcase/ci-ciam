@@ -69,8 +69,34 @@ function getIdSourcesData(){
   }
 </script>
 
-</head>
-<body class="insurance-page gary-bg" onload="getIdSourcesData()">
+
+<style>
+.alert {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+}
+.alert.warning{
+  background-color: #ff9800;
+  margin-bottom:30px;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+</style></head>
+<body class="insurance-page gary-bg">
   <div class="overlay-background">
 
       <div class="overlay-content login-wrap">
@@ -80,54 +106,51 @@ function getIdSourcesData(){
           </div>
 
 
-          <div style="width:100%; text-align:center">
-          <div class="tx--social" style="margin:auto;max-width:600px">
-						<a class="social-button" id="google-connect"> <span>Google</span></a>
-						<a class="social-button" id="linkedin-connect"> <span>LinkedIn</span></a>
-					</div>
-        </div>
-
+		      <div class="alert warning">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            @ERROR_MESSAGE@
+          </div>
         <form id="cloud-directory-form" method="post">
 
-    			<div class="formRow">
-    				<label>$LOGIN_USER_NAME$</label>
+          <div class="formRow">
+            <label>$LOGIN_USER_NAME$</label>
             <!--
               This input has no "name"-tag and so will not be send. See: https://www.w3schools.com/html/html_forms.asp
               Instead it will be used to determine the username with a suffix
             -->
-    				<input type="email" id="realusername" placeholder="$LOGIN_USER_NAME$" onFocus="this.placeholder = ''" value="@LOGIN_HINT@">
-            	<div class="inputLine"></div>
-    			</div>
+            <input type="email" id="realusername" placeholder="$LOGIN_USER_NAME$" onFocus="this.placeholder = ''" value="@LOGIN_HINT@">
+              <div class="inputLine"></div>
+          </div>
 
-    			<div class="formRow">
-    				<label>$LOGIN_PASSWORD$</label>
-    				<input type="password" name="password" placeholder="$LOGIN_PASSWORD$" onFocus="this.placeholder = ''">
+          <div class="formRow">
+            <label>$LOGIN_PASSWORD$</label>
+            <input type="password" name="password" placeholder="$LOGIN_PASSWORD$" onFocus="this.placeholder = ''">
                     <div class="show-password"></div>
-    				<div class="inputLine"></div>
-    			</div>
+            <div class="inputLine"></div>
+          </div>
 
-    			<div class="formRow-bottom clearfix">
-    				<div class="col">
-    					<input type="checkbox" id="remember">
-    					<label for="remember">$REMEMBER_ME$</label>
-    				</div>
+          <div class="formRow-bottom clearfix">
+            <div class="col">
+              <input type="checkbox" id="remember">
+              <label for="remember">$REMEMBER_ME$</label>
+            </div>
 
-    				<div class="col">
-    					<a href="$DEMO_APPLICATION_URL$/app/forgot-username">$LOGIN_WITH_FORGOT_USERNAME$</a><br>
+            <div class="col">
+              <a href="$DEMO_APPLICATION_URL$/app/forgot-username">$LOGIN_WITH_FORGOT_USERNAME$</a><br>
               <!--
               <a href="$DEMO_APPLICATION_URL$/app/forgot-password">$LOGIN_WITH_FORGOT_PASSWORD$</a>
               -->
               <!--The URL for the forgotten password is read from the Javascript above that sets forgot-password-link-->
               <a id="forgot-password-link" href="">$LOGIN_WITH_FORGOT_PASSWORD$</a>
-    				</div>
+            </div>
 
-    				<div class="clear"></div>
+            <div class="clear"></div>
             <input type="hidden" name="operation" value="verify">
             <input type="hidden" name="username">
-    				<input class="input-cta" type="submit" value="$LOGIN_BUTTON$" onclick="DoSubmit()">
-    				<p>$REGISTER_ACCOUNT$  <a href="$DEMO_APPLICATION_URL$/open-account" class="blue" id="open-new-account-link">$OPEN_AN_ACCOUNT$</a>
+            <input class="input-cta" type="submit" value="$LOGIN_BUTTON$" onclick="DoSubmit()">
+            <p>$REGISTER_ACCOUNT$  <a href="$DEMO_APPLICATION_URL$/open-account" class="blue" id="open-new-account-link">$OPEN_AN_ACCOUNT$</a>
             </p>
-    			</div>
+          </div>
 
         </form>
 

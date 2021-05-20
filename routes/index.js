@@ -158,6 +158,10 @@ router.get('/app/profile', function(req, res, next) {
           //// BUILD CONSENT
           dpcmClient.performDUA(req.session.accessToken, {
             trace: false,
+            // Added by Peter V to solve error of 
+            // "CSIBT0003E Required parameter(s), value.geoIP, is/are missing from the payload"
+            // Quick fix: used a dummy IP address
+            geoIP: "81.245.251.90",
             items: [
               {
                 purposeId: process.env.MARKETING_PURPOSE_ID,
@@ -263,12 +267,16 @@ router.post('/app/dpcm', function(req, res, next) {
       purposeId: process.env.MARKETING_PURPOSE_ID,
       accessTypeId: process.env.READ_ACCESS_TYPE,
       attributeId: process.env.EMAIL_ATTRIBUTE_ID,
+      // Peter V added for geoIP prob
+      geoIP: "81.245.251.90",
       state: (req.body.consentMarketing) ? 3 : 4,
     },
     {
       purposeId: process.env.PAPERLESS_PURPOSE_ID,
       accessTypeId: process.env.READ_ACCESS_TYPE,
       attributeId: process.env.EMAIL_ATTRIBUTE_ID,
+      // Peter V added for geoIP prob
+      geoIP: "81.245.251.90",
       state: (req.body.consentPaperless) ? 3 : 4
     }
   ], function(_err, result) {
