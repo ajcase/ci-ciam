@@ -1,0 +1,66 @@
+<!-- Template file path: templates/notifications/user_management/login/zh_CN/mfa_sign_in_attempt_email.html  -->
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Email id="default">
+    <SenderName>
+       <Value>
+        IBM Security
+       </Value>
+    </SenderName>
+    <Sender>
+       <Value>
+        ibmacct@ibm.com
+       </Value>
+    </Sender>
+    <Subject>
+      <Value>
+        复查最近一次帐户访问
+      </Value>
+    </Subject>
+
+    <Message>
+      <Value>
+      <![CDATA[<html>
+<!-- Template file path: templates/notifications/user_management/login/zh_CN/mfa_sign_in_attempt_email.html  -->
+      
+        <head />
+      
+          <body>
+            <div style="font-family: Helvetica neue, sans-serif;">
+              <table cellspacing="0" cellpadding="22" border="0" style="width: 100%; margin-bottom: 10px; top: 0px;left: 0px;">
+                <tr style="line-height: 30px; color: white; margin: 0 auto; background-color: #4178be;">
+                  <td style="font-size:24px;padding: 32px 64px 32px 72px;"><b>$PRODUCT_NAME$</b> </td>
+                </tr>
+              </table>
+            </div>
+            <div style="font-family: Helvetica neue, sans-serif; font-size: 14px; padding: 10px 64px 64px 64px; color: #121212;">
+      
+              <div>您好，@USER_FRIENDLY_NAME@，</div>
+      
+              <div>我们想要通知您，我们的安全系统已标记您的 $PRODUCT_NAME$ 帐户的最近一次访问。</div>
+              <br/>
+              <div>访问系统的设备的详细信息：</div>
+              <ul>
+                <li>位置：@LOCATION@</li>
+                <li>浏览器：@USER_AGENT@</li>
+                <li>互联网服务提供商：@ISP@</li>
+                <li>IP 地址：@IP_ADDRESS@</li>
+              </ul>
+              <br/>
+      
+              <div>如果您确认此登录尝试，那么可以安全地忽略此电子邮件。</div>
+              <br/>
+              <div>如果您不确认此登录尝试，那么您的帐户可能已泄露，请立即更改密码，并通知系统管理员。</div>
+              <br/>
+              <div>请注意：如果您登录过程或访问设备发生更改，那么您可能再次收到此电子邮件。</div>
+              <br/>
+              <div>顺颂商祺，</div>
+              <div>$PRODUCT_NAME$</div>
+            </div>
+          </body>
+      
+      </html>]]>
+      </Value>
+    </Message>
+</Email>
+</root>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Subject>
+  <Value>
+    您的一次性密码
+  </Value>
+</Subject>
+
+<Message>
+  <Value>
+	<![CDATA[<html>
+<!-- Template file path: templates/authentication/mfa/email/zh_CN/otp_delivery_email.xml  -->
+		<body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #121212; padding: 12px;">
+			<h1 style="color: #4178BE;">您的一次性密码 (OTP) 为： </h1>
+			<h2 style="color: #666666;">@CORRELATION@-@OTP@</h2>
+			<p>请使用此 OTP 来完成请求。 OTP 将在 @OTP_LIFETIME@ 分钟后到期。</p>
+			<p>请勿回复此电子邮件。</p>
+		</body>
+	</html>]]>
+  </Value>
+</Message>
+</root>

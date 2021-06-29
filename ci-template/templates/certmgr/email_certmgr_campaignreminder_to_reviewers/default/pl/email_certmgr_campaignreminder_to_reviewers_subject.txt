@@ -1,0 +1,1 @@
+Przypomnienie: Nadal masz oczekujące przeglądy dla kampanii @CERTIFICATION.NAME@. Data zakończenia kampanii: @CERTIFICATION.ENDDATE@.

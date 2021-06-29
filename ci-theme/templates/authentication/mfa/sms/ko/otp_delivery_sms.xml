@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Message value should be less than 70 characters -->
+<root>
+<Message>
+  <Value>
+    사용자의 패스코드: @CORRELATION@-@OTP@. @OTP_LIFETIME@분 후에 만료됩니다.
+  </Value>
+</Message>
+</root>

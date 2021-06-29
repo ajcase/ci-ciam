@@ -1,0 +1,65 @@
+<!-- Template file path: templates/notifications/user_management/login/pt_BR/access_denied_email.html  -->
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Email id="default">
+    <SenderName>
+       <Value>
+        IBM Security
+       </Value>
+    </SenderName>
+    <Sender>
+       <Value>
+        ibmacct@ibm.com
+       </Value>
+    </Sender>
+    <Subject>
+      <Value>
+      Acesso à conta negado
+      </Value>
+    </Subject>
+
+    <Message>
+      <Value>
+      <![CDATA[<html>
+<!-- Template file path: templates/notifications/user_management/login/pt_BR/access_denied_email.html  -->
+      
+        <head />
+      
+          <body>
+            <div style="font-family: Helvetica neue, sans-serif;">
+              <table cellspacing="0" cellpadding="22" border="0" style="width: 100%; margin-bottom: 10px; top: 0px;left: 0px;">
+                <tr style="line-height: 30px; color: white; margin: 0 auto; background-color: #4178be;">
+                  <td style="font-size:24px;padding: 32px 64px 32px 72px;"><b>$PRODUCT_NAME$</b> </td>
+                </tr>
+              </table>
+            </div>
+            <div style="font-family: Helvetica neue, sans-serif; font-size: 14px; padding: 10px 64px 64px 64px; color: #121212;">
+      
+              <div>Olá @USER_FRIENDLY_NAME@,</div>
+      
+              <div>Gostaríamos de informá-lo sobre um acesso recente em sua conta do $PRODUCT_NAME$ que nosso sistema de segurança
+                bloqueou.</div>
+              <br/>
+              <div>Detalhes do dispositivo que está acessando o sistema:</div>
+              <ul>
+                <li>Local: @LOCATION@</li>
+                <li>Navegador: @USER_AGENT@</li>
+                <li>Provedor de serviços da Internet: @ISP@</li>
+                <li>Endereço IP: @IP_ADDRESS@</li>
+              </ul>
+	      <br/>
+      
+      
+              <div>Se você não reconhece essa tentativa de conexão, sua conta pode ter sido comprometida, mude sua
+                senha imediatamente e alerte seu administrador do sistema.</div>
+              <br/>
+              <div>Atenciosamente,</div>
+              <div>$PRODUCT_NAME$</div>
+            </div>
+          </body>
+      
+      </html>]]>
+      </Value>
+    </Message>
+</Email>
+</root>

@@ -1,0 +1,1 @@
+キャンペーン・スーパーバイザーとして、@CERTIFICATION.OLD_REVIEWER@ がキャンペーン @CERTIFICATION.NAME@ の一部のレコードをあなたにエスカレートしました。このキャンペーンは @CERTIFICATION.ENDDATE@ に終了します。

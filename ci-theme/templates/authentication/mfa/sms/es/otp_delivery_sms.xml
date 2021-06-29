@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Message value should be less than 70 characters -->
+<root>
+<Message>
+  <Value>
+    Su código de acceso es: @CORRELATION@-@OTP@. Caduca en @OTP_LIFETIME@ minutos.
+  </Value>
+</Message>
+</root>

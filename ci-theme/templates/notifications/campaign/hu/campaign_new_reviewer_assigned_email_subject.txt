@@ -1,0 +1,1 @@
+@CERTIFICATION.OLD_REVIEWER@ hozzárendelte Önt áttekintőként a következő kampányhoz: @CERTIFICATION.NAME@. A kampány befejeződátuma: @CERTIFICATION.ENDDATE@.

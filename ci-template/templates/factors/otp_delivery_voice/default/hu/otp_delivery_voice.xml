@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <Message>
+    <Value>A belépési kódja a következő: @OTP@. @BREAK@ A kérés végrehajtásához használja ezt a belépési kódot.</Value>
+  </Message>
+</root>

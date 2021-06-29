@@ -1,0 +1,40 @@
+{
+   "contentMaxSize": 100,
+   "description": "Template for the notification to send to a user when an MFA was triggered",
+   "id": {
+      "component": "actions",
+      "name": "actions_user_mfa",
+      "revision": 6
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+         {
+            "description": "An approximation of the users location",
+            "key": "@LOCATION@"
+         },
+         {
+            "description": "The browser user-agent of the request which triggered this action",
+            "key": "@USER_AGENT@"
+         },
+         {
+            "description": "The users name",
+            "key": "@USER_FRIENDLY_NAME@"
+         },
+         {
+            "description": "The users ID",
+            "key": "@USER_ID@"
+         },
+         {
+            "description": "The client-ip of the request which triggered this action",
+            "key": "@IP_ADDRESS@"
+         },
+         {
+            "description": "The internet service provider which serviced the client request",
+            "key": "@ISP@"
+         }
+      ]
+   }
+}

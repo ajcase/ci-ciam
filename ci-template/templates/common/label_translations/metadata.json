@@ -1,0 +1,16 @@
+{
+   "contentMaxSize": 100,
+   "description": "A list of static text used by templates.",
+   "id": {
+      "component": "common",
+      "name": "label_translations",
+      "revision": 1
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+      ]
+   }
+}

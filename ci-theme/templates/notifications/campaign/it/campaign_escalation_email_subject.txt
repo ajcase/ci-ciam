@@ -1,0 +1,1 @@
+Essendo un supervisore della campagna, @CERTIFICATION.OLD_REVIEWER@ ha inviato a te per escalation alcuni record per la campagna @CERTIFICATION.NAME@. Questa campagna terminerà il @CERTIFICATION.ENDDATE@.

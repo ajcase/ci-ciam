@@ -1,0 +1,27 @@
+<!-- Template file path: templates/authentication/oidc/device_flow/default/user_authorize_error.html  -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>$OIDC_TITLE_USERAUTH_RESULT$</title>
+    <base href="/"/>
+    <link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico" />
+    <link rel="stylesheet" href="usc/css/stateless.css" />
+    <link rel="stylesheet" href="template/v1.0/static/theme.css?themeId=@THEME_ID@" />
+  </head>
+  <body>
+    <div class="cs-content usc-content usc-user-authorize-error">
+      @PAGE_HEADER@
+      <div class="user-authorize-main">
+        <p>$OIDC_TEXT_USERAUTH_ERROR$</p>
+        <br/>
+        <p>@ERROR_DESCRIPTION@</p>
+        <br/>
+        <form action="@ACTION@" method="get">
+          <input type="submit" value="$OIDC_BUTTON_ENTER_ANOTHER$" class="button"/>
+        </form>
+      </div>
+      @PAGE_FOOTER@
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1 @@
+キャンペーン @CERTIFICATION.NAME@ の状況が @CERTIFICATION.STATUS@ に変更されました。

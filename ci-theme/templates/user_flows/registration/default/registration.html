@@ -1,0 +1,38 @@
+<!-- Template file path: templates/user_flows/registration/default/registration.html  -->
+<!DOCTYPE html>
+<html>
+	<head>
+		<base href="/" />
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<link rel="shortcut icon" type="image/x-icon" href="/ui/assets/img/favicon.ico" />
+		<link rel="stylesheet" href="/usc/css/stateless.css">
+		<link rel="stylesheet" href="/profile/static/registration.css?version=@REGISTRATION_VERSION@">
+		<link rel="stylesheet" href="/template/v1.0/static/theme.css?themeId=@THEME_ID@" />
+		<title>@REGISTRATION_TITLE@</title>
+	</head>
+
+	<body class="register-@FLOW_URL_NAME@">
+		<div class="cs-content">
+			@PAGE_HEADER@
+
+			<div class="registration">
+				@REGISTRATION_FORM@
+			</div>
+
+			@PAGE_FOOTER@
+		</div>
+		<!-- Do not remove, may affect functionality -->
+		<div id="loader" class="bx--loading-overlay">
+			<div data-loading class="bx--loading">
+				<svg class="bx--loading__svg" viewBox="-75 -75 150 150">
+					<title>Loading</title>
+					<circle class="bx--loading__stroke" cx="0" cy="0" r="37.5" />
+				</svg>
+			</div>
+		</div>
+		<!-- Do not remove, may affect functionality -->
+		<script type="text/javascript" src="/profile/static/carbon-components.min.js"></script>
+		<script type="text/javascript" src="/profile/static/registration.js?version=@REGISTRATION_VERSION@"></script>
+		<script type="text/javascript" src="/usc/js/ieCheck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Subject>
+  <Value>
+    One-time Password personale
+  </Value>
+</Subject>
+
+<Message>
+  <Value>
+	<![CDATA[<html>
+<!-- Template file path: templates/authentication/mfa/email/it/otp_delivery_email.xml  -->
+		<body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #121212; padding: 12px;">
+			<h1 style="color: #4178BE;">La one-time password (OTP) personale è: </h1>
+			<h2 style="color: #666666;">@CORRELATION@-@OTP@</h2>
+			<p>Utilizzare questa OTP per completare la richiesta. Scadrà dopo @OTP_LIFETIME@ minuti.</p>
+			<p>Non rispondere a questa email.</p>
+		</body>
+	</html>]]>
+  </Value>
+</Message>
+</root>

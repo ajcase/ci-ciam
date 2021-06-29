@@ -1,0 +1,34 @@
+{
+   "contentMaxSize": 100,
+   "description": "SAML2.0 consent to federate",
+   "id": {
+      "component": "saml20",
+      "name": "saml_consent_to_federate",
+      "revision": 2
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The ID of the registered template theme.",
+            "key": "@THEME_ID@"
+         },
+         {
+            "default": null,
+            "description": "The HTML that contains the header of the web page. This code is modified by customizing the header.html common template.",
+            "key": "@PAGE_HEADER@"
+         }
+      ],
+      "required": [
+         {
+            "description": "The form action.",
+            "key": "@TOKEN:form_action@"
+         },
+         {
+            "description": "The display name of the service provider.",
+            "key": "@TOKEN:SPDisplayName@"
+         }
+      ]
+   }
+}

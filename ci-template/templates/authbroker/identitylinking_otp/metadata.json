@@ -1,0 +1,82 @@
+{
+   "contentMaxSize": 100,
+   "description": "A Page to get the one-time password.",
+   "id": {
+      "component": "authbroker",
+      "name": "identitylinking_otp",
+      "revision": 3
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "A short one-time password ID the user can use to verify they are entering the correct one-time password.",
+            "key": "@OTP_CORRELATION_ID@"
+         },
+         {
+            "default": null,
+            "description": "The maximum number of times a user will be allowed to attempt to verify a one-time password.",
+            "key": "@MAX_TRIES@"
+         },
+         {
+            "default": null,
+            "description": "The phone number the one-time password was sent to.",
+            "key": "@SENT_TO@"
+         },
+         {
+            "default": null,
+            "description": "The time the one-time password was created.",
+            "key": "@CREATION_TIME@"
+         },
+         {
+            "default": null,
+            "description": "The time the one-time password expires.",
+            "key": "@EXPIRY_TIME@"
+         },
+         {
+            "default": null,
+            "description": "The number of times a user has attempted to verify a one-time password.",
+            "key": "@NUMBER_OF_ATTEMPTS@"
+         },
+         {
+            "default": null,
+            "description": "The error message if any.",
+            "key": "@ERRMSG@"
+         },
+         {
+            "default": null,
+            "description": "The ID of the registered template theme.",
+            "key": "@THEME_ID@"
+         },
+         {
+            "default": null,
+            "description": "The HTML that contains the header of the web page. This code can be modified by customizing the header.html common template.",
+            "key": "@PAGE_HEADER@"
+         },
+         {
+            "default": null,
+            "description": "The HTML that contains the footer of the page. This code can be modified by customizing the footer.html common template.",
+            "key": "@PAGE_FOOTER@"
+         }
+      ],
+      "required": [
+         {
+            "description": "The form action URL.",
+            "key": "@IDENTITYLINKING_FORM_ACTION_URL@"
+         },
+         {
+            "description": "The UID of the one-time password verification record.",
+            "key": "@VERIFICATION_ID@"
+         },
+         {
+            "description": "The URL to re-send the OTP",
+            "key": "@RESEND_OTP_URL@"
+         },
+         {
+            "description": "Deprecated. Not used",
+            "key": "@LABEL_TITLE@"
+         }
+      ]
+   }
+}

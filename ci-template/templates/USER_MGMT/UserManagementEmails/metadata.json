@@ -1,0 +1,64 @@
+{
+   "contentMaxSize": 100,
+   "description": "Email templates for User Management operations.  The email template file contains a sender, subject, and contents section for customization.  Macros are replaced in the email before it is sent.  Macros are described below and must start and end with @ sign.",
+   "id": {
+      "component": "USER_MGMT",
+      "name": "UserManagementEmails",
+      "revision": 16
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+         {
+            "description": "The tenant name",
+            "key": "@TENANT@"
+         },
+         {
+            "description": "The user name.",
+            "key": "@USERNAME@"
+         },
+         {
+            "description": "The group name.  The group that the end user was added to or removed from.",
+            "key": "@GROUPNAME@"
+         },
+         {
+            "description": "A link to the login page.  When a user is created, then can click the link to login.",
+            "key": "@LOGIN_PAGE_LINK@"
+         },
+         {
+            "description": "The user's password.  When an admin creates a new user, the end user is email their temporary password.",
+            "key": "@PASSWORD@"
+         },
+         {
+            "description": "The attributes changed in a modify user operation displayed as a bunch of html table rows.",
+            "key": "@ATTRS_TABLEROWS@ "
+         },
+         {
+            "description": "The days before the password is expired.",
+            "key": "@DAYS_BEFORE_EXPIRE@ "
+         },
+         {
+            "description": "A link to the reset password page for password expiration notifications.",
+            "key": "@RESET_PWD_LINK@ "
+         },
+         {
+            "description": "A link to the change password page for password expiration notifications.",
+            "key": "@CHANGE_PWD_LINK@ "
+         },
+         {
+            "description": "The date when the user password is expired.",
+            "key": "@PWD_EXPIRY_DATE@"
+         },
+         {
+            "description": "If password reset for user self care is enabled for the tenant, the value is inherit, otherwise the value is none.",
+            "key": "@DISPLAY_RESET_ENABLED@"
+         },
+         {
+            "description": "If password reset for user self care is not enabled for the tenant, the value is inherit, otherwise the value is none.",
+            "key": "@DISPLAY_RESET_NOT_ENABLED@"
+         }
+      ]
+   }
+}

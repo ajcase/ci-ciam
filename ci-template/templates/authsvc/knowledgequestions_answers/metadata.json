@@ -1,0 +1,103 @@
+{
+   "contentMaxSize": 100,
+   "description": "A page for users to enter the answers to their knowledge questions.",
+   "id": {
+      "component": "authsvc",
+      "name": "knowledgequestions_answers",
+      "revision": 4
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The ID of the registered template theme.",
+            "key": "@THEME_ID@"
+         },
+         {
+            "default": null,
+            "description": "The HTML that contains the header of the web page. This code can be modified by customizing the header.html common template.",
+            "key": "@PAGE_HEADER@"
+         },
+         {
+            "default": null,
+            "description": "The HTML that contains the footer of the web page. This code can be modified by customizing the footer.html common template.",
+            "key": "@PAGE_FOOTER@"
+         },
+         {
+            "default": null,
+            "description": "Action taken.",
+            "key": "@ACTION@"
+         },
+         {
+            "default": null,
+            "description": "The given name of the logged in user",
+            "key": "@USER_GIVEN_NAME@"
+         },
+         {
+            "default": null,
+            "description": "A welcome message",
+            "key": "@WELCOME@"
+         },
+         {
+            "default": null,
+            "description": "A message saying \"Let's make sure it's you\"",
+            "key": "@LETS_MAKE_SURE_ITS_YOU@"
+         },
+         {
+            "default": null,
+            "description": "A message informing users that they must answer the questions correctly in order to proceed",
+            "key": "@CORRECTLY_ANSWER_QUESTIONS@"
+         },
+         {
+            "default": null,
+            "description": "A message for a link that can be clicked in order to use a different 2FA method",
+            "key": "@USER_ANOTHER_METHOD@"
+         },
+         {
+            "default": null,
+            "description": "A message for a link where users can get help",
+            "key": "@NEED_HELP@"
+         },
+         {
+            "default": null,
+            "description": "Full name of the User",
+            "key": "@NAME@"
+         },
+         {
+            "default": null,
+            "description": "Given name or first name",
+            "key": "@GIVEN_NAME@"
+         },
+         {
+            "default": null,
+            "description": "Family name or last name.",
+            "key": "@FAMILY_NAME@"
+         },
+         {
+            "default": null,
+            "description": "preferred user name.",
+            "key": "@PREFERRED_USERNAME@"
+         },
+         {
+            "default": null,
+            "description": "Show use another method or not.",
+            "key": "@SHOW_USE_ANOTHER_METHOD@"
+         }
+      ],
+      "required": [
+         {
+            "description": "An error message stating what went wrong",
+            "key": "@ERROR_MESSAGE@"
+         },
+         {
+            "description": "The translated question value",
+            "key": "@QUESTION@"
+         },
+         {
+            "description": "The question identifier",
+            "key": "@QUESTION_KEY@"
+         }
+      ]
+   }
+}

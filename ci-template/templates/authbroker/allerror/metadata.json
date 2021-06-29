@@ -1,0 +1,54 @@
+{
+   "contentMaxSize": 100,
+   "description": "A proper allerror page to display when error parsing msg.",
+   "id": {
+      "component": "authbroker",
+      "name": "allerror",
+      "revision": 7
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The timestamp when the error occurs.",
+            "key": "@TIMESTAMP@"
+         },
+         {
+            "default": null,
+            "description": "The exception message if any.",
+            "key": "@EXCEPTION_MSG@"
+         },
+         {
+            "default": null,
+            "description": "The Requested IP Address if any.",
+            "key": "@REQ_ADDR@"
+         },
+         {
+            "default": null,
+            "description": "The ID of the registered template theme.",
+            "key": "@THEME_ID@"
+         },
+         {
+            "default": null,
+            "description": "The HTML that contains the header of the web page. This code can be modified by customizing the header.html common template.",
+            "key": "@PAGE_HEADER@"
+         },
+         {
+            "default": null,
+            "description": "The HTML that contains the footer of the page. This code can be modified by customizing the footer.html common template.",
+            "key": "@PAGE_FOOTER@"
+         }
+      ],
+      "required": [
+         {
+            "description": "The detailed error message.",
+            "key": "@ERROR_MESSAGE@"
+         },
+         {
+            "description": "The locale of the current template page.",
+            "key": "@LOCALE@"
+         }
+      ]
+   }
+}

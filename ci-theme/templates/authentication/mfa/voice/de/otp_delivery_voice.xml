@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <Message>
+    <Value>Ihr Kenncode ist @OTP@. @BREAK@ Verwenden Sie diesen Kenncode zur Ausführung Ihrer Anforderung. </Value>
+  </Message>
+</root>

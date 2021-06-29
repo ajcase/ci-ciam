@@ -1,0 +1,1 @@
+귀하는 @CERTIFICATION.NAME@ 캠페인에 대한 지정된 검토자입니다. 이 캠페인은 @CERTIFICATION.ENDDATE@에 종료됩니다.

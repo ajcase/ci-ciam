@@ -1,0 +1,1 @@
+あなたは、@CERTIFICATION.OLD_REVIEWER@ からキャンペーン @CERTIFICATION.NAME@ のレビューアーとして割り当てられています。このキャンペーンは @CERTIFICATION.ENDDATE@ に終了します。

@@ -1,0 +1,75 @@
+<!-- Template file path: templates/authentication/device_manager/maas360/android/default/maas_android_login.html  -->
+<!DOCTYPE html>
+<!--
+	Macro Substitution Values:
+	ACTION: @ACTION@
+	BTN_CLICKED: @BTN_CLICKED@
+	CERT_SUBMISSION_URL: @CERT_SUBMISSION_URL@
+	MESSAGE: @MESSAGE@
+	WAIT: @WAIT@
+	WITH_XREQWITH: @WITH_XREQWITH@
+    REDIRECT_URL: @REDIRECT_URL@
+-->
+<html>
+<head>
+	<title>$LOGIN_TITLE$</title>
+	<base href="/" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" type="image/x-icon" href="usc/favicon.ico" />
+	<link rel="stylesheet" href="usc/css/stateless.css" />
+	<link rel="stylesheet" href="/template/v1.0/static/theme.css?themeId=@THEME_ID@" />
+	<style>
+		.button {
+				font-size: 18px;
+		}
+	</style>
+	<script type="text/javascript">
+		<!--  START NON-TRANSLATABLE  -->
+		var btnClicked = "@BTN_CLICKED@";
+		var withHeader = "@WITH_XREQWITH@";
+		var certSubmissionURL = "@CERT_SUBMISSION_URL@";
+		var waitTime = @WAIT@;
+		var cookieDisableMessage="$MAAS_COOKIE_DISABLED_MESSAGE$";
+		<!--  END NON-TRANSLATABLE  -->
+	</script>
+	<script type="text/javascript" src="/authsvc/mtfim/sps/static/common.js"></script>
+</head>
+<body onload="initProcessing()">
+	<div data-role="page" class="cs-content">
+		@PAGE_HEADER@
+		<div class="cs-select-login-provider-instructions">$MAAS_LOGIN$</div>
+		<div class="content">
+			<div data-role="content" class="header">
+				<p>@MESSAGE@</p>
+				<form action="@ACTION@" method="post" data-ajax="false">
+					<input type="hidden" name="operation" value="verify">
+					<input id="btnclicked" type="hidden" name="btnclicked" value="@BTN_CLICKED@">
+				</form>
+			</div>
+			<div id="topDiv" class="message">
+				<div class="spaced" id="authButtonDiv">
+					<a class="cs-link-button cs-button-primary-deprecated" id="authButton" onclick="handleWebViewAuth(0);" href="javascript:void(0)" >
+						<span>$MAAS_LOGIN_LABEL$</span>
+					</a>
+				</div>
+				<div class="spaced" id="authMessage" style="display: none; top: 0px; left: 0px; opacity: 1;">
+					<p style="font-size:18px">$MAAS_LOGIN_ATTEMPTING$</p>
+				</div>
+				<div style="display: none; top: 0px; left: 0px; opacity: 0;">
+					<a id="certUrlHref" href="@CERT_SUBMISSION_URL@" class="button cs-button">$MAAS_LOGIN_CLICK_HERE$</a>
+				</div>
+				<div class="spaced" id="openMaaSAppMessage" style="display: none; top: 0px; left: 0px; opacity: 1;">
+					<p style="font-size:18px">$MAAS_LOGIN_LAUNCH$</p>
+				</div>
+				<div class="spaced">
+					<a href="@REDIRECT_URL@">$MAAS_LOGIN_OTHER_OPTIONS$</a>
+				</div>
+			</div>
+		</div>
+		@PAGE_FOOTER@
+	</div>
+	<!-- Please do not move JS code from here, it may affect functionality -->
+	<script type="text/javascript" src="/authsvc/mtfim/sps/static/maasandroid_login.js"></script>
+</body>
+</html>

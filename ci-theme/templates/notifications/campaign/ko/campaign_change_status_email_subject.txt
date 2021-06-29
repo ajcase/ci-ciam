@@ -1,0 +1,1 @@
+@CERTIFICATION.NAME@ 캠페인의 상태가 @CERTIFICATION.STATUS@(으)로 변경되었습니다.

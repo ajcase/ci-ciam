@@ -1,0 +1,1 @@
+Erinnerung: Es sind noch anstehende Überprüfungen für die Kampagne @CERTIFICATION.NAME@ vorhanden. Diese Kampagne endet am @CERTIFICATION.ENDDATE@.

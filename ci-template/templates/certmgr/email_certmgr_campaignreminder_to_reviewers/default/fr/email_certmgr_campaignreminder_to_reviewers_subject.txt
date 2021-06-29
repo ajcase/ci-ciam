@@ -1,0 +1,1 @@
+Rappel : vous avez toujours des révisions en attente pour la campagne @CERTIFICATION.NAME@. Cette campagne prend fin le @CERTIFICATION.ENDDATE@.

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <Message>
+    <Value>Your passcode is @OTP@. @BREAK@ Use this passcode to complete your request.</Value>
+  </Message>
+</root>

@@ -10,6 +10,7 @@
     <Message>
       <Value>
       <![CDATA[<html>
+<!-- Template file path: templates/notifications/user_management/profile/fr/user_profile_modified_email.xml  -->
              <head>
             	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     		    <title>Profil utilisateur modifié</title>

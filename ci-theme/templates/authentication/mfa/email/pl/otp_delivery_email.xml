@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Subject>
+  <Value>
+    Hasło jednorazowe
+  </Value>
+</Subject>
+
+<Message>
+  <Value>
+	<![CDATA[<html>
+<!-- Template file path: templates/authentication/mfa/email/pl/otp_delivery_email.xml  -->
+		<body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #121212; padding: 12px;">
+			<h1 style="color: #4178BE;">Hasło jednorazowe (OTP): </h1>
+			<h2 style="color: #666666;">@CORRELATION@-@OTP@</h2>
+			<p>Użyj tego hasła OTP, aby zrealizować żądanie. Czas ważności w minutach: @OTP_LIFETIME@.</p>
+			<p>Nie odpowiadaj na tę wiadomość.</p>
+		</body>
+	</html>]]>
+  </Value>
+</Message>
+</root>

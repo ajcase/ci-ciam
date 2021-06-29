@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Email id="default">
+    <Subject>
+      <Value>
+        Informationen zur Wiederherstellung Ihres Benutzernamens
+      </Value>
+    </Subject>
+    <Message>
+      <Value>
+      <![CDATA[<html>
+<!-- Template file path: templates/authentication/login/cloud_directory/username/de/username_recovery.xml  -->
+            <head/>
+            <body>
+	         <div style="font-family: 'Helvetica neue', sans-serif;">
+	            <table cellspacing="0" cellpadding="22" border="0" style="width: 100%; margin-bottom: 10px; top: 0px;left: 0px;" >
+	              <tr style="line-height: 30px; color: white; margin: 0 auto; background-color: #4178be;">
+	                <td style="font-size:24px;padding: 32px 64px 32px 72px;">
+	                    <b>$PRODUCT_NAME$</b>
+	                </td>
+	              </tr>
+	            </table>
+	         </div>
+	         <div style="font-family: 'Helvetica neue', sans-serif; font-size: 14px; padding: 10px 64px 64px 64px; color: #121212;">
+	                Hallo @FIRST_NAME@,
+	                <br>
+	                <br>                 
+                    Ihr Benutzername für Tenant <b>@TENANT@</b> ist: <b>@USERNAME@</b>.
+                    <br>
+                    <br>
+Details zu dem Gerät, das auf das System zugreift: <br>
+                    <ul>
+                      <li>Standort: @LOCATION@</li>
+                      <li>Browser: @USER_AGENT@</li>
+                      <li>IP-Adresse: @IP_ADDRESS@</li>
+                    </ul>
+                    <br>
+                    <br>
+                    Wenn die Wiederherstellung Ihres Benutzernamens nicht von Ihnen angefordert wurde, wenden Sie sich an Ihren Administrator.
+             <br>
+                    <br>
+Mit freundlichen Grüßen, <br>
+IBM Security Verify
+</div>
+            </body>
+            </html>
+         ]]>      
+      </Value>
+    </Message>
+</Email>
+</root>

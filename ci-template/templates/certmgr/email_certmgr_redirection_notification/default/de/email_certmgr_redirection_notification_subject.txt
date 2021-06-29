@@ -1,0 +1,1 @@
+@CERTIFICATION.OLD_REVIEWER@ hat Sie als Prüfer der Kampagne @CERTIFICATION.NAME@ zugeordnet. Diese Kampagne endet am @CERTIFICATION.ENDDATE@.

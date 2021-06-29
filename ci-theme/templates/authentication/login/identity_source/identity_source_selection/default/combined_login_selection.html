@@ -1,34 +1,15 @@
+<!-- Template file path: templates/authentication/login/identity_source/identity_source_selection/default/combined_login_selection.html  -->
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>$LOGIN_TITLE$</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="apple-touch-icon" sizes="180x180" href="$DEMO_APPLICATION_URL$/favicon/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="$DEMO_APPLICATION_URL$/favicon/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="$DEMO_APPLICATION_URL$/favicon/favicon-16x16.png">
-<link rel="manifest" href="$DEMO_APPLICATION_URL$/favicon/site.webmanifest">
-<link rel="mask-icon" href="$DEMO_APPLICATION_URL$/favicon/safari-pinned-tab.svg" color="#7a6f6f">
-<link rel="shortcut icon" href="$DEMO_APPLICATION_URL$/f8avicon/favicon.ico">
-<meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-config" content="$DEMO_APPLICATION_URL$/favicon/browserconfig.xml">
+<title>$LOGIN_TITLE$</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#ffffff">
 
-<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-<link href="$DEMO_APPLICATION_URL$/stylesheets/style.css" rel="stylesheet" type="text/css">
-<link href="$DEMO_APPLICATION_URL$/stylesheets/social.css" rel="stylesheet" type="text/css">
-<link href="$DEMO_APPLICATION_URL$/stylesheets/overrides.css" rel="stylesheet" type="text/css">
-
 <!-- Load the Verify-specific stylesheets -->
-<link rel="stylesheet" href="/idaas/mtfim/static/styles.css">
 <link rel="stylesheet" href="/template/v1.0/static/theme.css?themeId=@THEME_ID@" />
-
-<!-- Don't think this is needed. lsp.js fixes passwordless options and sets loginURLs
-<script type="text/javascript" src="/idaas/mtfim/static/lsp.js?locale=@LOCALE@"></script>
--->
-<script type="text/javascript" src="/idaas/mtfim/static/lsp.js?locale=@LOCALE@"></script>
-
 
 <script>
 const idSources = @ID_SOURCES@;
@@ -69,6 +50,14 @@ function getIdSourcesData(){
   }
 </script>
 
+<!-- Read the JQuery library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
+<!-- A minified version of the demo apps's /javascripts/init.js with JQuery code -->
+<script>
+jQuery(document).ready(function(){jQuery(".close-popup").on("click",function(){return jQuery(".popup").fadeOut(),!1}),jQuery(".hamburger-menu").on("click",function(){jQuery(this).toggleClass("active"),jQuery(".main-menu").slideToggle()}),jQuery(".formRow input").focus(function(){jQuery(this).siblings(".formRow label").animate({opacity:1},800),jQuery(this).siblings(".formRow .inputLine").removeClass("active").animate({width:"100%"},800)}),jQuery(".formRow input").focusout(function(){jQuery(this).siblings(".formRow .inputLine").animate({width:0},800)}),jQuery(".formRow select").focus(function(){jQuery(this).siblings(".formRow label").animate({opacity:1},800),jQuery(this).siblings(".formRow .inputLine").removeClass("active").animate({width:"100%"},800)}),jQuery(".formRow select").focusout(function(){jQuery(this).siblings(".formRow .inputLine").addClass("active")}),jQuery(".show-password").click(function(){jQuery(this).toggleClass("active"),jQuery(this).hasClass("active")?jQuery(this).prev("input").attr("type","text"):jQuery(this).prev("input").attr("type","password")})}),jQuery(window).load(function(){jQuery(".shield").css({right:0});var e,i,n;e=$(".range-slider"),i=$(".range-slider__range"),n=$(".range-slider__value"),e.each(function(){n.each(function(){var e=$(this).prev().attr("value");$(this).html(e)}),i.on("input",function(){$(this).parents(".range-slider").find(".slider__value",n).html(this.value)})}),jQuery(".inline-popup-close").click(function(){return jQuery(".inline-popup").fadeOut(),jQuery(".inline-popup").removeClass("active"),!1}),jQuery(".inline-popup-open").click(function(){return jQuery(".inline-popup").fadeIn(),jQuery(".inline-popup").addClass("active"),!1}),jQuery(".inline-popup-close-2").click(function(){return jQuery(".inline-popup").fadeOut(),jQuery(".inline-popup").removeClass("active"),!1}),jQuery(".inline-popup-open-2").click(function(){return jQuery(".inline-popup-2").fadeIn(),jQuery(".inline-popup-2").addClass("active"),!1})});
+</script>
+
+
 </head>
 <body class="insurance-page gary-bg" onload="getIdSourcesData()">
   <div class="overlay-background">
@@ -76,7 +65,7 @@ function getIdSourcesData(){
       <div class="overlay-content login-wrap">
 
           <div class="overlay-logo">
-          	<a href="$DEMO_APPLICATION_URL$/"><img src="$DEMO_APPLICATION_URL$/images/insurance_logo.svg"></a>
+              <a href="$DEMO_APPLICATION_URL$/"><img src="/template/v1.0/static/logo.svg?themeId=@THEME_ID@"></a>
           </div>
 
 
@@ -125,19 +114,18 @@ function getIdSourcesData(){
             <input type="hidden" name="operation" value="verify">
             <input type="hidden" name="username">
     				<input class="input-cta" type="submit" value="$LOGIN_BUTTON$" onclick="DoSubmit()">
-    				<p>$REGISTER_ACCOUNT$  <a href="$DEMO_APPLICATION_URL$/open-account" class="blue" id="open-new-account-link">$OPEN_AN_ACCOUNT$</a>
-            </p>
     			</div>
 
         </form>
-
+        <br>
+        <div>
+        <p>$REGISTER_ACCOUNT$  <a href="$DEMO_APPLICATION_URL$/open-account" class="blue" id="open-new-account-link">$OPEN_AN_ACCOUNT$</a>
+        </p>
+        </div>
       </div>
-
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
-    <script src="$DEMO_APPLICATION_URL$/javascripts/init.js"></script>
     <div class="footer">
-      <div class="container">
+      <div class="footer-container">
         @PAGE_FOOTER@
       </div>
     </div>

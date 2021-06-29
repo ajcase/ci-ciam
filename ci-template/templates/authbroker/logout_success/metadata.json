@@ -1,0 +1,40 @@
+{
+   "contentMaxSize": 100,
+   "description": "A page to display when user logout successfully.",
+   "id": {
+      "component": "authbroker",
+      "name": "logout_success",
+      "revision": 8
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The IDaaS logout url.",
+            "key": "@IDAAS_LOGOUT_URL@"
+         },
+         {
+            "default": null,
+            "description": "The ID of the registered template theme.",
+            "key": "@THEME_ID@"
+         },
+         {
+            "default": null,
+            "description": "The HTML that contains the header of the web page. This code can be modified by customizing the header.html common template.",
+            "key": "@PAGE_HEADER@"
+         },
+         {
+            "default": null,
+            "description": "The HTML that contains the footer of the page. This code can be modified by customizing the footer.html common template.",
+            "key": "@PAGE_FOOTER@"
+         }
+      ],
+      "required": [
+         {
+            "description": "The locale of the current template page.",
+            "key": "@LOCALE@"
+         }
+      ]
+   }
+}

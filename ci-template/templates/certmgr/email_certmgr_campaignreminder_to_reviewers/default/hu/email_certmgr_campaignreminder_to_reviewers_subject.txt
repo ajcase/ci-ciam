@@ -1,0 +1,1 @@
+Emlékeztető: Még mindig vannak függőben lévő áttekintései a következő kampányhoz: @CERTIFICATION.NAME@. A kampány befejeződátuma: @CERTIFICATION.ENDDATE@.

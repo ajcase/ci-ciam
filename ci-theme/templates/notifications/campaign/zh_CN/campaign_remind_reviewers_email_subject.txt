@@ -1,0 +1,1 @@
+提示：您仍具有营销活动 @CERTIFICATION.NAME@ 的暂挂复查。此营销活动将于 @CERTIFICATION.ENDDATE@ 结束。

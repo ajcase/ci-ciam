@@ -1,0 +1,16 @@
+{
+   "contentMaxSize": 100,
+   "description": "The company logo displayed on the page header of all html templates.",
+   "id": {
+      "component": "common",
+      "name": "branding_logo_png",
+      "revision": 2
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+      ]
+   }
+}

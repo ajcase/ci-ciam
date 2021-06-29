@@ -1,0 +1,21 @@
+{
+   "contentMaxSize": 100,
+   "description": "A page header for all html templates.",
+   "id": {
+      "component": "common",
+      "name": "branding_header",
+      "revision": 2
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The id of the theme that holds the common visual elements.",
+            "key": "@THEME_ID@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

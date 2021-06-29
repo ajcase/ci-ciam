@@ -1,0 +1,1 @@
+Kontrolor @CERTIFICATION.OLD_REVIEWER@ vás přiřadil jako kontrolora ke kampani @CERTIFICATION.NAME@. Kampaň bude končit dne @CERTIFICATION.ENDDATE@.

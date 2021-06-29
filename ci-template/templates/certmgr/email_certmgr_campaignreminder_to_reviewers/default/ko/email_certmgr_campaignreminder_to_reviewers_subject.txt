@@ -1,0 +1,1 @@
+미리 알림: @CERTIFICATION.NAME@ 캠페인에 대한 보류 중인 검토가 남아 있습니다. 이 캠페인은 @CERTIFICATION.ENDDATE@에 종료됩니다.

@@ -1,0 +1,1 @@
+Recordatorio: todavía tiene revisiones pendientes para la campaña @CERTIFICATION.NAME@. Esta campaña finalizará el @CERTIFICATION.ENDDATE@.

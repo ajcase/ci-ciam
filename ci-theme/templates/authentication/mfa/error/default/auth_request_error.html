@@ -1,3 +1,4 @@
+<!-- Template file path: templates/authentication/mfa/error/default/auth_request_error.html  -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,32 +17,67 @@
 		var errorMessage = "@ERROR_MESSAGE@";
 		// END NON-TRANSLATABLE
 	</script>
-</head>
-<body>
-	<div class="cs-content cs-all-error">
-		@PAGE_HEADER@
-		<div class="content">
-			<div class="error-header spaced">
-				<span>$GENERIC_ERROR_HEADER$</span>
-			</div>
-			<div class="error-message spaced">
-				<span>@ERROR_MESSAGE@</span>
-			</div>
-			<div id="details-section">
-				<div id="timestamp-label" class="spaced">
-					<span>$GENERIC_ERROR_OCCURRED_AT$ @TIMESTAMP@</span>
-				</div>
-				<div id="request-address-label" class="spaced">
-					<span>$GENERIC_ERROR_REQUEST_ADDRESS$ @REQ_ADDR@</span>
-				</div>
-				<div id="exception-message-label" class="spaced">
-					<span>$GENERIC_ERROR_ERROR_DETAILS$ @EXCEPTION_MSG@</span>
-				</div>
-			</div>
-			<button id="details-button" class="cs-link" onclick="toggleErrorDetails('$GENERIC_ERROR_VIEW_DETAILS$', '$GENERIC_ERROR_HIDE_DETAILS$')">$GENERIC_ERROR_VIEW_DETAILS$</button>
-		</div>
-		@PAGE_FOOTER@
-	</div>
+
 	<script type="text/javascript" src="/authsvc/mtfim/sps/static/proper_errors_all_error.js"></script>
+
+	<script>
+	 function modify_msg(msg){
+	    // The message code is contained in the first 10 characters
+	    switch(msg.substr(0,10)) {
+	      case "CCSIAH0004E":
+	        // Original message: "CCSIAH0004E The system cannot complete your login request. Do not click the Back button or refresh the page. Reaccess the protected resource in a new window."
+	        newmsg="The system cannot complete your login request";
+	        break;
+	      default:
+	        // Show the message but without the code.
+	        newmsg=msg.slice(10);
+	    }
+	    return newmsg;
+	  }
+	</script>
+
+</head>
+
+
+
+<body class="insurance-page gary-bg">
+  <div class="overlay-background">
+      <div class="overlay-content login-wrap">
+          <div class="overlay-logo">
+            <a href="$DEMO_APPLICATION_URL$/"><img src="/template/v1.0/static/logo.svg?themeId=@THEME_ID@"></a>
+          </div>
+		<div class="content">
+      <span id="error-message">
+        <script>
+          document.getElementById("error-message").innerHTML = modify_msg("@ERROR_MESSAGE@");
+        </script>
+      </span>
+
+		<div id="details-section">
+			<div id="timestamp-label" class="spaced">
+				<span>$GENERIC_ERROR_OCCURRED_AT$ @TIMESTAMP@</span>
+			</div>
+			<div id="request-address-label" class="spaced">
+				<span>$GENERIC_ERROR_REQUEST_ADDRESS$ @REQ_ADDR@</span>
+			</div>
+			<div id="exception-message-label" class="spaced">
+				<span>$GENERIC_ERROR_ERROR_DETAILS$ @EXCEPTION_MSG@</span>
+			</div>
+		</div>
+		<button id="details-button" class="cs-link" onclick="toggleErrorDetails('$GENERIC_ERROR_VIEW_DETAILS$', '$GENERIC_ERROR_HIDE_DETAILS$')">$GENERIC_ERROR_VIEW_DETAILS$</button>
+		<div class="separator"></div>
+    		<a href="$DEMO_APPLICATION_URL$" class="blue" id="cs-button-return-home">$RETURN_HOME$</a>
+		</div>
+      </div>
+    <div class="footer">
+      <div class="container">
+        @PAGE_FOOTER@
+      </div>
+    </div>
+    </div>
+    <script language="JavaScript">
+	    sessionStorage.clear();
+	    localStorage.clear();
+    </script>
 </body>
 </html>

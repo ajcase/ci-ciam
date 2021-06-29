@@ -1,0 +1,64 @@
+<!-- Template file path: templates/authentication/saml/sso/default/saml_name_id_management_success.html  -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <base href="/"/>
+  <title>$SAML2_TITLE_NIMGMT_SUCCESS$</title>
+  <!-- Name ID Management Success -->
+  <link rel="shortcut icon" type="image/x-icon" href="usc/favicon.ico"/>
+  <link rel="stylesheet" href="usc/css/stateless.css"/>
+  <link rel="stylesheet" href="template/v1.0/static/theme.css?themeId=@THEME_ID@"/>
+  <meta name="viewport" content="width=device-width, initial-scale='1.0'"/>
+  <script>
+    function onloadFunc() {
+      // display the section base on mnid terminate or update
+      if ("@TOKEN:NIMGNTAction@" == "TERMINATE") {
+        document.getElementById("divTerminate").hidden = false;
+      } else if ("@TOKEN:NIMGNTAction@" == "UPDATE") {
+        document.getElementById("divUpdate").hidden = false;
+      }
+      // display body only when the pag is fully loaded
+      // to avoid partial display of text
+      document.getElementById("topDiv").hidden = false;
+    }
+  </script>
+</head>
+
+<body class="title-background" onload="onloadFunc()">
+<div id="topDiv" class="cs-content" hidden="true">
+  @PAGE_HEADER@
+  <div id="divUpdate" class="content" hidden="true">
+    <div class="content-header">
+      $SAML2_TITLE_NIMGMT_UPDATE_SUCCESS$
+    </div>
+    <div>
+      <div>
+        <div class="spaced user-authorize-main">
+            <span>
+              <p>$SAML2_MESSAGE_NIMGMT_UPDATE_SUCCESS$ <label>@TOKEN:SPDisplayName@</label>.</p>
+            </span>
+        </div>
+      </div>
+    </div>
+    <br/>
+  </div>
+  <div id="divTerminate" class="content" hidden="true">
+    <div class="content-header">
+      $SAML2_TITLE_NIMGMT_TERMINATE_SUCCESS$
+    </div>
+    <div>
+      <div>
+        <div class="spaced user-authorize-main">
+            <span>
+              <p>$SAML2_MESSAGE_NIMGMT_TERMINATE_SUCCESS$ <label>@TOKEN:SPDisplayName@</label>.</p>
+            </span>
+        </div>
+      </div>
+    </div>
+    <br/>
+  </div>
+</div>
+</body>

@@ -1,0 +1,1 @@
+Lembrete: você ainda possui revisões pendentes para a campanha @CERTIFICATION.NAME@. Essa campanha terminará em @CERTIFICATION.ENDDATE@.

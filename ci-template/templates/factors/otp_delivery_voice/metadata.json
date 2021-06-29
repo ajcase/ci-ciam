@@ -1,0 +1,35 @@
+{
+   "contentMaxSize": 100,
+   "description": "The voice one-time password delivery format.",
+   "id": {
+      "component": "factors",
+      "name": "otp_delivery_voice",
+      "revision": 1
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The one-time password correlation value.",
+            "key": "@CORRELATION@"
+         },
+         {
+            "default": null,
+            "description": "The one-time password lifetime.",
+            "key": "@OTP_LIFETIME@"
+         },
+         {
+            "default": null,
+            "description": "Used to tell the service to add a pause where used.",
+            "key": "@BREAK@"
+         }
+      ],
+      "required": [
+         {
+            "description": "The one-time password value.",
+            "key": "@OTP@"
+         }
+      ]
+   }
+}

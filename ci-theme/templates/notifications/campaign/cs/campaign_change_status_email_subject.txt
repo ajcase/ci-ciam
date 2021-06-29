@@ -1,0 +1,1 @@
+Stav kampaně @CERTIFICATION.NAME@ se změnil na stav @CERTIFICATION.STATUS@.

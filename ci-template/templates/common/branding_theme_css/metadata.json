@@ -1,0 +1,16 @@
+{
+   "contentMaxSize": 100,
+   "description": "A CSS to override styling for all html templates.",
+   "id": {
+      "component": "common",
+      "name": "branding_theme_css",
+      "revision": 1
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+      ]
+   }
+}

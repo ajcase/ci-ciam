@@ -1,0 +1,67 @@
+<!-- Template file path: templates/notifications/user_management/login/ru/mfa_sign_in_attempt_email.html  -->
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Email id="default">
+    <SenderName>
+       <Value>
+        IBM Security
+       </Value>
+    </SenderName>
+    <Sender>
+       <Value>
+        ibmacct@ibm.com
+       </Value>
+    </Sender>
+    <Subject>
+      <Value>
+        Проверить недавний доступ к учетной записи
+      </Value>
+    </Subject>
+
+    <Message>
+      <Value>
+      <![CDATA[<html>
+<!-- Template file path: templates/notifications/user_management/login/ru/mfa_sign_in_attempt_email.html  -->
+      
+        <head />
+      
+          <body>
+            <div style="font-family: Helvetica neue, sans-serif;">
+              <table cellspacing="0" cellpadding="22" border="0" style="width: 100%; margin-bottom: 10px; top: 0px;left: 0px;">
+                <tr style="line-height: 30px; color: white; margin: 0 auto; background-color: #4178be;">
+                  <td style="font-size:24px;padding: 32px 64px 32px 72px;"><b>$PRODUCT_NAME$</b> </td>
+                </tr>
+              </table>
+            </div>
+            <div style="font-family: Helvetica neue, sans-serif; font-size: 14px; padding: 10px 64px 64px 64px; color: #121212;">
+      
+              <div>Здравствуйте, @USER_FRIENDLY_NAME@,</div>
+      
+              <div>Мы хотели уведомить вас о недавнем доступе к вашей учетной записи $PRODUCT_NAME$, что было отмечено нашей системой защиты.</div>
+              <br/>
+              <div>Сведения об устройстве, которое обращается к системе:</div>
+              <ul>
+                <li>Положение: @LOCATION@</li>
+                <li>Браузер: @USER_AGENT@</li>
+                <li>Провайдер услуг Интернета: @ISP@</li>
+                <li>IP-адрес: @IP_ADDRESS@</li>
+              </ul>
+              <br/>
+      
+              <div>Если вы признаете этот вход в систему, вы можете спокойно игнорировать эту электронную почту.</div>
+              <br/>
+              <div>Если вы не признаете эту попытку входа, то ваша учетная запись, возможно, скомпрометированы, немедленно измените свой пароль
+и сообщите системному администратору.</div>
+              <br/>
+              <div>Примечание: Вы можете получить эту электронную почту еще раз, если процесс входа в систему или доступ к устройству изменится.</div>
+              <br/>
+              <div>С уважением,</div>
+              <div>$PRODUCT_NAME$</div>
+            </div>
+          </body>
+      
+      </html>]]>
+      </Value>
+    </Message>
+</Email>
+</root>

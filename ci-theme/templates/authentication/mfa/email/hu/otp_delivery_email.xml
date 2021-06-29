@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Subject>
+  <Value>
+    Az egyszeri jelszó
+  </Value>
+</Subject>
+
+<Message>
+  <Value>
+	<![CDATA[<html>
+<!-- Template file path: templates/authentication/mfa/email/hu/otp_delivery_email.xml  -->
+		<body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #121212; padding: 12px;">
+			<h1 style="color: #4178BE;">Az egyszeri jelszó (OTP) a következő: </h1>
+			<h2 style="color: #666666;">@CORRELATION@-@OTP@</h2>
+			<p>A kérés végrehajtásához használja ezt az egyszeri jelszót. Ez @OTP_LIFETIME@ perc után lejár.</p>
+			<p>Ne válaszoljon erre az e-mailre.</p>
+		</body>
+	</html>]]>
+  </Value>
+</Message>
+</root>

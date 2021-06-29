@@ -1,0 +1,1 @@
+@CERTIFICATION.OLD_REVIEWER@ назначил вас проверяющим для кампании @CERTIFICATION.NAME@. Эта кампания закончится @CERTIFICATION.ENDDATE@.

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Message value should be less than 70 characters -->
+<root>
+<Message>
+  <Value>
+    Sua senha é: @CORRELATION@-@OTP@. Ela expira em @OTP_LIFETIME@ minutos.
+  </Value>
+</Message>
+</root>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Email id="default">
+    <Subject>
+      <Value>
+        已修改使用者設定檔
+      </Value>
+    </Subject>
+
+    <Message>
+      <Value>
+      <![CDATA[<html>
+<!-- Template file path: templates/notifications/user_management/profile/zh_TW/user_profile_modified_email.xml  -->
+             <head>
+            	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    		    <title>已修改使用者設定檔</title>
+    		</head>
+    	   <body>
+           <div style="font-family: 'Helvetica neue', sans-serif;">
+             <table cellspacing="0" cellpadding="22" border="0" style="width: 100%; margin-bottom: 10px; top: 0px;left: 0px;" >
+               <tr style="line-height: 30px; color: white; margin: 0 auto; background-color: #4178be;">
+                 <td style="font-size:24px;padding: 32px 64px 32px 72px;">
+                    <b>$PRODUCT_NAME$</b>
+                 </td>
+               </tr>
+             </table>
+          </div>
+          <div style="font-family: 'Helvetica neue', sans-serif; font-size: 14px; padding: 10px 64px 64px 64px; color: #121212;">
+            <p style="padding-bottom: 12px;font-size: 16px">變更您的帳戶資訊。 </p>    
+            <p style="padding-bottom: 12px; line-height: 24px">您收到此電子郵件是因為已更新訂閱 <b><a style="text-decoration: none; color: #000000;">@TENANT@</a></b>
+                中與您的帳戶 <a href="#" style="color: #4178BE;">@USERNAME@</a> 相關的一則以上資訊片段。 如果您未要求這些變更，請聯絡您的系統管理者。</p>
+            <p style="font-size: 14px; line-height: 24px">
+             <b>已變更資訊：</b><br /> 
+             <table style="border-spacing: 0px; font-size: 14px; line-height: 24px; text-align: left;">
+                @ATTRS_TABLEROWS@  
+            </table>
+         </p>            
+         </div>
+         </body>
+		</html>
+          ]]>
+      </Value>
+    </Message>
+</Email>
+</root>

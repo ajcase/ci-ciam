@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Message value should be less than 70 characters -->
+<root>
+<Message>
+  <Value>
+    A belépési kódja: @CORRELATION@-@OTP@. @OTP_LIFETIME@ perc múlva lejár.
+  </Value>
+</Message>
+</root>

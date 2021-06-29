@@ -1,0 +1,61 @@
+{
+   "contentMaxSize": 100,
+   "description": "IBM Verify Authentication selection",
+   "id": {
+      "component": "authsvc",
+      "name": "ibmverify_authenticator_selection",
+      "revision": 11
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The ID of the registered template theme.",
+            "key": "@THEME_ID@"
+         },
+         {
+            "default": null,
+            "description": "The HTML that contains the header of the web page. This code can be modified by customizing the header.html common template.",
+            "key": "@PAGE_HEADER@"
+         },
+         {
+            "default": null,
+            "description": "The HTML that contains the footer of the web page. This code can be modified by customizing the footer.html common template.",
+            "key": "@PAGE_FOOTER@"
+         },
+         {
+            "default": null,
+            "description": "Action.",
+            "key": "@ACTION@"
+         },
+         {
+            "default": null,
+            "description": "Error message.",
+            "key": "@ERROR_MESSAGE@"
+         },
+         {
+            "default": null,
+            "description": "Authenticator id.",
+            "key": "@AUTHENTICATOR_ID@"
+         },
+         {
+            "default": null,
+            "description": "Boolean status to keep device checked or not.",
+            "key": "@DEVICE_CHECKED@"
+         },
+         {
+            "default": null,
+            "description": "Device name.",
+            "key": "@DEVICE_NAME@"
+         },
+         {
+            "default": null,
+            "description": "Device type.",
+            "key": "@DEVICE_TYPE@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

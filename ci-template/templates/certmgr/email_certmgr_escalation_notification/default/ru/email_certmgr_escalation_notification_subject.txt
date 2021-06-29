@@ -1,0 +1,1 @@
+Будучи инспектором кампании, @CERTIFICATION.OLD_REVIEWER@ эскалирует вам некоторые записи для кампании @CERTIFICATION.NAME@. Эта кампания закончится @CERTIFICATION.ENDDATE@.

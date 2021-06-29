@@ -1,0 +1,1 @@
+@CERTIFICATION.OLD_REVIEWER@ has assigned you as a reviewer for the campaign @CERTIFICATION.NAME@. This campaign will end on @CERTIFICATION.ENDDATE@.

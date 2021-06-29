@@ -1,0 +1,16 @@
+{
+   "contentMaxSize": 100,
+   "description": "An optional format for the company logo.",
+   "id": {
+      "component": "common",
+      "name": "branding_logo_svg",
+      "revision": 2
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+      ],
+      "required": [
+      ]
+   }
+}

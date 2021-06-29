@@ -1,0 +1,26 @@
+<!-- Template file path: templates/authentication/oidc/error/default/oidc_generic_error.html  -->
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>$GENERIC_ERROR_TITLE$</title>
+    <base href="/"/>
+    <link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico" />
+    <link rel="stylesheet" href="usc/css/stateless.css" />
+    <link rel="stylesheet" href="template/v1.0/static/theme.css?themeId=@THEME_ID@" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div class="cs-content cs-all-error">
+      @PAGE_HEADER@
+      <div class="content">
+        <div class="error-header spaced">
+          <span>$GENERIC_ERROR_HEADER$</span>
+        </div>
+        <div class="error-message spaced">
+          <span>@ERROR_DESCRIPTION@</span>
+        </div>
+      </div>
+      @PAGE_FOOTER@
+    </div>
+  </body>
+</html>

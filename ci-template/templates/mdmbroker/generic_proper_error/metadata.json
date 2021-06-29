@@ -1,0 +1,54 @@
+{
+   "contentMaxSize": 100,
+   "description": "A general proper error page.",
+   "id": {
+      "component": "mdmbroker",
+      "name": "generic_proper_error",
+      "revision": 10
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The timestamp when the error occurs.",
+            "key": "@TIMESTAMP@"
+         },
+         {
+            "default": null,
+            "description": "The exception message if any.",
+            "key": "@EXCEPTION_MESSAGE@"
+         },
+         {
+            "default": null,
+            "description": "The Requested IP Address if any.",
+            "key": "@REQ_ADDR@"
+         },
+         {
+            "default": null,
+            "description": "The ID of the registered template theme.",
+            "key": "@THEME_ID@"
+         },
+         {
+            "default": null,
+            "description": "The HTML that contains the header of the web page. This code can be modified by customizing the header.html common template.",
+            "key": "@PAGE_HEADER@"
+         },
+         {
+            "default": null,
+            "description": "The REDIRECT URL link. This code can be modified by customizing the header.html common template.",
+            "key": "@REDIRECT_URL@"
+         }
+      ],
+      "required": [
+         {
+            "description": "The detailed error message.",
+            "key": "@ERROR_MESSAGE@"
+         },
+         {
+            "description": "The locale of the current template page.",
+            "key": "@LOCALE@"
+         }
+      ]
+   }
+}

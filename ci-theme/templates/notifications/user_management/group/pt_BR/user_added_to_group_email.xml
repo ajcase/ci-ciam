@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Email id="default">
+    <Subject>
+      <Value>
+        Grupo modificado
+      </Value>
+    </Subject>
+
+    <Message>
+      <Value>
+       <![CDATA[<html>
+<!-- Template file path: templates/notifications/user_management/group/pt_BR/user_added_to_group_email.xml  -->
+         <head>
+    		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    		<title>Grupo modificado</title>
+  		</head>
+  		 <body>
+           <div style="font-family: 'Helvetica neue', sans-serif;">
+             <table cellspacing="0" cellpadding="22" border="0" style="width: 100%; margin-bottom: 10px; top: 0px;left: 0px;" >
+               <tr style="line-height: 30px; color: white; margin: 0 auto; background-color: #4178be;">
+                 <td style="font-size:24px;padding: 32px 64px 32px 72px;">
+                    <b>$PRODUCT_NAME$</b>
+	                </td>
+               </tr>
+             </table>
+          </div>
+          <div style="font-family: 'Helvetica neue', sans-serif; font-size: 14px; padding: 10px 64px 64px 64px; color: #121212;">
+             <p>A conta <b>@USERNAME@</b> foi incluída no grupo: <b>@GROUPNAME@</b> para a assinatura <b><a style="text-decoration: none; color: #000000;">@TENANT@</a></b>.</p>
+         </div>
+        </body>  	
+          </html>
+         ]]>      
+      </Value>
+    </Message>
+</Email>
+</root>

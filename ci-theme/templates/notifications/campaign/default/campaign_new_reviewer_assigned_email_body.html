@@ -1,0 +1,37 @@
+<!-- Template file path: templates/notifications/campaign/default/campaign_new_reviewer_assigned_email_body.html  -->
+<div style="font-family: 'Helvetica neue', sans-serif;">
+<table style="width: 100%; margin-bottom: 10px; top: 0px;left: 0px;" cellspacing="0" cellpadding="22" border="0">
+	<tbody>
+		<tr style="line-height: 30px; color: white; margin: 0 auto; background-color: #4178be;">
+			<td style="font-size:24px;padding: 32px 64px 32px 72px;"><b>@CERTIFICATION.PRODUCTNAME@</b></td>
+		</tr>
+	</tbody>
+</table>
+</div>
+<div style="font-family: 'Helvetica neue', sans-serif; font-size: 14px; padding: 10px 64px 64px 64px; color: #121212;">
+
+<p>
+<strong>@CERTIFICATION.OLD_REVIEWER@</strong> has assigned you as a reviewer for the campaign "@CERTIFICATION.NAME@".<br/>
+This campaign will end on <strong>@CERTIFICATION.ENDDATE@</strong>.<br/>
+</p>
+
+<p>
+Please visit the campaign to review the assigned items: <a href="@USC.HYPERLINK@">@CERTIFICATION.NAME@</a><br/><br/>
+</p>
+
+<hr style="border: 0;
+    height: 2.2px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(65,120,190, 0.8), rgba(0, 0, 0, 0));">
+	
+<h4>Details of Campaign to review:</h4>
+<ul>
+<li>Campaign ID: @CERTIFICATION.ID@</li>
+<li>Campaign Name: @CERTIFICATION.NAME@</li>
+<li>Campaign Type: @CERTIFICATION.TYPE@</li>
+<li>Start date: @CERTIFICATION.STARTDATE@</li>
+<li>End date: @CERTIFICATION.ENDDATE@</li>
+</ul>
+<table style="border-spacing: 0px; font-size: 14px; line-height: 24px; text-align: left;">
+</table>
+<p>&nbsp;</p>
+</div>

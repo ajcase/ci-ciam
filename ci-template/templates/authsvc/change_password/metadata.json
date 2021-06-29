@@ -1,0 +1,106 @@
+{
+   "contentMaxSize": 100,
+   "description": "Page to change the password.",
+   "id": {
+      "component": "authsvc",
+      "name": "change_password",
+      "revision": 4
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The ID of the registered template theme.",
+            "key": "@THEME_ID@"
+         },
+         {
+            "default": null,
+            "description": "The HTML that contains the header of the web page. This code can be modified by customizing the header.html common template.",
+            "key": "@PAGE_HEADER@"
+         },
+         {
+            "default": null,
+            "description": "The HTML that contains the footer of the web page. This code can be modified by customizing the footer.html common template.",
+            "key": "@PAGE_FOOTER@"
+         },
+         {
+            "default": null,
+            "description": "Change passwrod",
+            "key": "@LABEL_CHANGE_PASSWORD@"
+         },
+         {
+            "default": null,
+            "description": "Change passwrod description",
+            "key": "@LABEL_CHANGE_PASSWORD_DESC@"
+         },
+         {
+            "default": null,
+            "description": "Current passwrod",
+            "key": "@LABEL_CURRENT_PASSWORD@"
+         },
+         {
+            "default": null,
+            "description": "New passwrod",
+            "key": "@LABEL_NEW_PASSWORD@"
+         },
+         {
+            "default": null,
+            "description": "Confirm passwrod",
+            "key": "@LABEL_CONFIRM_PASSWORD@"
+         },
+         {
+            "default": null,
+            "description": "Change passwrod",
+            "key": "@LABEL_CHANGE_PASSWORD@"
+         },
+         {
+            "default": null,
+            "description": "Cancel",
+            "key": "@LABEL_CANCEL@"
+         },
+         {
+            "default": null,
+            "description": "Action taken.",
+            "key": "@ACTION@"
+         },
+         {
+            "default": null,
+            "description": "Error message.",
+            "key": "@ERROR_MESSAGE@"
+         },
+         {
+            "default": null,
+            "description": "User name.",
+            "key": "@USERNAME@"
+         },
+         {
+            "default": null,
+            "description": "Policy message.",
+            "key": "@POLICYMESSAGE@"
+         },
+         {
+            "default": null,
+            "description": "Passwrod warning.",
+            "key": "@PASSWORDWARNING@"
+         },
+         {
+            "default": null,
+            "description": "Error for empty current password.",
+            "key": "@ERROR_CURRENT_PASSWORD_EMPTY@"
+         },
+         {
+            "default": null,
+            "description": "Error for empty new password.",
+            "key": "@ERROR_NEW_PASSWORD_EMPTY@"
+         },
+         {
+            "default": null,
+            "description": "Error for empty confirm password.",
+            "key": "@ERROR_CONFIRM_PASSWORD_EMPTY@"
+         }
+      ],
+      "required": [
+      ]
+   }
+}

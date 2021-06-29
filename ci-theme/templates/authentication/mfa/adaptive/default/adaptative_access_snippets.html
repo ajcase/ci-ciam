@@ -1,0 +1,110 @@
+<!-- Template file path: templates/authentication/mfa/adaptive/default/adaptative_access_snippets.html  -->
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+
+<head>
+  <title>$TRUSTEER_VERIFYING_PAGE_TITLE$</title>
+
+  <script type="text/javascript">
+    (function () {
+      var f = document,
+        e = window,
+        i = e.location.protocol,
+        b = [
+          ["src", [i == "https:" ? "https:/" : "http:/", "@FRONTEND_URL@/@SNIPPET_ID@/aloads.js?dt=@SNIPPET_LOADER_TAG@&r=" + Math.random()].join("/")],
+          ["type", "text/javascript"],
+          ["async", true]
+        ],
+        c = f.createElement("script"),
+        h = f.getElementsByTagName("head")[0];
+      setTimeout(function () {
+        for (var d = 0, l = b.length; d < l; d++) {
+          c.setAttribute(b[d][0], b[d][1])
+        }
+        h.appendChild(c)
+      }, 0)
+    })();
+  </script>
+  
+  <script type="text/javascript">
+    var getFlowCalled = 0;
+    var tick = performance.now();
+    console.log(tick + " ms: base baseline");
+
+    var COLLECTION_MONITOR_TIMEOUT = @COLLECTION_MONITOR_TIMEOUT_A2@;
+    var COLLECTION_MONITOR_COUNTER = @GET_FLOW_COUNT_A2@;
+    var PAGE_COLLECTION_TIMEOUT = @COLLECTION_PAGE_TIMEOUT@;
+
+    function getFormat() {
+      console.log("getFormat() called: @TAGVALUE_SESSION_INDEX@");
+      var format = {
+        "p": {
+          "p": ""
+        },
+        "u": {
+          "p": [""]
+        },
+        "c": "@TAGVALUE_SESSION_INDEX@"
+      }
+      return format;
+    }
+
+    function getFlow() {
+      getFlowCalled++;
+      var me = getFlowCalled;
+      var toc = performance.now();
+      console.log((toc - tick) + " ms: getFlow() called " + getFlowCalled + " times...");
+      if (getFlowCalled == COLLECTION_MONITOR_COUNTER) {
+        clearTimeout(pageTimeout);
+        submitForm();
+      }
+      var toc = performance.now();
+      console.log((toc - tick) + " ms: getFlow() called " + me + " times... Done");
+    }
+
+    function submitForm() {
+      var toc = performance.now();
+      console.log((toc - tick) + " ms: Sleeping for " + COLLECTION_MONITOR_TIMEOUT + " milliseconds...");
+      setTimeout(function () {
+        var toc = performance.now();
+        console.log((toc - tick) + " ms: Waited for CSID collection, now submitting...");
+        document.getElementById("verifying_message").innerHTML = "$SAML_POST_REQUEST_WAIT$";
+        document.myFlowForm.submit();
+      }, COLLECTION_MONITOR_TIMEOUT)
+    }
+
+    var pageTimeout = setTimeout(function () {
+      document.getElementById("verifying_message").innerHTML = "$SAML_POST_REQUEST_WAIT$";
+      console.log("Page timeout before collection complete...");
+      document.myFlowForm.submit();
+    }, PAGE_COLLECTION_TIMEOUT);
+  </script>
+  <link rel="manifest" href="/usc/manifest.json" />
+  <link rel="shortcut icon" type="image/x-icon" href="/usc/favicon.ico" />
+  <link rel="stylesheet" href="/usc/css/stateless.css" />
+  <link rel="stylesheet" href="/idaas/mtfim/static/styles.css" />
+  <link rel="stylesheet" href="/template/v1.0/static/theme.css?themeId=@THEME_ID@" />
+</head>
+
+<body>
+  <div style="position: relative; z-index: 0;">
+    <div class="bx--loading-overlay" style="flex-direction: column;">
+      <div aria-live="assertive" class="bx--loading class" style="width:4rem;height:4rem;">
+        <svg class="bx--loading__svg"
+          style="fill: transparent;stroke: #6EA6FF;stroke-width: 7;stroke-linecap: butt;stroke-dasharray: 240;stroke-dashoffset: 40;"
+          viewBox="-75 -75 150 150">
+          <circle cx="0" cy="0" r="37.5"></circle>
+        </svg>
+      </div>
+      <div id="verifying_message">$TRUSTEER_VERIFYING_PAGE_TITLE$...</div>
+    </div>
+  </div>
+  <form name="myFlowForm" action="@TARGET_URL@" method="GET">
+    <div style="display: none">
+      @TARGET_URL_QUERY_PARAMETERS@
+    </div>
+  </form>
+</body>
+</html>

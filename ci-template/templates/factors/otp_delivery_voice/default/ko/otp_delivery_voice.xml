@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <Message>
+    <Value>패스코드는 @OTP@입니다. @BREAK@ 이 패스코드를 사용하여 요청을 완료하십시오. </Value>
+  </Message>
+</root>

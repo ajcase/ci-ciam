@@ -1,0 +1,1 @@
+Jste kontrolor přiřazený ke kampani @CERTIFICATION.NAME@. Kampaň bude končit dne @CERTIFICATION.ENDDATE@.

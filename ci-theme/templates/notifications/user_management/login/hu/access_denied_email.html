@@ -1,0 +1,64 @@
+<!-- Template file path: templates/notifications/user_management/login/hu/access_denied_email.html  -->
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Email id="default">
+    <SenderName>
+       <Value>
+        IBM Security
+       </Value>
+    </SenderName>
+    <Sender>
+       <Value>
+        ibmacct@ibm.com
+       </Value>
+    </Sender>
+    <Subject>
+      <Value>
+      A hozzáférés a fiókhoz megtagadva</Value>
+    </Subject>
+
+    <Message>
+      <Value>
+      <![CDATA[<html>
+<!-- Template file path: templates/notifications/user_management/login/hu/access_denied_email.html  -->
+      
+        <head />
+      
+          <body>
+            <div style="font-family: Helvetica neue, sans-serif;">
+              <table cellspacing="0" cellpadding="22" border="0" style="width: 100%; margin-bottom: 10px; top: 0px;left: 0px;">
+                <tr style="line-height: 30px; color: white; margin: 0 auto; background-color: #4178be;">
+                  <td style="font-size:24px;padding: 32px 64px 32px 72px;"><b>$PRODUCT_NAME$</b> </td>
+                </tr>
+              </table>
+            </div>
+            <div style="font-family: Helvetica neue, sans-serif; font-size: 14px; padding: 10px 64px 64px 64px; color: #121212;">
+      
+              <div>Kedves @USER_FRIENDLY_NAME@!</div>
+      
+              <div>Tájékoztatni szeretnék egy új hozzáférésről $PRODUCT_NAME$ fiókjához, amelyet biztonsági rendszerünk blokkolt. </div>
+              <br/>
+              <div>A rendszerhez hozzáférő eszköz részletei:</div>
+              <ul>
+                <li>Hely: @LOCATION@</li>
+                <li>Böngésző: @USER_AGENT@</li>
+                <li>Internetszolgáltató: @ISP@</li>
+                <li>IP cím: @IP_ADDRESS@</li>
+              </ul>
+	      <br/>
+      
+      
+              <div>Ha nem ismeri fel ezt a bejelentkezési kísérletet,
+akkor lehetséges, hogy a fiókja veszélyben van, kérjük, módosítsa azonnal
+jelszavát és értesítse a rendszeradminisztrátort.</div>
+              <br/>
+              <div>Üdvözlettel,</div>
+              <div>$PRODUCT_NAME$</div>
+            </div>
+          </body>
+      
+      </html>]]>
+      </Value>
+    </Message>
+</Email>
+</root>

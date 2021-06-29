@@ -1,0 +1,64 @@
+<!-- Template file path: templates/notifications/user_management/login/pl/access_denied_email.html  -->
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Email id="default">
+    <SenderName>
+       <Value>
+        IBM Security
+       </Value>
+    </SenderName>
+    <Sender>
+       <Value>
+        ibmacct@ibm.com
+       </Value>
+    </Sender>
+    <Subject>
+      <Value>
+      Odmowa dostępu do konta
+      </Value>
+    </Subject>
+
+    <Message>
+      <Value>
+      <![CDATA[<html>
+<!-- Template file path: templates/notifications/user_management/login/pl/access_denied_email.html  -->
+      
+        <head />
+      
+          <body>
+            <div style="font-family: Helvetica neue, sans-serif;">
+              <table cellspacing="0" cellpadding="22" border="0" style="width: 100%; margin-bottom: 10px; top: 0px;left: 0px;">
+                <tr style="line-height: 30px; color: white; margin: 0 auto; background-color: #4178be;">
+                  <td style="font-size:24px;padding: 32px 64px 32px 72px;"><b>$PRODUCT_NAME$</b> </td>
+                </tr>
+              </table>
+            </div>
+            <div style="font-family: Helvetica neue, sans-serif; font-size: 14px; padding: 10px 64px 64px 64px; color: #121212;">
+      
+              <div>Dzień dobry @USER_FRIENDLY_NAME@,</div>
+      
+              <div>chcielibyśmy poinformować o niedawnym dostępie do konta $PRODUCT_NAME$, które zostało zablokowane przez nasz system bezpieczeństwa.</div>
+              <br/>
+              <div>Szczegółowe informacje na temat urządzenia używanego do uzyskania dostępu:</div>
+              <ul>
+                <li>Lokalizacja: @LOCATION@</li>
+                <li>Przeglądarka: @USER_AGENT@</li>
+                <li>Dostawca usług internetowych: @ISP@</li>
+                <li>Adres IP: @IP_ADDRESS@</li>
+              </ul>
+	      <br/>
+      
+      
+              <div>Jeśli nie rozpoznajesz tej próby dostępu, może to oznaczać, że konto zostało złamane.
+                Natychmiast zmień swoje hasło i powiadom o tej sytuacji administratora systemu.</div>
+              <br/>
+              <div>Z wyrazami szacunku,</div>
+              <div>$PRODUCT_NAME$</div>
+            </div>
+          </body>
+      
+      </html>]]>
+      </Value>
+    </Message>
+</Email>
+</root>

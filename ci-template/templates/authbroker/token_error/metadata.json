@@ -1,0 +1,40 @@
+{
+   "contentMaxSize": 100,
+   "description": "This page is displayed when access token is invalid or expired.",
+   "id": {
+      "component": "authbroker",
+      "name": "token_error",
+      "revision": 1
+   },
+   "isServiceTemplate": false,
+   "parameters": {
+      "optional": [
+         {
+            "default": null,
+            "description": "The ID of the registered template theme.",
+            "key": "@THEME_ID@"
+         },
+         {
+            "default": null,
+            "description": "The HTML that contains the header of the web page. This code can be modified by customizing the header.html common template.",
+            "key": "@PAGE_HEADER@"
+         },
+         {
+            "default": null,
+            "description": "The HTML that contains the footer of the page. This code can be modified by customizing the footer.html common template.",
+            "key": "@PAGE_FOOTER@"
+         },
+         {
+            "default": null,
+            "description": "The redirect URL set in the link.",
+            "key": "@REDIRECT_URL@"
+         }
+      ],
+      "required": [
+         {
+            "description": "The detailed error message for the given token.",
+            "key": "@TOKEN_ERROR_MESSAGE@"
+         }
+      ]
+   }
+}
