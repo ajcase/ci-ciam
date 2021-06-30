@@ -1,5 +1,4 @@
 # Ignore below items of ci-theme
-/ci-theme/*.zip
 /ci-theme/theme.properties
 /ci-theme/tmp/
 
