@@ -252,6 +252,52 @@ function getGroupID(groupName, accessToken, callback) {
   });
 }
 
+function getThemeID(appName, accessToken, callback) {
+
+  console.log("Querying theme for " + appName);
+  // Get the app's themeID
+  var options = {
+      method: 'GET',
+      url: process.env.OIDC_CI_BASE_URI + '/v1.0/applications/',
+      headers: {
+        'Authorization': 'Bearer ' + accessToken,
+        'Content-Type': 'application/json'
+      },
+      qs: {
+        'limit': 1,
+        'search': 'name="' + appName + '"'
+      },
+    };
+
+  console.log("Options JSON:", options)
+
+  request(options, function(error, response, body) {
+    if (error) throw new Error(error);
+    console.log("HTTP response code is: "+response.statusCode);
+    //let bodyObj=JSON.parse(response.body);
+    //console.log("HTTP body is: " + response.body);
+    if (response.statusCode == 200) {
+      console.log("HTTP 200: Successfully retrieved app data");
+      let bodyObj=JSON.parse(response.body);
+      if (bodyObj._embedded.applications[0].customization != undefined) {
+      // A custom theme is set.
+          var themeId=bodyObj._embedded.applications[0].customization.themeId;
+          console.log("themeId in JSON body = " + themeId);
+      } else {
+        var themeId="default";
+        console.log("themeId set to default");
+      }
+      if (error) throw new Error(error);
+      callback(null, themeId);        
+      } else {
+        if (error) throw new Error(error);
+        callback(null, false);
+      }
+  });
+}
+
+
+
 function getFullProfile(userId, accessToken, callback) {
   var options = {
     method: 'GET',
@@ -810,6 +856,7 @@ module.exports = {
   verifyOtp: verifyOtp,
   getUserID: getUserID,
   getGroupID: getGroupID,
+  getThemeID: getThemeID,
   getFullProfile: getFullProfile,
   getQuoteCount: getQuoteCount,
   resetPassword: resetPassword,

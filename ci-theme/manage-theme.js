@@ -16,6 +16,12 @@
  *    Delete the TrustMeInsurance theme.
  *    For this to work you must configure all apps such that they do not use the theme
  *      
+ *      
+ * Note: this script uses the .env file in ci-ciam for following parameters:
+ * - THEME_NAME: defaults to TrustMeInsurance
+ * - API_CLIENT_ID and API_SECRET: credentials for privileged API access      
+ * - OIDC_CI_BASE_URI: points to your tenant     
+ *      
  */
 
 var request = require('request');
@@ -104,49 +110,39 @@ function registerTheme(accessToken) {
    
     var zipfileName=process.env.THEME_NAME + ".zip";
     var themeConfig='{"name": "' + process.env.THEME_NAME + '", "description": "' + process.env.THEME_DESC + '"}';
-    var themeFilename='"' + process.env.THEME_NAME + ".zip" + '"'; 
-    //var themeFilename=process.env.THEME_NAME + ".zip"; 
-    console.log("Registering theme for " + process.env.THEME_NAME + " using file " + zipfileName);
+    var themeFilename='"' + process.env.THEME_NAME + ".zip" + '"';
 
+    console.log("Registering theme '" + process.env.THEME_NAME + "'" + " using file " + zipfileName);
 
-    templateFile = fs.createReadStream(zipfileName);
-
-    templateFile.on('error', function(error) {
-      console.log("ERROR: Cannot access file " + zipfileName);
-      // console.log("Detailed error: " + error.stack);
-      reject(error);
-    });
-
-    templateFile.on('end',function() {
-      // Register the theme
-      var options = {
-        method: 'POST',
-        url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes',
-        headers: {
-          'Authorization': 'Bearer ' + accessToken,
-          'Content-Type': 'application/x-www-form-urlencoded'
+    // Register the theme
+    // console.log("Preparing API call...");
+    var options = {
+      method: 'POST',
+      url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes',
+      headers: {
+        'Authorization': 'Bearer ' + accessToken,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      formData: {
+        'files': {
+          'value': fs.createReadStream(zipfileName),
+          'options': {
+            'filename': themeFilename
+          }
         },
-        formData: {
-          'files': {
-            'value': templateFile,
-            'options': {
-              'filename': themeFilename
-            }
-          },
-          'configuration': themeConfig
-        }
-      };
-      console.log("Making API call...");
-      request(options, (error, response, _body) => {
-        if (error) {
-          reject(error);
-        } else {
-          if (response.statusCode == 201) {
-            console.log("Successfully registered theme " + process.env.THEME_NAME);
-            resolve(true);
-          } else reject(response);
-        }
-      });
+        'configuration': themeConfig
+      }
+    };
+    console.log("Making API call...");
+    request(options, (error, response, _body) => {
+      if (error) {
+        reject(error);
+      } else {
+        if (response.statusCode == 201) {
+          console.log("Successfully registered theme '" + process.env.THEME_NAME + "'");
+          resolve(true);
+        } else reject(response);
+      }
     });
   }).catch(error => console.log("ERROR details: \n\t" + error.stack));
 }
@@ -158,8 +154,7 @@ function updateTheme(accessToken,themeID) {
     var zipfileName=process.env.THEME_NAME + ".zip";
     var themeConfig='{"name": "' + process.env.THEME_NAME + '", "description": "' + process.env.THEME_DESC + '"}';
     var themeFilename='"' + process.env.THEME_NAME + ".zip" + '"'; 
-    //var themeFilename=process.env.THEME_NAME + ".zip"; 
-    console.log("Updating theme for " + process.env.THEME_NAME + " using file " + zipfileName);
+    console.log("Updating theme for '" + process.env.THEME_NAME + "'" + " using file " + zipfileName);
 
     templateFile = fs.createReadStream(zipfileName);
 

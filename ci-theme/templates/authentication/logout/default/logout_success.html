@@ -1,51 +1,40 @@
 <!-- Template file path: templates/authentication/logout/default/logout_success.html  -->
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
+  <head>
+    <title>$LOGOUT_OK_TITLE$</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
 
-<head>
-<meta charset="utf-8">
-<title>$$LOGOUT_OK_TITLE</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Load the Verify-specific stylesheets -->
+    <link
+      rel="stylesheet"
+      href="/template/v1.0/static/theme.css?themeId=@THEME_ID@"
+    />
+  </head>
 
-<link rel="apple-touch-icon" sizes="180x180" href="$DEMO_APPLICATION_URL$/favicon/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="$DEMO_APPLICATION_URL$/favicon/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="$DEMO_APPLICATION_URL$/favicon/favicon-16x16.png">
-<link rel="manifest" href="$DEMO_APPLICATION_URL$/favicon/site.webmanifest">
-<link rel="mask-icon" href="$DEMO_APPLICATION_URL$/favicon/safari-pinned-tab.svg" color="#7a6f6f">
-<link rel="shortcut icon" href="$DEMO_APPLICATION_URL$/f8avicon/favicon.ico">
-<meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-config" content="$DEMO_APPLICATION_URL$/favicon/browserconfig.xml">
-<meta name="theme-color" content="#ffffff">
-
-<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-<link href="$DEMO_APPLICATION_URL$/stylesheets/style.css" rel="stylesheet" type="text/css">
-<link href="$DEMO_APPLICATION_URL$/stylesheets/social.css" rel="stylesheet" type="text/css">
-<link href="$DEMO_APPLICATION_URL$/stylesheets/overrides.css" rel="stylesheet" type="text/css">
-
-<!-- Load the Verify-specific stylesheets -->
-<link rel="stylesheet" href="/idaas/mtfim/static/styles.css">
-<link rel="stylesheet" href="/template/v1.0/static/theme.css?themeId=@THEME_ID@" />
-</head>
-
-
-<body class="insurance-page gary-bg">
-  <div class="overlay-background">
+  <body class="insurance-page gary-bg">
+    <div class="overlay-background">
       <div class="overlay-content login-wrap">
-          <div class="overlay-logo">
-          	<a href="$DEMO_APPLICATION_URL$/"><img src="$DEMO_APPLICATION_URL$/images/insurance_logo.svg"></a>
-          </div>
-		<div class="content">
-			<span id="sign-out-successful-message">$LOGOUT_OK_SIGNOUT_SUCCESSFUL$</span>
-			<div class="separator"></div>
-    		<a href="$DEMO_APPLICATION_URL$" class="blue" id="cs-button-return-home">$LOGOUT_OK_RETURN_HOME$</a>
-		</div>
+        <div class="overlay-logo">
+          <a href="$DEMO_APPLICATION_URL$/"
+            ><img src="/template/v1.0/static/logo.svg?themeId=@THEME_ID@"
+          /></a>
+        </div>
+        <div class="content">
+          <span id="sign-out-successful-message"
+            >$LOGOUT_OK_SIGNOUT_SUCCESSFUL$</span
+          >
+          <div class="separator"></div>
+          <a
+            href="$DEMO_APPLICATION_URL$"
+            class="blue"
+            id="cs-button-return-home"
+            >$RETURN_HOME$</a
+          >
+        </div>
       </div>
-    <div class="footer">
-      <div class="container">
-        @PAGE_FOOTER@
-      </div>
-    </div>
     </div>
     <div class="footer">
       <div class="footer-container">
@@ -53,8 +42,18 @@
       </div>
     </div>
     <script language="JavaScript">
-	    sessionStorage.clear();
-	    localStorage.clear();
+      sessionStorage.clear();
+      localStorage.clear();
+
+      var cookies = document.cookie;
+      for (var i = 0; i < cookies.split(";").length; ++i) {
+        var myCookie = cookies[i];
+        var pos = myCookie.indexOf("=");
+        var name = pos > -1 ? myCookie.substr(0, pos) : myCookie;
+        // console.log("Cookie to delete = " + name);
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      }
     </script>
-</body>
+  </body>
 </html>
+

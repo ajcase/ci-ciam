@@ -153,15 +153,16 @@ router.get('/app/profile', function(req, res, next) {
               }))[0] !== 'undefined') ? true : false)
             }
           }
-          console.log(buildExtProfile)
+          console.log(buildExtProfile);
 
+          // For the "Change Password" button a direct URL to Verify's authn service is used
+          // This URL is then passed to the renderer; reference to file profile.hbs
+          var buildChangePasswordURL = process.env.OIDC_CI_BASE_URI + "/authsvc/mtfim/sps/authsvc?PolicyId=urn:ibm:security:authentication:asf:changepassword&login_hint=" + me.userName + "&themeId=" + process.env.THEME_ID;
+          console.log("--- Change Password URL --- is: " + buildChangePasswordURL);
+          
           //// BUILD CONSENT
           dpcmClient.performDUA(req.session.accessToken, {
             trace: false,
-            // Added by Peter V to solve error of 
-            // "CSIBT0003E Required parameter(s), value.geoIP, is/are missing from the payload"
-            // Quick fix: used a dummy IP address
-            geoIP: "81.245.251.90",
             items: [
               {
                 purposeId: process.env.MARKETING_PURPOSE_ID,
@@ -204,7 +205,8 @@ router.get('/app/profile', function(req, res, next) {
               mfaStatus: mfaEnabled,
               linkedAccounts: linkedAccountsTotal,
               hasAddress: hasAddress,
-              extProfile: buildExtProfile
+              extProfile: buildExtProfile,
+              changePasswordURL: buildChangePasswordURL
             });
           });
           ////
@@ -216,6 +218,7 @@ router.get('/app/profile', function(req, res, next) {
     res.redirect('/login');
   }
 });
+
 router.post('/app/preferences', function(req, res, next) {
   var loggedIn = ((req.session.loggedIn) ? true : false);
   var userId = req.session.userId;
@@ -267,16 +270,12 @@ router.post('/app/dpcm', function(req, res, next) {
       purposeId: process.env.MARKETING_PURPOSE_ID,
       accessTypeId: process.env.READ_ACCESS_TYPE,
       attributeId: process.env.EMAIL_ATTRIBUTE_ID,
-      // Peter V added for geoIP prob
-      geoIP: "81.245.251.90",
       state: (req.body.consentMarketing) ? 3 : 4,
     },
     {
       purposeId: process.env.PAPERLESS_PURPOSE_ID,
       accessTypeId: process.env.READ_ACCESS_TYPE,
       attributeId: process.env.EMAIL_ATTRIBUTE_ID,
-      // Peter V added for geoIP prob
-      geoIP: "81.245.251.90",
       state: (req.body.consentPaperless) ? 3 : 4
     }
   ], function(_err, result) {

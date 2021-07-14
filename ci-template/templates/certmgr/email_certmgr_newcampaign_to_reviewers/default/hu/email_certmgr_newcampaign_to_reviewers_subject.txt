@@ -1,1 +1,0 @@
-Hozzárendelték Ont áttekintőként a következő kampányhoz: @CERTIFICATION.NAME@. A kampány befejeződátuma: @CERTIFICATION.ENDDATE@.

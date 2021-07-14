@@ -1,1 +1,0 @@
-Состояние кампании @CERTIFICATION.NAME@ изменено на @CERTIFICATION.STATUS@.

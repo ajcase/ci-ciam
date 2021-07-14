@@ -1,1 +1,0 @@
-O status da campanha @CERTIFICATION.NAME@ mudou para @CERTIFICATION.STATUS@.

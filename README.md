@@ -1,30 +1,11 @@
-
 # Contents
 
-- [**Introduction**](#introduction)
-  - [Demonstration Components](#demonstration-components)
-- [**Verify Setup**](#verify-setup)
-  - [Identity Sources](#identity-sources)
-  - [Create an Application in Verify](#create-an-application-in-verify)
-  - [Create an API Client](#create-an-api-client)
-- [**Setup NodeJS Application**](#setup-nodejs-application)
-  - [Clone Repository from GitHub](#clone-repository-from-github)
-  - [Install Packages](#install-packages)
-  - [Create environment file](#create-environment-file)
-  - [Start the application](#start-the-application)
-- [**Perform Automated Setup**](#perform-automated-setup)
-  - [Run the Setup in the Consumer Application](#run-the-setup-in-the-consumer-application)
-  - [Apply MFA Access Policy to Application](#apply-mfa-access-policy-to-application)
-  - [Disable setup option](#disable-setup-option)
-- [**Configure Template Pages**](#configure-template-pages)
-  - [Create and complete properties file](#create-and-complete-properties-file)
-  - [Run script to create template ZIP file](#run-script-to-create-template-zip-file)
-  - [Upload ZIP to Verify](#upload-zip-to-verify)
+[TOC]
 
 # Introduction
 
 This repository contains assets required to set up a Consumer IAM Demonstration using
-the provided NodeJS application and an IBM Security Verify tenant.
+the provided NodeJS application and an IBM Security Verify tenant. Then NodeJS application represent a demo company called TrustMeInsurance that is specialised in insurances and loans.
 
 ## Demonstration Components
 The demonstration environment contains the following components:
@@ -33,15 +14,13 @@ The demonstration environment contains the following components:
 The demonstration application is a NodeJS Express application.
 
 NodeJS is an application execution environment based on
-JavaScript.  NodeJS applications can be hosted in many places including on a local machine,
-in a container environment, or on a hosted service.
+JavaScript.  NodeJS applications can be hosted in many places including on a local machine, in a container environment, or on a hosted service.
 
-These instructions assume a local installation of Node Package Manager (npm).
+These instructions assume a local installation of the Node Package Manager (npm).
 
 ### IBM Security Verify
 
-IBM Security Verify is an Identity-as-a-Service (IDaaS) and Authentication-as-a-Service (AaaS) platform.  In this demonstration system it provides all of the authentication and identity services
-required by the demonstration application.  Integration is via REST API.
+IBM Security Verify is an Identity-as-a-Service (IDaaS) and Authentication-as-a-Service (AaaS) platform.  In this demonstration system it provides all of the authentication and identity services required by the demonstration application.  Integration is via OpenID Connect and privileged REST API's.
 
 If you do not have an Verify tenant, you must complete at
 least Exercises 1 and 2 from the [IBM Security Verify Basics Cookbook](https://ibm.biz/cloudidcookbook) as a pre-requisite for this cookbook.
@@ -62,32 +41,88 @@ LinkedIn is used as an example Social Sign-On provider.  It is integrated with t
 
 ## Identity Sources
 
+### Introduction
+
+The demo application uses 3 identity sources; Verify's native Cloud Directory, Google and LinkedIn.
+Use the Verify admin console to navigate to Configuration -> Identity Sources to configure these.
+
 Make sure the *Primary Identity Source* is set to **Cloud Directory**.
 
 ### Create Identity Sources for Google and LinkedIn
 
 This requires you to have an account for these services and create
-application definitions for Verify. You will need to provide
-re-direct URIs as part of this which are given in the CI Console (along
-with link to the developer consoles of the services). When application
-definitions are created, you will get Client/App ID and Secret which you
+application definitions for Verify. Detailed instructions can be found in the Verify documentation, see these links:
+
+* [Instructions for Google](https://www.ibm.com/support/knowledgecenter/SSCT62/com.ibm.iamservice.doc/tasks/idp_config_google.html)
+* [Instructions for LinkedIn](https://www.ibm.com/docs/en/security-verify?topic=source-configuring-your-application-in-linkedin)
+
+You will need to provide redirect URIs as part of this which are given in the Verify Console (along with a link to the developer consoles of the services). When application definitions are created, you will get a ClientID and Secret which you
 will enter into the Verify Identity Source definition.
 
-Set the following for Identity Linking:
+Set the following for Identity Linking for both Google and LinkedIn:
 
-  - Enabled: On
+  - *Enabled identity linking for this identity source*: On
 
-  - Unique User Identifier: email
+  - *Unique User Identifier*: email
 
-  - Just-in-time Provisioning: On
+  - *Just-in-time Provisioning*: On
 
-### Create Data & Privacy items
+## Create Data Consent & Privacy Items
 
-1. Create purpose "Communications"
-2. Create purpose "Paperless Billing"
-3. Create EULA "Terms"
+### Introduction
 
-!!**TO BE COMPLETED with details**!!
+Three Verify DPCM (Data Privacy and Consent Management) items need to be introduced:
+
+1. A purpose "Communications"
+2. A purpose "Paperless Billing"
+3. A EULA "Terms"
+
+### Create the Purposes
+
+Proceed as follows to add the "Communications" purpose:
+
+* Sign in to your tenant as an administrator
+* Navigate to "Data privacy & consent"
+* Navigate to the "Purposes" tab
+* Click "Create Purpose"
+* In the "General Settings" section enter the following:
+	* Purpose name: Communications
+	* Purpose ID: communications
+	* Description: A preference that indicates that the customer agrees with receiving information on promotions, new products, and personalized advice weekly.
+	* Tags: trustme
+* Click Next
+* In the "Default and custom settings" section do the following:
+	* Create an "Access type" of value "Read" and set the "Access type ID" to "read"
+*  Click Next
+*  In the "Attributes" section do the following:
+	*  Add the attribute "email" and leave other fields default
+* Click "Create Purpose"
+
+
+Now do the same for "Paperless Billing" using the same procedure. Only following "General Settings" items are different:
+* 	Purpose name: Paperless Billing
+* 	Purpose ID: paperless-billing
+* 	Description: A preference that indicates that the customer agrees with paperless billing
+
+### Create the EULA
+
+Here's the procedure to add the "Terms" EULA:
+
+* Sign in to your tenant as an administrator
+* Navigate to "Data privacy & consent"
+* Navigate to the "EULAs" tab
+* Click "Create EULA"
+* In the "General Settings" section enter the following:
+	* EULA name: Terms
+	* EULA ID: terms
+	* Description: The terms and conditions by which a user may use the TrustMeInsurances website
+	* Tags: trustme
+* Click Next
+* In the "Terms of use" section enter the following:
+	* URI: http://localhost:3000/terms.html
+* Click "Create EULA"
+
+You are of course free to point to another html document instead of the http://localhost:3000/terms.html above.
 
 
 ## Create an Application in Verify
@@ -95,15 +130,17 @@ Set the following for Identity Linking:
 Login to your Verify tenant administrator console as an
 administrator.
 
-1.  Go to Applications menu and click Add application
+1.  Go to "Applications" and click "Add application"
 
-2.  Select Custom Application and click Add application
+2.  Select "Custom Application" and click "Add application"
 
-3.  Complete name, description, and company name (values don't matter)
+3.  Set the name to "TrustMeInsurance"
 
-4.  On Sign-in tab:
+4.  Set the description, and company name (values don't matter)
 
-    1.  Sign-on Method: Open ID Connect 1.0
+5. On the "Sign-in" tab change the following settings, and leave other settings as default
+
+    1.  Sign-on method: Open ID Connect 1.0
 
     2.  Application URL: http://localhost:3000
 
@@ -121,33 +158,37 @@ administrator.
 
     8.  Click Save
 
-5.  In the API Access tab:
+	**Note**: After creation a single sign-on client id and secret will be generated. The id and secret correspond to the OIDC_CLIENT_ID and OIDC_CLIENT_ID_SECRET of the .env file which is explained below.
+	
+	**Note:** API access for sign-in is left to its default of "not restricted". Hence  entitlements such as "authentication yourself", "reset your password", "create consent records" and "read privacy consent" are granted to the application sign-on token. This token is granted to an authenticated user. See this [link ](https://www.ibm.com/docs/en/security-verify?topic=provider-default-api-client-sign-token-entitlements)for a complete list of these default entitlements.
 
-	1. 	Edit the API key that was created for the app
-	2. Check "Configure API Access"
+
+6. In the "API access" tab:
+
+	1. 	Click "Add API client"
+	2. Choose a name e.g. "TrustMeInsurance Privileged API Client"
 	3. Select the following API access
 
 		    - Manage access policies
 		    - Manage attribute sources
-		    - Manage users and standard Groups
 		    - Manage templates
-		    - Manage privacy purposes and EULA
-		    - Manage privacy consents
+		    - Manage users and standard groups
+		    - Read application configuration
 
-6.  In entitlements tab:
+	**Note**: This API client is used for privileged API access to your Verify tenant. Such access is needed for e.g. automated setup and user self-registration.  After creation a privileged client id and secret will be generated. The id and secret correspond to the API_CLIENT_ID and API_SECRET of the .env file which is explained below.   
+
+7.  In the "Entitlements" tab:
 
     1.  Select: All users are entitled to this application
 
     2.  Click Save
 
-7. In Privacy tab:
+8. In the "Privacy" tab:
 
    Add EULA "Terms", purpose "Paperless Billing" and "Communications". These were 
-   configured in the section "Create Data & Privacy items".
-
-8.  Return to Sign-on tab:
-
-    1.  Make a note of Client ID and Client Secret
+   configured in the section "Create Data Consent & Privacy items".
+   
+9. Click Save
 
 
 # Setup NodeJS Application
@@ -158,8 +199,9 @@ In the directory where you want the repo clone directory to be created, run
 this command:
 
 ```
-git clone https://github.com/ajcase/ci-ciam.git
+git clone https://github.com/petervolckaert/ci-ciam.git
 ```
+
 
 ## Install Packages
 
@@ -178,26 +220,35 @@ Create the *.env* file from the provided sample:
 cp dotenv.sample .env
 ```
 
-Edit the *.env* file and complete for your environment:
+Edit the *.env* file and complete for your environment. For a default configuration, just change the XXXXXXX parts to accomodate your environment
 
 ```
-OIDC_CI_BASE_URI=https://xxxxxxxx.ice.ibmcloud.com
+PORT=3000
+OIDC_REDIRECT_URI=http://localhost:3000/oauth/callback
+OIDC_CI_BASE_URI=https://XXXXXXX.ice.ibmcloud.com
 OIDC_CLIENT_ID=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
 OIDC_CLIENT_SECRET=XXXXXXXXXX
-OIDC_REDIRECT_URI=http://localhost:3000/oauth/callback
 API_CLIENT_ID=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
 API_SECRET=XXXXXXXXXX
 APP=insurance
 MFAGROUP=MFAGroup
 ALLOW_DYNAMIC_SETUP=true
-MARKETING_PURPOSE_ID=
-PAPERLESS_PURPOSE_ID=
-READ_ACCESS_TYPE=
-TERMS_PURPOSE_ID=
+MARKETING_PURPOSE_ID=newsletter
+PAPERLESS_PURPOSE_ID=paperless-billing
+READ_ACCESS_TYPE=read
+TERMS_PURPOSE_ID=terms
 DEFAULT_ACCESS_TYPE=default
 EMAIL_ATTRIBUTE_ID=3
+# THEME_NAME and THEME_DESC will determine the name and the description
+# of the app's theme. Used by manage-theme.js
 THEME_NAME=TrustMeInsurance
-THEME_DESC="Theme for TrustMeInsurance demo CIAM app"
+THEME_DESC="Theme for the TrustMeInsurance CIAM demo app"
+# APP_NAME must be the name of the custom app that is defined in your Verify tenant
+# Used by app.js to retrieve the ID of the theme for the app.
+APP_NAME=TrustMeInsurance
+# BRAND_ID should be 'false'. Any other value will create users with an @BRAND_ID suffix
+# BRAND_ID is used in open-account.js and some theme files.
+BRAND_ID=false
 ```
 
 Save the file and close the editor.
@@ -261,81 +312,48 @@ Restart the application.
 
 # Configure Application Theme
 
-This is optional. When you configure an application in IBM Security Verify, you can apply a *theme* so that your brand displays on login and logout pages. 
+## Introduction
+
+When you configure an application in IBM Security Verify, you can apply a *theme* so that your login pages, logout pages, notifications and so on have your look&feel.  
 Configuring a theme for an app will only affect the look & feel when accessing that app. Other access to the tenant is not affected.
 
-Note: many assets in the theme pages are loaded from the NodeJS server. If
-this server is not available (it's not running or can't be reached by
-the client) then the pages will not render properly.
+The demo application repository comes with a file **TrustMeInsurance.zip** which must be uploaded to your Verify tenant. Once uploaded, you must configure the demo app to use the theme.
 
-## Create and complete properties file
-
-Go to the ci-theme directory and make a copy of the sample
-properties file:
-
-```
-cd ci-theme
-cp theme.properties.sample theme.properties
-```
-
-Edit the properties file and complete for your environment:
-
-```
-CI_TENANT_URL=https://xxxxxxx.verify.ibm.com
-DEMO_APPLICATION_URL=http://localhost:3000
-GOOGLE_ID_SOURCE_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-LINKEDIN_ID_SOURCE_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-THEME_NAME=TrustMeInsurance
-```
-
-The Google and LinkedIn ID sources can be found in the Identity Source
-properties in the Verify admin console.
-
-## Run script to create theme ZIP file
-
-Navigate to the ci-theme directory.
-Then run the script below to replace variables in the theme files and save a ZIP
-file for uploading:
-
-```
-cd ci-theme
-./fix-theme.sh
-```
-This will result in a great number of messages like the below. This is ok.
-
-```
-...
-
-updating: templates/notifications/user_management/login/es/user_password_reset_email.xml.bak (deflated 59%)
-updating: templates/notifications/user_management/login/es/user_password_change_not_show_email.xml.bak (deflated 57%)
-updating: templates/notifications/user_management/login/es/access_denied_email.html (deflated 58%)
-updating: templates/notifications/user_management/login/es/mfa_sign_in_attempt_email.html (deflated 61%)
-updating: templates/notifications/user_management/login/es/user_password_reset_email.xml (deflated 59%)
-```
 
 ## Register theme in Verify
 
-Navigate to the ci-theme directory.
-Then run the following command to register the theme to your Verify tenant. This command use the .env file in parent directory. The .env file contains the configuration for your Verify tenant.
+Navigate to the ci-ciam/ci-theme directory.
+Then run the following command to register the theme to your Verify tenant. This command use the .env file in the parent directory ci-ciam. The parameters THEME_NAME and THEME_DESC determine the name and the description. By default the theme name is "TrustMeInsurance" and the zipfile TrustMeInsurance.zip will be uploaded.
 
 ```
 node manage-theme.js register
 ```
+**Note:** Please see **README-Theme.md** in the *ci-theme* directory for a guide on how to modify the theme, delete the theme or list the current tenant's themes.
+
 ## Configure your app for the theme
 
 Login to your Verify tenant administrator console as an
 administrator.
 
-1. Go to the hamburger menu and select Applications
+1. Go to the hamburger menu and select "Applications"
 2. Edit the settings of the Custom Application by clicking the settings wheel. 
-3. On the General tab: set the Theme to the newly registered theme.
+3. On the General tab: set the Theme to the newly registered theme which is "TrustMeInsurance" by default
 4. Click Save
 
-Note: to reset the theme to the default Verify theme simply select "default" as the app theme.
+**Note:** to reset the theme to the default Verify theme simply select "default" as the app theme.
 
-## Modifying the theme
+# Making Changes To the Default Config
 
-Please see **README-Theme.md** in the *ci-theme* directory for a guide on how to modify the theme.
+If you change your setup in the .env file for following parameters:
+
+* The port of the NodeJS app. (Default=3000)
+* The name of the application. (Default=TrustMeInsurance)
+
+... then you must also recreate the theme zipfile. Proceed as follows:
+
+* Update the file ci-ciam/ci-theme/templates/common/labels/default/**template_labels.properties** to accomodate your setup.
+* Navigate to ci-ciam/ci-theme
+* Zip up the templates directory again and name your file <app name>.zip
 
 
 # License

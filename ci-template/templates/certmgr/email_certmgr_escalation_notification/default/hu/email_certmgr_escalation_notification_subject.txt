@@ -1,1 +1,0 @@
-A kampány ellenőreként @CERTIFICATION.OLD_REVIEWER@ kiterjesztette a(z) @CERTIFICATION.NAME@ kampány néhány rekordját. A kampány befejeződátuma: @CERTIFICATION.ENDDATE@.

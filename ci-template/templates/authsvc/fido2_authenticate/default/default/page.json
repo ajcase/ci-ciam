@@ -1,6 +1,0 @@
-{
-	"location" : "@ACTION@",
-	"serverOptions" : @FIDO2_ASSERTION_OPTIONS@,
-	"verifyState" : "@FIDO2_VERIFY_STATE@",
-	"errorMessage": "@LABEL_FIDO2_ERROR@"
-}

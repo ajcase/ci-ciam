@@ -185,49 +185,6 @@ app.get('/oauth/callback', passport.authenticate('openidconnect', {
   failureRedirect: '/'
 }))
 
-function getThemeId(accessToken,callback) {
-  // Get the themeId that is set for the app the theme 
-   
-    console.log("Querying theme for " + process.env.APP_NAME);
-
-    // Get the app's themeID
-    var options = {
-        method: 'GET',
-        url: process.env.OIDC_CI_BASE_URI + '/v1.0/applications/',
-        headers: {
-          'Authorization': 'Bearer ' + accessToken,
-          'Content-Type': 'application/json'
-        },
-        qs: {
-          'limit': 1,
-          'search': 'name="' + process.env.APP_NAME + '"'
-        },
-      };
-      console.log("Making API call to /v1.0/applications/ with token " + accessToken + " ...");
-      request(options, (error, response, _body) => {
-        if (error) {
-          return(error);
-        } else {
-          console.log("HTTP response code is: "+response.statusCode);
-          //let bodyObj=JSON.parse(response.body);
-          //console.log("HTTP body is: " + response.body);
-          if (response.statusCode == 200) {
-            console.log("HTTP 200: Successfully retrieved app data");
-            let bodyObj=JSON.parse(response.body);
-      if (bodyObj._embedded.applications[0].customization != undefined) {
-    // A custom theme is set.
-              var themeId=bodyObj._embedded.applications[0].customization.themeId;
-              console.log("themeId in JSON body = " + themeId);
-            } else {
-    var themeId="default";
-              console.log("themeId set to default");
-     }
-            callback(themeId);
-            return (true)        
-          } else return(response.body);
-        }
-      });
-}
 
 
 // Destroy both the local session and
@@ -287,10 +244,14 @@ if (process.env.API_CLIENT_ID && process.env.API_SECRET && process.env.MFAGROUP 
           console.log(`Group ${process.env.MFAGROUP} is invalid`);
         }
       });
-      // Get the ThemeId based on the app name
-      getThemeId(apiAccessToken, function(themeId) {
-      process.env.THEME_ID = themeId;
-      console.log('themeId returned by getThemeId is: ' + themeId);
+      // Get the demo app's theme id
+      bbfn.getThemeID(process.env.APP_NAME, apiAccessToken, (_err,result) => {
+        if (result) {
+          process.env.THEME_ID = result;
+          console.log(`Theme ID is ${process.env.THEME_ID}`);
+        } else {
+          console.log(`Failed to set Theme ID`);
+        }
       });
     }
   });
