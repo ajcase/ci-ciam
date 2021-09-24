@@ -1,0 +1,1 @@
+Вы - назначенный инспектор для кампании @CERTIFICATION.NAME@. Эта кампания закончится @CERTIFICATION.ENDDATE@.

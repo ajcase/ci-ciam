@@ -1,0 +1,68 @@
+<!-- Template file path: templates/notifications/user_management/login/es/mfa_sign_in_attempt_email.html  -->
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Email id="default">
+    <SenderName>
+       <Value>
+        IBM Security
+       </Value>
+    </SenderName>
+    <Sender>
+       <Value>
+        ibmacct@ibm.com
+       </Value>
+    </Sender>
+    <Subject>
+      <Value>
+        Revisar un acceso de cuenta reciente
+      </Value>
+    </Subject>
+
+    <Message>
+      <Value>
+      <![CDATA[<html>
+<!-- Template file path: templates/notifications/user_management/login/es/mfa_sign_in_attempt_email.html  -->
+      
+        <head />
+      
+          <body>
+            <div style="font-family: Helvetica neue, sans-serif;">
+              <table cellspacing="0" cellpadding="22" border="0" style="width: 100%; margin-bottom: 10px; top: 0px;left: 0px;">
+                <tr style="line-height: 30px; color: white; margin: 0 auto; background-color: #4178be;">
+                  <td style="font-size:24px;padding: 32px 64px 32px 72px;"><b>$PRODUCT_NAME$</b> </td>
+                </tr>
+              </table>
+            </div>
+            <div style="font-family: Helvetica neue, sans-serif; font-size: 14px; padding: 10px 64px 64px 64px; color: #121212;">
+      
+              <div>Hola @USER_FRIENDLY_NAME@,</div>
+      
+              <div>Queremos informarle sobre un acceso reciente en la cuenta $PRODUCT_NAME$ que nuestro sistema de seguridad
+                ha señalado.</div>
+              <br/>
+              <div>Detalles del dispositivo que accede al sistema:</div>
+              <ul>
+                <li>Ubicación: @LOCATION@</li>
+                <li>Navegador: @USER_AGENT@</li>
+                <li>Proveedor de servicios de Internet: @ISP@</li>
+                <li>Dirección IP: @IP_ADDRESS@</li>
+              </ul>
+              <br/>
+      
+              <div>Si reconoce este intento de inicio de sesión, puede ignorar de forma segura este correo electrónico.</div>
+              <br/>
+              <div>Si no reconoce este intento de inicio de sesión, es posible que su cuenta esté comprometida; cambie
+la contraseña inmediatamente y avise al administrador del sistema.</div>
+              <br/>
+              <div>Nota: es posible que reciba este correo electrónico de nuevo si cambia el proceso de inicio de sesión o el acceso a dispositivo.</div>
+              <br/>
+              <div>Saludos,</div>
+              <div>$PRODUCT_NAME$</div>
+            </div>
+          </body>
+      
+      </html>]]>
+      </Value>
+    </Message>
+</Email>
+</root>

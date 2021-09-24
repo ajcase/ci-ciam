@@ -1,0 +1,1 @@
+あなたはキャンペーン @CERTIFICATION.NAME@ のスーパーバイザーとして割り当てられています。このキャンペーンは @CERTIFICATION.ENDDATE@ に終了します。

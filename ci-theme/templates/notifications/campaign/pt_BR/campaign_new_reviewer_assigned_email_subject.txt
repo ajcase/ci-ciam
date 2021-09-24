@@ -1,0 +1,1 @@
+@CERTIFICATION.OLD_REVIEWER@ designou você como um revisor para a campanha @CERTIFICATION.NAME@. Essa campanha terminará em @CERTIFICATION.ENDDATE@.

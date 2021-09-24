@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <Message>
+    <Value>Sua senha é @OTP@. @BREAK@ Use essa senha para concluir sua solicitação. </Value>
+  </Message>
+</root>

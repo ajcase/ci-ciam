@@ -1,0 +1,67 @@
+<!-- Template file path: templates/authentication/saml/error/default/protocol_error.html  -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<base href="/" />
+		<title id="title">$GENERIC_PROTOCOL_ERROR_TITLE$</title>
+		<link rel="shortcut icon" type="image/x-icon" href="usc/favicon.ico" />
+		<link rel="stylesheet" href="usc/css/stateless.css" />
+		<link rel="stylesheet" href="template/v1.0/static/theme.css?themeId=@THEME_ID@" />
+		<meta name="viewport" content="width=device-width, initial-scale='1.0'" />
+	</head>
+	<body class="title-background">
+		<div class="cs-content cs-all-error">
+			@PAGE_HEADER@
+			<div class="content">
+				<div class="error-header spaced">
+					<span>$GENERIC_PROTOCOL_ERROR_MESSAGE$</span>
+				</div>
+				<div class="error-message spaced">
+					<span>$GENERIC_PROTOCOL_ERROR_DESCRIPTION$</span>
+				</div>
+				<div id="details-section">
+					<div id="timestamp-label" class="spaced">
+						<span>$GENERIC_ERROR_OCCURRED_AT$ @TIMESTAMP@</span>
+					</div>
+					<div id="request-address-label" class="spaced">
+						<span>$GENERIC_ERROR_REQUEST_ADDRESS$ @REQ_ADDR@</span>
+					</div>
+					<div class="spaced">
+						<span>$GENERIC_ERROR_CONTACT_SUPPORT$ </span><a class="cs-primary" href="$GENERIC_ERROR_SUPPORT_URL$" target="_blank">$GENERIC_ERROR_SUPPORT_URL$</a>
+					</div>
+				</div>
+				<button id="details-button" class="cs-link" onclick="toggleErrorDetails('$GENERIC_ERROR_VIEW_DETAILS$', '$GENERIC_ERROR_HIDE_DETAILS$')">$GENERIC_ERROR_VIEW_DETAILS$</button>
+			</div>
+		</div>
+
+		<script>
+			if (!("@TIMESTAMP@" || "@REQ_ADDR@")){
+				document.getElementById('details-button').style.display = "none"
+			}
+
+			if (!"@TIMESTAMP@"){
+				document.getElementById('timestamp-label').style.display = "none"
+			}
+
+			if (!"@REQ_ADDR@"){
+				document.getElementById('request-address-label').style.display = "none"
+			}
+
+			document.getElementById('details-section').style.display = "none"
+
+			function toggleErrorDetails(viewText, hideText) {
+				var state = document.getElementById('details-section').style.display
+				if (state != 'none') {
+					document.getElementById('details-section').style.display = 'none'
+					document.getElementById('details-button').innerHTML = viewText
+				} else {
+					document.getElementById('details-section').style.display = 'block'
+					document.getElementById('details-button').innerHTML = hideText
+				}
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,1 @@
+Vous avez été affecté à la révision de la campagne @CERTIFICATION.NAME@. Cette campagne prend fin le @CERTIFICATION.ENDDATE@.

@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
       'bearer': req.session.accessToken
     }
   },function(err, response, body){
-    console.log('---- User ID token ----')
+    console.log('profile.js: ---- User ID token ----');
     console.log(body);
 
     var userinfo = JSON.parse(body);
@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
       }
     },function(err, response, body){
 
-      console.log('---- User profile ----')
+      console.log('profile.js: ---- User profile ----');
       console.log(body);
 
       var me = JSON.parse(body);
@@ -35,7 +35,7 @@ router.get('/', function(req, res, next) {
         }
       },function(err, response, body){
 
-        console.log('---- Attributes ----')
+        console.log('profile.js: ---- Attributes ----');
         console.log(body);
 
         attributes = JSON.parse(body);

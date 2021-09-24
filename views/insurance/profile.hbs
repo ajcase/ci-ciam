@@ -181,7 +181,12 @@
 											href="/app/enroll/sms">Enroll now</a></span>{{/unless}}</li>
 
 								{{/if}}
+								<!--
+								-- Underlying line was replace by a URL that goes to the Verify authn service and
+								-- loads the theme file on_demand_change_password.html
 								<li>Password <span>****** <a href="/app/change-password">Change password</a></span></li>
+								-->
+								<li>Password <span>****** <a href="{{changePasswordURL}}">Change password</a></span></li>
 							</ul>
 						</div>
 					</div>

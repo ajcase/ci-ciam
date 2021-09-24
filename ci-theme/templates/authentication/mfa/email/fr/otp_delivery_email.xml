@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Subject>
+  <Value>
+    Votre mot de passe à utilisation unique
+  </Value>
+</Subject>
+
+<Message>
+  <Value>
+	<![CDATA[<html>
+<!-- Template file path: templates/authentication/mfa/email/fr/otp_delivery_email.xml  -->
+		<body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #121212; padding: 12px;">
+			<h1 style="color: #4178BE;">Votre mot de passe à utilisation unique est : </h1>
+			<h2 style="color: #666666;">@CORRELATION@-@OTP@</h2>
+			<p>Utilisez ce mot de passe à utilisation unique pour finaliser votre demande. Il
+expirera au bout de @OTP_LIFETIME@ minutes.</p>
+			<p>Ne répondez pas à ce courrier électronique.</p>
+		</body>
+	</html>]]>
+  </Value>
+</Message>
+</root>

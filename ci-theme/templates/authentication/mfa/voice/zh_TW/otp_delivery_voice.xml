@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <Message>
+    <Value>您的密碼是 @OTP@。@BREAK@ 使用此密碼以完成您的要求。</Value>
+  </Message>
+</root>

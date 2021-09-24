@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Subject>
+  <Value>
+    일회성 비밀번호
+  </Value>
+</Subject>
+
+<Message>
+  <Value>
+	<![CDATA[<html>
+<!-- Template file path: templates/authentication/mfa/email/ko/otp_delivery_email.xml  -->
+		<body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #121212; padding: 12px;">
+			<h1 style="color: #4178BE;">사용자의 일회성 비밀번호(OTP): </h1>
+			<h2 style="color: #666666;">@CORRELATION@-@OTP@</h2>
+			<p>이 OTP를 사용하여 요청을 완료하십시오. @OTP_LIFETIME@분 후에 만료됩니다.</p>
+			<p>이 이메일에 응답하지 마십시오.</p>
+		</body>
+	</html>]]>
+  </Value>
+</Message>
+</root>

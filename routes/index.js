@@ -153,8 +153,13 @@ router.get('/app/profile', function(req, res, next) {
               }))[0] !== 'undefined') ? true : false)
             }
           }
-          console.log(buildExtProfile)
+          console.log(buildExtProfile);
 
+          // For the "Change Password" button a direct URL to Verify's authn service is used
+          // This URL is then passed to the renderer; reference to file profile.hbs
+          var buildChangePasswordURL = process.env.OIDC_CI_BASE_URI + "/authsvc/mtfim/sps/authsvc?PolicyId=urn:ibm:security:authentication:asf:changepassword&login_hint=" + me.userName + "&themeId=" + process.env.THEME_ID;
+          console.log("--- Change Password URL --- is: " + buildChangePasswordURL);
+          
           //// BUILD CONSENT
           dpcmClient.performDUA(req.session.accessToken, {
             trace: false,
@@ -200,7 +205,8 @@ router.get('/app/profile', function(req, res, next) {
               mfaStatus: mfaEnabled,
               linkedAccounts: linkedAccountsTotal,
               hasAddress: hasAddress,
-              extProfile: buildExtProfile
+              extProfile: buildExtProfile,
+              changePasswordURL: buildChangePasswordURL
             });
           });
           ////
@@ -212,6 +218,7 @@ router.get('/app/profile', function(req, res, next) {
     res.redirect('/login');
   }
 });
+
 router.post('/app/preferences', function(req, res, next) {
   var loggedIn = ((req.session.loggedIn) ? true : false);
   var userId = req.session.userId;

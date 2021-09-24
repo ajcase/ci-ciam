@@ -1,0 +1,90 @@
+<!-- Template file path: templates/authentication/mfa/error/default/auth_request_error.html  -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title id="title">$GENERIC_ERROR_TITLE$</title>
+    <base href="/" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale='1.0'" />
+    <link rel="shortcut icon" type="image/x-icon" href="usc/favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="/template/v1.0/static/theme.css?themeId=@THEME_ID@"
+    />
+    <script>
+      // START NON-TRANSLATABLE
+      const timestamp = "@TIMESTAMP@";
+      const reqAddr = "@REQ_ADDR@";
+      const exceptionMsg = "@EXCEPTION_MSG@";
+      var errorMessage = "@ERROR_MESSAGE@";
+      // END NON-TRANSLATABLE
+    </script>
+
+    <script
+      type="text/javascript"
+      src="/authsvc/mtfim/sps/static/proper_errors_all_error.js"
+    ></script>
+
+    <script>
+      function modify_msg(msg) {
+        // The message code is contained in the first 10 characters
+        switch (msg.substr(0, 10)) {
+          case "CCSIAH0004E":
+            // Original message: "CCSIAH0004E The system cannot complete your login request. Do not click the Back button or refresh the page. Reaccess the protected resource in a new window."
+            newmsg = "We could not sign you in.";
+            break;
+          case "CSIAH0328E":
+            // Original message: "CSIAH0328E The reset password verification failed. The email link that you accessed might have expired."
+            newmsg =
+              "We could not reset your password. Possibly the button that you clicked has expired.";
+            break;
+          default:
+            // Show the message but without the code.
+            newmsg = "The error code is " + msg.substr(0, 10);
+        }
+        return (
+          '<div style="color:Tomato;"><b>Oops...something went wrong.</b></div><br>' +
+          newmsg
+        );
+      }
+    </script>
+  </head>
+
+  <body class="insurance-page gary-bg">
+    <div class="overlay-background">
+      <div class="overlay-content login-wrap">
+        <div class="overlay-logo">
+          <a href="$DEMO_APPLICATION_URL$/"
+            ><img src="/template/v1.0/static/logo.svg?themeId=@THEME_ID@"
+          /></a>
+        </div>
+        <div class="content">
+          <span id="error-message">
+            <script>
+              document.getElementById("error-message").innerHTML = modify_msg(
+                "@ERROR_MESSAGE@"
+              );
+            </script>
+          </span>
+          <br /><br />
+          <div class="separator"></div>
+          <a
+            href="$DEMO_APPLICATION_URL$"
+            class="blue"
+            id="cs-button-return-home"
+            >$RETURN_HOME$</a
+          >
+        </div>
+      </div>
+      <div class="footer">
+        <div class="footer-container">
+          @PAGE_FOOTER@
+        </div>
+      </div>
+    </div>
+    <script language="JavaScript">
+      sessionStorage.clear();
+      localStorage.clear();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1 @@
+@CERTIFICATION.OLD_REVIEWER@ przypisał użytkownika jako recenzenta do kampanii @CERTIFICATION.NAME@. Data zakończenia kampanii: @CERTIFICATION.ENDDATE@.

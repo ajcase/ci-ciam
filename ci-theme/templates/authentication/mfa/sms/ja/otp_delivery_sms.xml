@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Message value should be less than 70 characters -->
+<root>
+<Message>
+  <Value>
+    ご使用のパスコードは @CORRELATION@-@OTP@ です。これは、@OTP_LIFETIME@ 分で有効期限が切れます。
+  </Value>
+</Message>
+</root>

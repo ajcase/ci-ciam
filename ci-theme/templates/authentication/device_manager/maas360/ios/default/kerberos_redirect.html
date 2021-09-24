@@ -1,0 +1,32 @@
+<!-- Template file path: templates/authentication/device_manager/maas360/ios/default/kerberos_redirect.html  -->
+<!DOCTYPE html>
+<!--
+    Macro Substitution Values:
+    REDIRECT_URL: @REDIRECT_URL@
+-->
+<html>
+<head>
+	<title>$LOGIN_TITLE$</title>
+	<base href="/" />
+	<meta charset="UTF-8">
+	<meta http-equiv="Refresh" content="0;url=@REDIRECT_URL@">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" type="image/x-icon" href="usc/favicon.ico" />
+	<link rel="stylesheet" href="usc/css/stateless.css" />
+	<link rel="stylesheet" href="/template/v1.0/static/theme.css?themeId=@THEME_ID@" />
+</head>
+<body>
+	<div data-role="page" class="cs-content">
+		@PAGE_HEADER@
+		<div class="content">
+			<div>
+				<p>$KERBEROS_REDIRECT$</p>
+			</div>
+			<div>
+				<p>$KERBEROS_REDIRECT_CLICK$ <a href="@REDIRECT_URL@">$KERBEROS_REDIRECT_HERE$</a>.</p>
+			</div>
+		</div>
+		@PAGE_FOOTER@
+	</div>
+</body>
+</html>

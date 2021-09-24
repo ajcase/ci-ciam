@@ -1,0 +1,79 @@
+<!-- Template file path: templates/authentication/login/error/default/login_error.html  -->
+<!DOCTYPE html>
+<!--
+	Macro Substitution Values:
+	REQ_ADDR: @REQ_ADDR@
+	TIMESTAMP: @TIMESTAMP@
+	ERROR_MESSAGE: @ERROR_MESSAGE@
+	EXCEPTION_MSG: @EXCEPTION_MSG@
+	IDAAS_LOGIN_URL: @IDAAS_LOGIN_URL@
+	PROVIDED_PREFERRED_USERNAME: @PROVIDED_PREFERRED_USERNAME@
+    PROVIDED_GIVEN_NAME: @PROVIDED_GIVEN_NAME@
+    PROVIDED_FAMILY_NAME: @PROVIDED_FAMILY_NAME@
+    PROVIDED_EMAIL: @PROVIDED_EMAIL@
+ -->
+<html>
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<base href="/" />
+	<link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico" />
+	<title id="title">$LOGIN_ERROR_TITLE$</title>
+	<link rel="stylesheet" href="usc/css/stateless.css">
+	<link rel="stylesheet" href="/template/v1.0/static/theme.css?themeId=@THEME_ID@" />
+	<meta content="width=device-width, initial-scale=1.0">
+
+
+</head>
+
+
+
+<body class="title-background">
+	<div class="cs-content cs-all-error">
+		@PAGE_HEADER@
+		<div class="content">
+			<div class="error-header spaced">
+				<span>$LOGIN_ERROR_HEADER$</span>
+			</div>
+			<div class="error-message spaced">
+				<span>@ERROR_MESSAGE@</span>
+			</div>
+			<div id="detailsSection">
+				<div class="spaced">
+					<span>$GENERIC_ERROR_OCCURRED_AT$ @TIMESTAMP@</span>
+				</div>
+				<div class="spaced">
+					<span>$GENERIC_ERROR_REQUEST_ADDRESS$ @REQ_ADDR@</span>
+				</div>
+				<div class="spaced">
+					<span>$GENERIC_ERROR_ERROR_DETAILS$ @EXCEPTION_MSG@</span>
+				</div>
+				<div class="spaced">
+					<span>$GENERIC_ERROR_CONTACT_SUPPORT$ </span><a class="cs-primary" href="$GENERIC_ERROR_SUPPORT_URL$" target="_blank">$GENERIC_ERROR_SUPPORT_URL$</a>
+				</div>
+			</div>
+			<button id="detailsButton" class="cs-link" onclick="toggleErrorDetails('$GENERIC_ERROR_VIEW_DETAILS$', '$GENERIC_ERROR_HIDE_DETAILS$')"> $GENERIC_ERROR_VIEW_DETAILS$ </button>
+			<div class="spaced">
+				<a href="@IDAAS_LOGIN_URL@"><button class="cs-link">$LOGIN_ERROR_TRY_AGAIN$</button></a>
+			</div>
+		</div>
+		@PAGE_FOOTER@
+	</div>
+
+	<script language="JavaScript">
+		document.getElementById('detailsSection').style.display = "none"
+
+		function toggleErrorDetails(viewText, hideText) {
+			var state = document.getElementById('detailsSection').style.display;
+			if (state == 'block') {
+				document.getElementById('detailsSection').style.display = 'none';
+				document.getElementById('detailsButton').innerHTML = viewText;
+			} else {
+				document.getElementById('detailsSection').style.display = 'block';
+				document.getElementById('detailsButton').innerHTML = hideText;
+			}
+		}
+	</script>
+</body>
+
+</html>

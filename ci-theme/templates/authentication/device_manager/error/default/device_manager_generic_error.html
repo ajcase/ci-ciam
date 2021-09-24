@@ -1,0 +1,118 @@
+<!-- Template file path: templates/authentication/device_manager/error/default/device_manager_generic_error.html  -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <base href="/" />
+    <title id="title">$GENERIC_ERROR_TITLE$</title>
+    <link rel="shortcut icon" type="image/x-icon" href="usc/favicon.ico" />
+    <link rel="stylesheet" href="usc/css/stateless.css" />
+    <link rel="stylesheet" href="template/v1.0/static/theme.css?themeId=@THEME_ID@" />
+    <meta name="viewport" content="width=device-width, initial-scale='1.0'" />
+    <script>
+      let queryIndex = location.href.indexOf("?");
+      let queryStr = "";
+      let themeId = "";
+      let themeIdQParam = "";
+      let targetUrl = "";
+      let targetQParam = "";
+      if (queryIndex === -1) {
+        location.href = "/idaas/mtfim/sps/idaas/login?runtime=true";
+      } else {
+        queryStr = location.href.substring(queryIndex + 1);
+        
+        // Build Target query param
+        if (queryStr.search("targetUrl=") !== -1) {
+          targetUrl = new URLSearchParams(location.search).get('targetUrl');
+          targetQParam = "&Target=" + encodeURIComponent(targetUrl);
+        }
+
+        // Build themeId query param
+        if (queryStr.search("themeId") !== -1) {
+          themeId = new URLSearchParams(location.search).get('themeId');
+          if (themeId === undefined || themeId === null || themeId.length === 0) {
+            //Search for themeId in the targetUrl
+            let url = new URL(decodeURIComponent(targetUrl));
+            themeId = new URLSearchParams(url.search).get('themeId');
+          }
+          if (themeId !== undefined && themeId !== null && themeId.length > 0) {
+            themeIdQParam = "&themeId=" + themeId;
+          }
+        }
+        
+        // Build the final destination
+        location.href = "/idaas/mtfim/sps/idaas/login?runtime=true" + targetQParam + themeIdQParam;
+      }
+    </script>
+    </head>
+    <body class="title-background">
+    <div class="cs-content cs-all-error">
+      @PAGE_HEADER@
+      <div class="content" style="display:none">
+        <div class="error-header spaced">
+          <span>$GENERIC_ERROR_HEADER$</span>
+        </div>
+        <div class="error-message spaced">
+          <span>@ERROR_MESSAGE@</span>
+        </div>
+
+        <div id="detailsSection">
+          <div id="timestamp-label" class="spaced">
+            <span>$GENERIC_ERROR_OCCURRED_AT$ @TIMESTAMP@</span>
+          </div>
+          <div id="request-address-label" class="spaced">
+            <span>$GENERIC_ERROR_REQUEST_ADDRESS$ @REQ_ADDR@</span>
+          </div>
+          <div id="exception-message-label" class="spaced">
+            <span>$GENERIC_ERROR_ERROR_DETAILS$ @EXCEPTION_MSG@</span>
+          </div>
+          <div class="spaced">
+            <span>$GENERIC_ERROR_CONTACT_SUPPORT$ </span><a class="cs-primary" href="$GENERIC_ERROR_SUPPORT_URL$" target="_blank">$GENERIC_ERROR_SUPPORT_URL$</a>
+          </div>
+        </div>
+
+        <button id="detailsButton" class="cs-link" onclick="toggleErrorDetails('$GENERIC_ERROR_VIEW_DETAILS$', '$GENERIC_ERROR_HIDE_DETAILS$')">$GENERIC_ERROR_VIEW_DETAILS$</button>
+      </div>
+    </div>
+
+    <script>
+
+      if (!("@TIMESTAMP@" || "@EXCEPTION_MSG@" || "@REQ_ADDR@"  )){
+        document.getElementById("detailsButton").style.display = "none"
+      }
+
+      if (!"@TIMESTAMP@"){
+        document.getElementById("timestamp-label").style.display = "none"
+      }
+
+      if (!"@EXCEPTION_MSG@"){
+        document.getElementById("exception-message-label").style.display = "none"
+      }
+
+      if (!"@REQ_ADDR@"){
+        document.getElementById("request-address-label").style.display = "none"
+      }
+
+      if (!"@ERROR_MESSAGE@"){
+        document.getElementById("error-message-label").style.display = "none"
+      }
+
+      document.getElementById("detailsSection").style.display = "none"
+
+      function toggleErrorDetails(viewText, hideText) {
+        var state = document.getElementById("detailsSection").style.display
+        if (state != "none") {
+          document.getElementById("detailsSection").style.display = "none"
+          document.getElementById("detailsButton").innerHTML = viewText
+        } else {
+          document.getElementById("detailsSection").style.display = "block"
+          document.getElementById("detailsButton").innerHTML = hideText
+        }
+      }
+
+    </script>
+  </body>
+
+</html>

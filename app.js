@@ -185,6 +185,8 @@ app.get('/oauth/callback', passport.authenticate('openidconnect', {
   failureRedirect: '/'
 }))
 
+
+
 // Destroy both the local session and
 // revoke the access_token at IBM
 app.get('/logout', function(req, res) {
@@ -199,9 +201,14 @@ app.get('/logout', function(req, res) {
 
     console.log('Session Revoked at IBM');
     req.session.loggedIn = false;
-    res.redirect(process.env.OIDC_CI_BASE_URI + '/idaas/mtfim/sps/idaas/logout');
+    console.log('process.env.THEME_ID in /logout is: ' + process.env.THEME_ID);
+    req.session.loggedIn = false;
+    res.redirect(process.env.OIDC_CI_BASE_URI + '/idaas/mtfim/sps/idaas/logout' + '?themeId=' + process.env.THEME_ID);
+
   });
 });
+
+
 
 // catch error
 app.use(function(req, res, next) {
@@ -221,18 +228,29 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-if (process.env.API_CLIENT_ID && process.env.API_SECRET && process.env.MFAGROUP) {
+if (process.env.API_CLIENT_ID && process.env.API_SECRET && process.env.MFAGROUP && process.env.APP_NAME) {
+  // Get access token for privileged API access
   bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err, body) {
     if (err) {
       console.log(err);
     } else {
       apiAccessToken = body.access_token;
+      // Get the MFA group's id
       bbfn.getGroupID(process.env.MFAGROUP, apiAccessToken, (_err,result) => {
         if (result && result['urn:ietf:params:scim:schemas:extension:ibm:2.0:Group'].groupType == "standard") {
           process.env.MFAGROUPID = result.id;
           console.log(`MFA Group ID is ${process.env.MFAGROUPID}`);
         } else {
           console.log(`Group ${process.env.MFAGROUP} is invalid`);
+        }
+      });
+      // Get the demo app's theme id
+      bbfn.getThemeID(process.env.APP_NAME, apiAccessToken, (_err,result) => {
+        if (result) {
+          process.env.THEME_ID = result;
+          console.log(`Theme ID is ${process.env.THEME_ID}`);
+        } else {
+          console.log(`Failed to set Theme ID`);
         }
       });
     }

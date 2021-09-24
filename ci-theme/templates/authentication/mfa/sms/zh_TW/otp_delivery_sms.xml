@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Message value should be less than 70 characters -->
+<root>
+<Message>
+  <Value>
+    您的密碼為：@CORRELATION@-@OTP@。 它將在 @OTP_LIFETIME@ 分鐘後到期。
+  </Value>
+</Message>
+</root>

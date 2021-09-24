@@ -1,0 +1,79 @@
+<!-- Template file path: templates/authentication/mfa/totp/default/time_based_otp_submit.html  -->
+<!DOCTYPE html>
+<!--
+	These are the macros for user info
+	NAME: @NAME@
+	FAMILY_NAME: @FAMILY_NAME@
+	GIVEN_NAME: @GIVEN_NAME@
+	PREFERRED_USERNAME: @PREFERRED_USERNAME@
+-->
+<html>
+<head>
+	<title id="title">$OTP_TITLE$</title>
+	<base href="/" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width">
+	<link rel="shortcut icon" type="image/x-icon" href="usc/favicon.ico" />
+	<link rel="stylesheet" href="usc/css/stateless.css" />
+	<link rel="stylesheet" href="/template/v1.0/static/theme.css?themeId=@THEME_ID@" />
+	<script>
+		// START NON-TRANSLATABLE
+		const action = "@ACTION@";
+		const themeId = "@THEME_ID@";
+		var errorMessage = "@ERROR_MESSAGE@";
+		var otpLoginDisabled = "@OTP_LOGIN_DISABLED@";
+		const showUseAnotherMethod = "@SHOW_USE_ANOTHER_METHOD@";
+		// END NON-TRANSLATABLE
+	</script>
+</head>
+<!-- cs-totp-login currently has styling attached in stateless.css -->
+<body>
+	<div class="cs-content">
+		@PAGE_HEADER@
+		<div class="content">
+			<div class="content-header">$OTP_SUBMISSION$</div>
+			<div class="spaced">
+				<div><span>$TOTP_ENTER_OTP$</span></div>
+				<form id="combined-form" action=""
+					autocomplete="off"
+					method="POST">
+					<div class="otp-hint-and-input top-spaced">
+						<div class="cs-wide cs-row-table">
+							<div>
+								<input id="otp-input"
+									maxlength="40"
+									name="otp"
+									type="text"
+									class="bx--text-input">
+							</div>
+						</div>
+						<input name="operation"
+							type="hidden"
+							value="verify">
+					</div>
+				</form>
+				<form id="use-another-method-form" action=""
+						method="POST">
+					<input name="operation" type="hidden" value="restart">
+				</form>
+				<div style="position: relative;">
+                    <div class="cs-button-strip cs-row-table spaced">
+						<button id="otp-login-button" class="cs-button bx--btn bx--btn--primary" onclick="submitOtp()">$OTP_LOGIN_SUBMIT$</button>
+					</div>
+                    <div class="use-another-method" style="position: absolute;top: 25px;">
+						<a onclick="goBack()" href="javascript:void(0)">$USE_ANOTHER_METHOD$</a>
+					</div>
+                    <div style="clear:both;"></div>
+                </div>
+				<div id="otp-error-message" class="top-spaced error-message">
+					<span>@ERROR_MESSAGE@</span>
+				</div>
+			</div>
+		</div>
+		@PAGE_FOOTER@
+	</div>
+	<!-- Please do not move JS code from here, it may affect functionality -->
+	<script type="text/javascript" src="/authsvc/mtfim/sps/static/common.js"></script>
+	<script type="text/javascript" src="/authsvc/mtfim/sps/static/totp_login.js"></script>
+</body>
+</html>

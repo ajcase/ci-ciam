@@ -1,0 +1,1 @@
+A(z) @CERTIFICATION.NAME@ kampány állapota a következőre változott: @CERTIFICATION.STATUS@.

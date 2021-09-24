@@ -1,0 +1,100 @@
+<!-- Template file path: templates/authentication/mfa/mfa_selection/default/combined_mfa_selection.html  -->
+<!DOCTYPE html>
+<!--
+	These are the macros for user info
+	NAME: @NAME@
+	FAMILY_NAME: @FAMILY_NAME@
+	GIVEN_NAME: @GIVEN_NAME@
+	PREFERRED_USERNAME: @PREFERRED_USERNAME@
+-->
+<html>
+<head>
+	<title id="title">$OTP_DELIVERY_SELECTION_TITLE$</title>
+	<base href="/" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<link rel="shortcut icon" type="image/x-icon" href="usc/favicon.ico" />
+	<link rel="stylesheet" href="usc/css/stateless.css" />
+	<link rel="stylesheet" href="/template/v1.0/static/theme.css?themeId=@THEME_ID@" />
+	<script>
+		// START NON-TRANSLATABLE
+		const action = "@ACTION@";
+		const themeId = "@THEME_ID@";
+		
+		var methods = []
+		/**
+		 * method object interface:
+		 * {
+		 * 	methodLabel: string
+		 * 	methodType: string
+		 * 	methodId: string
+		 * }
+		 */
+		
+		[RPT otpMethods]
+		var method = {}
+		method.methodLabel = "@OTP_METHOD_LABEL@"
+		method.methodId = "@OTP_METHOD_ID@"
+		method.methodType = "@OTP_METHOD_ID@".split('_')[0]
+		// method.methodChecked = "@OTP_METHOD_CHECKED@"		// Removing the property as it is not being used anywhere in page
+		methods.push(method)
+		[ERPT otpMethods]
+		
+		var otpTypeEmail = "$OTP_METHOD_TYPE_EMAIL$";
+		var otpTypeSMS = "$OTP_METHOD_TYPE_SMS$";
+		var otpTypeVerify = "$OTP_METHOD_TYPE_VERIFY$";
+		var otpTypeTotp = "$OTP_METHOD_TYPE_TOTP$";
+		var otpTypeKQ = "$OTP_METHOD_TYPE_KQ$";
+		var otpTypeFido2 = "$OTP_METHOD_TYPE_FIDO2$";
+		var otpTypeVoiceOTP = "$OTP_METHOD_TYPE_VOICE_OTP$";
+		
+		var otpActionEmail = "$OTP_METHOD_ACTION_EMAIL$";
+		var otpActionSMS = "$OTP_METHOD_ACTION_SMS$";
+		var otpActionVerfiy = "$OTP_METHOD_ACTION_VERIFY$";
+		var otpActionTotp = "$OTP_METHOD_ACTION_TOTP$";
+		var otpActionKQ = "$OTP_METHOD_ACTION_KQ$";
+		var otpActionFido2 = "$OTP_METHOD_ACTION_FIDO2$";
+		var otpActionVoiceOTP = "$OTP_METHOD_ACTION_VOICE_OTP$";
+		// END NON-TRANSLATABLE
+	</script>
+</head>
+
+<!--cs-otp-delivery-selection currently has styling attached in stateless.css -->
+<body cs-otp-delivery-selection>
+	<div class='cs-content'>
+		@PAGE_HEADER@
+		<div class='bx--modal-header'>
+			<p class='bx--type-delta'>$OTP_DELIVERY_SELECTION_TWO_STEP_VERIFICATION$</p>
+			<p class='bx--type-beta' data-ci-id="choose-method-label">$OTP_DELIVERY_SELECTION_CHOOSE_METHOD$</p>
+		</div>
+		<div class='verify-message'>$OTP_DELIVERY_SELECTION_HOW_VERIFY$</div>
+		<div id="method-containers" class='right-panel'>
+			<!-- OTP methods HTML is currently Javascript generated, see inline script -->
+		</div>
+		<!-- Copyright IBM Corp. 2016, 2018 This source code is licensed under the Apache-2.0 license found in the LICENSE file in the root directory of this source tree. -->
+
+		<div>
+			<div id="help-modal-container" aria-label="Need help?" class="bx--modal" role="presentation" tabindex="-1">
+				<div role="dialog" class="bx--modal-container" aria-label="Need help?" aria-modal="true">
+					<div class="bx--modal-header">
+						<button class="bx--modal-close" type="button" title="close the modal" aria-label="close the modal" onclick="closeHelpModal(event)">
+							<svg focusable="false" preserveAspectRatio="xMidYMid meet" aria-label="close the modal" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" role="img" class="bx--modal-close__icon" style="will-change: transform;"><path d="M24 9.4L22.6 8 16 14.6 9.4 8 8 9.4l6.6 6.6L8 22.6 9.4 24l6.6-6.6 6.6 6.6 1.4-1.4-6.6-6.6L24 9.4z"></path></svg>
+						</button>
+						<h3 class="bx--modal-header__heading">$HELP_NEED_HELP$ </h3>
+					</div>
+					<div class="bx--modal-content"><p>$HELP_CONTACT_HELP_DESK$ </p>
+					</div>
+				</div>
+			</div>
+			<div class="help-message">$HELP_CANNOT_USE$ <a href="#" onclick="openHelpModal(event)">$HELP_GET_HELP$ </a></div>
+		</div>
+		@PAGE_FOOTER@
+		<form id="combined-form" method="POST" action="">
+			<input type="hidden" name="operation" value="generate">
+			<input id="delivery-selection-input" type="hidden" name="otp.user.otp-method.id" value="">
+		</form>
+	</div>
+	<!-- Please do not move JS code from here, it may affect functionality -->
+	<script type="text/javascript" src="/authsvc/mtfim/sps/static/common.js"></script>
+	<script type="text/javascript" src="/authsvc/mtfim/sps/static/combinedmfa_selection.js"></script>
+</body>
+</html>

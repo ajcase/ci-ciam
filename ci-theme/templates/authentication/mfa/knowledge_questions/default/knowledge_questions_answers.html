@@ -1,0 +1,68 @@
+<!-- Template file path: templates/authentication/mfa/knowledge_questions/default/knowledge_questions_answers.html  -->
+<!DOCTYPE html>
+<!--
+	These are the macros for user info
+	NAME: @NAME@
+	FAMILY_NAME: @FAMILY_NAME@
+	GIVEN_NAME: @GIVEN_NAME@
+	PREFERRED_USERNAME: @PREFERRED_USERNAME@
+-->
+<html>
+    <head>
+		<title>$KNOWLEDGE_QA_TITLE$</title>
+		<base href="/" />
+        <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+        <link rel="shortcut icon" type="image/x-icon" href="/usc/favicon.ico" />
+        <link rel="stylesheet" href="/usc/css/stateless.css">
+		<link rel="stylesheet" href="/template/v1.0/static/theme.css?themeId=@THEME_ID@" />
+        <script type="text/javascript" src="/ui/assets/_js?include=templates/otp/otp"></script>
+		<script type="text/javascript" src="/authsvc/mtfim/sps/static/knowledgequestions_answers.js"></script>
+		<script type="text/javascript">
+			//START NON-TRANSLATABLE
+			const showUseAnotherMethod = "@SHOW_USE_ANOTHER_METHOD@";
+			//END NON-TRANSLATABLE
+		</script>
+    </head>
+    <body onload="onLoadPage()">
+        <div class='cs-content'>
+			@PAGE_HEADER@
+            <div class='bx--modal-header'>
+                <p class='bx--type-delta'>$KNOWLEDGE_QA_WELCOME$, @USER_GIVEN_NAME@</p>
+                <p class='bx--type-beta'>$KNOWLEDGE_QA_LETS_MAKE_SURE_ITS_YOU$</p>
+            </div>
+            <div class='verify-message'>$KNOWLEDGE_QA_CORRECTLY_ANSWER_QUESTIONS$</div>
+            <div class="top-spaced error-message">
+                <span id="cs-error-message">@ERROR_MESSAGE@</span>
+            </div>
+            <div class='right-panel'>
+                <form class="knowledge-questions" method="POST" action="@ACTION@">
+                    [RPT questions]
+                    <div class="question-answer">
+                        <div class="question">
+                            <span class="bx--list-box__label" for="downshift-1-input">@QUESTION@</span>
+                        </div>
+                        <div class="answer">
+                            <input id="@QUESTION_KEY@" placeholder="answer" type="" class="bx--text-input" name="@QUESTION_KEY@" autocomplete="off">
+                        </div>
+                    </div>
+                    [ERPT questions]
+                    
+                    <input type="hidden" name="operation" value="verify">
+
+					<div style="position: relative;">
+						<input type="submit" class="cs-button bx--btn bx--btn--primary" value="$KNOWLEDGE_QA_VERIFY$">
+						<div class="use-another-method" style="position: absolute;top: 11px;">
+						   <a onclick="goBack()" href="javascript:void(0)">$KNOWLEDGE_QA_USE_ANOTHER_METHOD$</a>
+						</div>
+						<div style="clear:both;"></div>
+					</div>
+                </form>
+				<form id="use-another-method-form" action="" 
+						method="POST">
+					<input name="operation" type="hidden" value="restart">
+				</form>
+            </div>
+			@PAGE_FOOTER@
+        </div>
+    </body>
+</html>

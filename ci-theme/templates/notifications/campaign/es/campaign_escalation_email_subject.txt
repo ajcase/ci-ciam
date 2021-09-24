@@ -1,0 +1,1 @@
+Al ser un supervisor de campaña, @CERTIFICATION.OLD_REVIEWER@ le ha escalado algunos registros para la campaña @CERTIFICATION.NAME@. Esta campaña finalizará el @CERTIFICATION.ENDDATE@.

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="292px" height="46px" viewBox="0 0 292 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Insurance-Login" transform="translate(-545.000000, -173.000000)">
+            <g id="Group-2" transform="translate(545.000000, 173.000000)">
+                <g id="Group">
+                  <text id="TrustMeInsurance" font-family="HelveticaNeue-Thin, Helvetica Neue" font-size="29" font-weight="300" line-spacing="39" fill="#212121">
+                      <tspan x="53" y="35">Trust</tspan>
+                      <tspan x="111.715" y="35" font-family="HelveticaNeue, Helvetica Neue" font-weight="normal">Me</tspan>
+                      <tspan x="152.715" y="35" font-family="HelveticaNeue-Bold, Helvetica Neue" font-weight="bold">Insurance</tspan>
+                  </text>
+                    <g id="Group-3">
+                        <polygon id="Fill-1" fill="#5AAAFA" points="19.3512546 0.000118494424 0 19.3524187 0 45.6956343 6.50453067 45.6956343 6.50453067 22.047493 23.9507435 4.60058318"></polygon>
+                        <polygon id="Fill-2" fill="#01478D" points="30.6450395 0.000118494424 7.98588522 22.662177 7.98588522 45.6956343 42.0130925 45.6956343 42.0127904 22.6615962 30.6455739 11.2951696 26.0458295 15.8945655 35.5087941 25.3574837 35.5087941 39.1914057 14.4899047 39.1914057 14.4901603 25.3556018 30.6455739 9.20030437 43.4925999 22.047493 43.4925999 45.6956343 49.9971306 45.6956343 49.9971306 19.3532551"></polygon>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

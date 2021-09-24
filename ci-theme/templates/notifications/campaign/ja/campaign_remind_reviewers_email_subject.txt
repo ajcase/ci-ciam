@@ -1,0 +1,1 @@
+リマインダー: キャンペーン @CERTIFICATION.NAME@ に保留中のレビューがあります。このキャンペーンは @CERTIFICATION.ENDDATE@ に終了します。

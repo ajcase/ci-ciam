@@ -1,0 +1,52 @@
+<!-- Template file path: templates/authentication/login/identity_source/identity_linking/default/ask_for_unique_id.html  -->
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<base href="/" />
+<title id="loginTitle">$LOGIN_TITLE$</title>
+<link rel="shortcut icon" type="image/x-icon" href="usc/favicon.ico" />
+<link rel="stylesheet" href="usc/css/stateless.css" />
+<link rel="stylesheet" href="/templates/v1.0/static/theme.css?themeId=@THEME_ID@" />
+<meta name="viewport" content="width=device-width">
+
+<script type="text/javascript">
+	window.onload = function() {
+		const errMsg = "@ERRMSG@";
+		if (errMsg) {
+			document.getElementById("error-message").classList.add("active");
+		}
+	}
+
+	function validate() {
+		const uidInput = document.getElementById('value-input');
+		const uid = uidInput.value;
+		if (uid === null || uid.trim() === "") {
+			uidInput.classList.add("error");
+			return false;
+		} else {
+			uidInput.classList.remove("error");
+			document.getElementById('login-button').disabled = true;
+			return true;
+		}
+	}
+</script>
+</head>
+
+<body>
+	<div class="cs-content login">
+		@PAGE_HEADER@
+		<p>$IDL_UNIQUE_ID_PHONE_LABEL$</p>
+		<div class="login-main">
+			<div id="error-message" class="login-error-message ease-in-anim">
+				<p id="login-error-text" class="">@ERRMSG@</p>
+			</div>
+			<form id="login-main-form" class="login-fields input-centered" method="POST" onsubmit="return validate()" autocomplete="off" action="@IDENTITYLINKING_FORM_ACTION_URL@">
+				<input id="value-input" type="text" class="bx--text-input" name="attrvalue" placeholder="" value="@ATTRVALUE@" tabindex="1">
+				<button class="bx--btn button" id="login-button" value="login" class="button-1 ease-in-anim-fast login" tabindex="2" type="submit">$IDL_SUBMIT_BUTTON$</button>
+			</form>
+		</div>
+		@PAGE_FOOTER@
+	</div>
+</body>
+</html>

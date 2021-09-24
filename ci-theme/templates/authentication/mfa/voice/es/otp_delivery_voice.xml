@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <Message>
+    <Value>Su código de acceso es @OTP@. @BREAK@ Utilice este código de acceso para completar su solicitud.</Value>
+  </Message>
+</root>

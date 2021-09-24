@@ -1,0 +1,64 @@
+<!-- Template file path: templates/authentication/mfa/ibmverify/default/ibmverify.html  -->
+<!DOCTYPE html>
+<!--
+	Macro Substitution Values:
+	ACTION: @ACTION@
+	DEVICE_NAME: @DEVICE_NAME@
+	DEVICE_TYPE: @DEVICE_TYPE@
+	RESELECT_HIDDEN: @RESELECT_HIDDEN@
+
+	These are the macros for user info
+	NAME: @NAME@
+	FAMILY_NAME: @FAMILY_NAME@
+	GIVEN_NAME: @GIVEN_NAME@
+	PREFERRED_USERNAME: @PREFERRED_USERNAME@
+-->
+<html>
+<head>
+	<title>$VERIFY_LOGIN_TITLE$</title>
+	<base href="/" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" type="image/x-icon" href="usc/favicon.ico" />
+	<link rel="stylesheet" href="usc/css/stateless.css">
+	<link rel="stylesheet" href="/template/v1.0/static/theme.css?themeId=@THEME_ID@" />
+	<script type="text/javascript" src="/authsvc/mtfim/sps/static/ibmverify_login.js"></script>
+	<script type="text/javascript">
+		//START NON-TRANSLATABLE
+		const showUseAnotherMethod = "@SHOW_USE_ANOTHER_METHOD@";
+		//END NON-TRANSLATABLE
+	</script>
+</head>
+<body onload="onLoadPage()">
+	<div data-role="page" class="cs-content">
+		@PAGE_HEADER@
+		<div class="content">
+			<div data-role="content" class="header">
+				<p>$VERIFY_LOGIN_PENDING$ @DEVICE_NAME@ (@DEVICE_TYPE@)</p>
+				<p>$TRANSACTION$ @TRANSACTION_ID@<p>
+				<form action="@ACTION@" method="post" data-ajax="false">
+					<input type="hidden" name="operation" value="verify">
+					<input id="authStatus" type="hidden" name="authStatus" value="FAILED">
+				</form>
+				<form id="use-another-method-form" action="" 
+						method="POST">
+					<input name="operation" type="hidden" value="restart">
+				</form>
+			</div>
+			<br/>
+			<br/>
+			<div class="use-another-method">
+			   <a onclick="goBack()" href="javascript:void(0)">$USE_ANOTHER_METHOD$</a>
+			</div>
+			<!-- div @RESELECT_HIDDEN@ data-role="content">
+					<form action="@ACTION@" method="post" data-ajax="false">
+						<input type="hidden" name="operation" value="select">
+						Click on the Reselect button to select the different device for authentication.
+						<input type="submit" name="Reselect" value="Reselect">
+					</form>
+				</div -->
+		</div>
+		@PAGE_FOOTER@
+	</div>
+</body>
+</html>

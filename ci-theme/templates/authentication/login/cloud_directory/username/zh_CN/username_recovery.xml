@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Email id="default">
+    <Subject>
+      <Value>
+        用户名恢复信息
+      </Value>
+    </Subject>
+    <Message>
+      <Value>
+      <![CDATA[<html>
+<!-- Template file path: templates/authentication/login/cloud_directory/username/zh_CN/username_recovery.xml  -->
+            <head/>
+            <body>
+	         <div style="font-family: 'Helvetica neue', sans-serif;">
+	            <table cellspacing="0" cellpadding="22" border="0" style="width: 100%; margin-bottom: 10px; top: 0px;left: 0px;" >
+	              <tr style="line-height: 30px; color: white; margin: 0 auto; background-color: #4178be;">
+	                <td style="font-size:24px;padding: 32px 64px 32px 72px;">
+	                    <b>$PRODUCT_NAME$</b>
+	                </td>
+	              </tr>
+	            </table>
+	         </div>
+	         <div style="font-family: 'Helvetica neue', sans-serif; font-size: 14px; padding: 10px 64px 64px 64px; color: #121212;">
+	                您好，@FIRST_NAME@，
+	                <br>
+	                <br>                 
+                    租户 <b>@TENANT@</b> 的用户名为：<b>@USERNAME@</b>.
+                    <br>
+                    <br>
+                    访问系统的设备的详细信息：
+                    <br>
+                    <ul>
+                      <li>位置：@LOCATION@</li>
+                      <li>浏览器：@USER_AGENT@</li>
+                      <li>IP 地址：@IP_ADDRESS@</li>
+                    </ul>
+                    <br>
+                    <br>
+                    如果您未请求恢复用户名，请与管理员联系。
+                    <br>
+                    <br>
+                    顺颂商祺， <br>
+                    IBM Security Verify 
+                               
+             </div>
+            </body>
+            </html>
+         ]]>      
+      </Value>
+    </Message>
+</Email>
+</root>

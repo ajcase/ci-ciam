@@ -1,0 +1,68 @@
+<!-- Template file path: templates/authentication/saml/sso/default/saml_consent_to_federate.html  -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <base href="/"/>
+  <title>$SAML2_TITLE_CONSENT$</title>
+  <!--	<title>Consent to federate</title>-->
+  <link rel="shortcut icon" type="image/x-icon" href="usc/favicon.ico"/>
+  <link rel="stylesheet" href="usc/css/stateless.css"/>
+  <link rel="stylesheet" href="template/v1.0/static/theme.css?themeId=@THEME_ID@"/>
+  <meta name="viewport" content="width=device-width, initial-scale='1.0'"/>
+  <script>
+    function approveConsent() {
+      document.consentForm.Consent.value = "1";
+      document.consentForm.submit();
+    }
+
+    function denyConsent() {
+      document.consentForm.Consent.value = "0";
+      document.consentForm.submit();
+    }
+  </script>
+</head>
+
+<body class="title-background">
+<div class="cs-content">
+  @PAGE_HEADER@
+  <div class="content">
+    <div class="content-header">
+      $SAML2_TITLE_CONSENT$
+      <!--			<span>Consent to federate</span>-->
+    </div>
+    <div>
+      <form name="consentForm" action="@TOKEN:form_action@" method="post">
+        <div>
+          <div class="spaced user-authorize-main"><span>
+            <!--A new identity has been generated to federate into <b>@TOKEN:SPDisplayName@</b>.
+            Do you agree?-->
+            <p>$SAML2_MESSAGE_CONSENT_DESCRIPTION$ <label>@TOKEN:SPDisplayName@</label>.</p>
+            <p>$SAML2_MESSAGE_CONSENT_QUESTION$</p>
+            </span>
+          </div>
+          <br/>
+          <div class="cs-button-strip cs-row-table spaced">
+            <div>
+              <button class="cs-button bx--btn bx--btn--secondary" onclick="denyConsent()">
+                $SAML2_BUTTON_CONSENT_DENY$
+              </button>
+            </div>
+            <div>
+              <button class="cs-button bx--btn bx--btn--primary" onclick="approveConsent()">
+                $SAML2_BUTTON_CONSENT_APPROVE$
+              </button>
+            </div>
+          </div>
+          <input type="hidden" checked name="Consent" value="0"/>
+          <input type="hidden" name="FIMAction" value="consent"/>
+          </p>
+        </div>
+      </form>
+    </div>
+    <br/>
+  </div>
+</div>
+</body>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Email id="default">
+    <Subject>
+      <Value>
+        Account deleted
+      </Value>
+    </Subject>
+
+    <Message>
+      <Value>
+      <![CDATA[<html>
+<!-- Template file path: templates/notifications/user_management/profile/ko/account_deleted_email.xml  -->
+            <head>
+            	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    		    <title>계정 삭제</title>
+    		</head>
+    	   <body>
+           <div style="font-family: 'Helvetica neue', sans-serif;">
+             <table cellspacing="0" cellpadding="22" border="0" style="width: 100%; margin-bottom: 10px; top: 0px;left: 0px;" >
+               <tr style="line-height: 30px; color: white; margin: 0 auto; background-color: #4178be;">
+                 <td style="font-size:24px;padding: 32px 64px 32px 72px;">
+                    <b>$PRODUCT_NAME$</b>
+                 </td>
+               </tr>
+             </table>
+          </div>
+          <div style="font-family: 'Helvetica neue', sans-serif; font-size: 14px; padding: 10px 64px 64px 64px; color: #121212;">
+                <p><b><a style="text-decoration: none;color: #000000;">@TENANT@</a></b> 등록에 대해 <b>@USERNAME@</b> 계정이 삭제되었습니다.</p>
+                <p>이 조치가 실수로 수행된 것이면 시스템 관리자에게 문의하십시오.</p>	
+         </div>
+        </body>  	
+        </html>
+         ]]>
+      </Value>
+    </Message>
+</Email>
+</root>

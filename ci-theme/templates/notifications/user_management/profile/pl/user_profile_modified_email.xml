@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Email id="default">
+    <Subject>
+      <Value>
+        Zmodyfikowano profil użytkownika
+      </Value>
+    </Subject>
+
+    <Message>
+      <Value>
+      <![CDATA[<html>
+<!-- Template file path: templates/notifications/user_management/profile/pl/user_profile_modified_email.xml  -->
+             <head>
+            	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    		    <title>Zmodyfikowano profil użytkownika</title>
+    		</head>
+    	   <body>
+           <div style="font-family: 'Helvetica neue', sans-serif;">
+             <table cellspacing="0" cellpadding="22" border="0" style="width: 100%; margin-bottom: 10px; top: 0px;left: 0px;" >
+               <tr style="line-height: 30px; color: white; margin: 0 auto; background-color: #4178be;">
+                 <td style="font-size:24px;padding: 32px 64px 32px 72px;">
+                    <b>$PRODUCT_NAME$</b>
+                 </td>
+               </tr>
+             </table>
+          </div>
+          <div style="font-family: 'Helvetica neue', sans-serif; font-size: 14px; padding: 10px 64px 64px 64px; color: #121212;">
+            <p style="padding-bottom: 12px;font-size: 16px">Informacje o koncie zostały zmienione. </p>    
+            <p style="padding-bottom: 12px; line-height: 24px">Otrzymujesz tę wiadomość, ponieważ dla konta <a href="#" style="color: #4178BE;">@USERNAME@</a> (w subskrypcji <b><a style="text-decoration: none; color: #000000;">@TENANT@</a></b>) zmodyfikowano przynajmniej jedną właściwość. Skontaktuj się z administratorem, jeśli nie jesteś inicjatorem tej zmiany.</p>
+            <p style="font-size: 14px; line-height: 24px">
+             <b>Zmienione informacje:</b><br /> 
+             <table style="border-spacing: 0px; font-size: 14px; line-height: 24px; text-align: left;">
+                @ATTRS_TABLEROWS@  
+            </table>
+         </p>            
+         </div>
+         </body>
+		</html>
+          ]]>
+      </Value>
+    </Message>
+</Email>
+</root>

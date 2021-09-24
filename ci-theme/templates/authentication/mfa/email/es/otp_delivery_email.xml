@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Subject>
+  <Value>
+    Su contraseña única
+  </Value>
+</Subject>
+
+<Message>
+  <Value>
+	<![CDATA[<html>
+<!-- Template file path: templates/authentication/mfa/email/es/otp_delivery_email.xml  -->
+		<body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #121212; padding: 12px;">
+			<h1 style="color: #4178BE;">Su contraseña única (OTP) es: </h1>
+			<h2 style="color: #666666;">@CORRELATION@-@OTP@</h2>
+			<p>Utilice esta OTP para completar la solicitud. Caducará después de @OTP_LIFETIME@ minutos.</p>
+			<p>No responda a este correo electrónico.</p>
+		</body>
+	</html>]]>
+  </Value>
+</Message>
+</root>

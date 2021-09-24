@@ -1,0 +1,129 @@
+<!-- Template file path: templates/authentication/mfa/otp_auth/default/otp_submit.html  -->
+<!DOCTYPE html>
+<!--
+	These are the macros for user info
+	NAME: @NAME@
+	FAMILY_NAME: @FAMILY_NAME@
+	GIVEN_NAME: @GIVEN_NAME@
+	PREFERRED_USERNAME: @PREFERRED_USERNAME@
+-->
+<html>
+<head>
+	<title id="title">$OTP_TITLE$</title>
+	<base href="/" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width">
+	<link rel="shortcut icon" type="image/x-icon" href="usc/favicon.ico" />
+	<link rel="stylesheet" href="usc/css/stateless.css" />
+	<link rel="stylesheet" href="/template/v1.0/static/theme.css?themeId=@THEME_ID@" />
+	<script>
+		// START NON-TRANSLATABLE
+		const action = "@ACTION@";
+		const themeId = "@THEME_ID@";
+		var otpDeliveryAttr = "@OTP_DELIVERY_ATTR@";
+		var errorMessage = "@ERROR_MESSAGE@";
+		var otpString = "@OTP_STRING@";
+		var otpLifetime = "@OTP_LIFETIME@"			// Configured OTP expiry time in seconds
+		var enterOtpSendToMacro = "$OTP_ENTER_OTP_SENT_TO$"
+		var enterOtpMacro = "$OTP_ENTER_OTP$"
+		var otpExpiryTime = "@OTP_EXPIRY_TIME@"		// password expiry time in yyyy-MM-dd'T'HH:mm:ss.sss'Z' format
+    const showUseAnotherMethod = "@SHOW_USE_ANOTHER_METHOD@";
+
+		// END NON-TRANSLATABLE
+		var absOtpLifetime;
+		if(otpExpiryTime) {
+			var absExpiry = new Date(otpExpiryTime).getTime();	// Get EPOCH time from expiry time
+			var timeNow = new Date().getTime();
+			var timeDiff = absExpiry - timeNow;
+			// console.log("Expiry: " + otpExpiryTime + " - " + new Date(absExpiry) + " - " + absExpiry)
+			// console.log("Now: " + new Date(timeNow) + " - " + timeNow)
+			absOtpLifetime = (timeDiff / 1000) | 0;
+			// console.log("Diff Secs: " + absOtpLifetime)
+		}
+		
+	</script>
+</head>
+<body cs-macotp-login>
+	<div class="cs-content">
+		@PAGE_HEADER@
+		<div class="content">
+			<div class="content-header"><span id="cs-otp-content-header">$OTP_SUBMISSION$</span></div>
+			<div class="spaced">
+				<div id="ci-time-not-expired-container">
+					<div><span id="cs-enter-otp-message"></span></div>
+					<br />
+					<span>$OTP_TIME_REMAINING$ <span class="cs-timer" id="ci-otp-timer"></span></span>
+					<form id="submit-otp-form" action=""
+						autocomplete="off"
+						cs-attach="submitOtpForm"
+						method="POST">
+						<div class="otp-hint-and-input top-spaced">
+							<div class="cs-wide cs-row-table">
+								<div id="otp-hint">
+									<span id="cs-otp-hint">@OTP_HINT@-</span>
+								</div>
+								<div>
+									<input cs-initial-focus
+										id="otp-input"
+										maxlength="40"
+										name="otp.user.otp"
+										type="text"
+										carbon-text-input="false" tabindex="1">
+								</div>
+							</div>
+							<input name="otp.user.otp-hint"
+								value="@OTP_HINT@"
+								type="hidden">
+							<input name="operation"
+								value="verify"
+								type="hidden">
+							<input name="Submit"
+								type="hidden"
+								value="Login">
+						</div>
+					</form>
+					<form id="regenerate-otp-form" action=""
+						cs-attach="regenerateOtpForm"
+						method="POST">
+						<input name="operation"
+							type="hidden"
+							value="generate">
+					</form>
+					<form id="use-another-method-form" action="" 
+						method="POST">
+						<input name="operation"
+							type="hidden"
+							value="restart">
+					</form>
+					<div class="cs-button-strip cs-row-table spaced">
+						<button id="cs-submit-button" class="cs-button bx--btn bx--btn--primary" onclick="submitOtp()" tabindex="2"><span class="bx--btn__text">$OTP_LOGIN_SUBMIT$</span></button>
+					</div>
+					<div id="cs-error-message-container" class="top-spaced error-message">
+						<span id="cs-error-message"></span>
+					</div>
+				</div>
+				<div id="ci-time-expired-container" style="display:none;">
+					<div class="top-spaced error-message">
+						<span id="ci-time-out-error">$OTP_EXPIRED$</span>
+					</div>
+				</div>
+				<br/>
+				<br/>
+				<div style="position: relative;">
+					<div id="cs-resend-link" style="float: right;">
+                       <a onclick="regenerateOtp()" href="javascript:void(0)" tabindex="3">$OTP_LOGIN_RESEND$</a>
+                    </div>
+                    <div class="use-another-method" style="position: absolute;bottom: 33%;">
+                       <a onclick="goBack()" href="javascript:void(0)">$USE_ANOTHER_METHOD$</a>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+			</div>
+		</div>
+		@PAGE_FOOTER@
+	</div>
+	<!-- Please do not move JS code from here, it may affect functionality -->
+	<script type="text/javascript" src="/authsvc/mtfim/sps/static/common.js"></script>
+	<script type="text/javascript" src="/authsvc/mtfim/sps/static/macotp_login.js"></script>
+</body>
+</html>

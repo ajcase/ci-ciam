@@ -1,0 +1,330 @@
+<!-- Template file path: templates/authentication/oidc/consent/default/user_consent.html  -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>$OIDC_TITLE_CONSENT$</title>
+    <base href="/"/>
+    <link rel="shortcut icon" type="image/x-icon" href="ui/assets/img/favicon.ico" />
+    <link rel="stylesheet" href="usc/css/stateless.css" />
+    <link rel="stylesheet" href="template/v1.0/static/theme.css?themeId=@THEME_ID@" />
+    <script>
+      function approveConsent() {
+          document.consentForm.trust_level.value = "permit";
+          document.consentForm.submit();
+      }
+      function denyConsent() {
+          document.consentForm.trust_level.value = "deny";
+          document.consentForm.submit();
+      }
+      function renderConsents() {
+          renderTransientCheckBoxes("dscope");
+          renderTransientCheckBoxes("dentitlement");
+          renderDPCMScopes();
+      }
+
+      function renderTransientCheckBoxes(prefix) {
+          var idx = 1;
+          var dv = document.getElementById(prefix + idx + "_widget");
+          while (dv != null) {
+              var state = document.getElementById(prefix + idx + "_state").value;
+              var label = document.getElementById(prefix + idx + "_label").value;
+              dv.appendChild(createTransientCheckBox(prefix, idx, state));
+              dv.appendChild(createCheckBoxLabel(prefix + idx + "_cb", label));
+              dv = document.getElementById(prefix + (++idx) + "_widget");
+          }
+      }
+      function createTransientCheckBox(prefix, idx, state) {
+          var input = document.createElement("input");
+          input.type = "checkbox";
+          input.id = prefix + idx + "_cb";
+          input.setAttribute("class", "bx--checkbox");
+          if (state === "CONSENT_ALLOW") {
+              input.setAttribute("checked", "checked");
+          }
+          input.setAttribute("onclick", "changeState('" + (prefix + idx) + "','CONSENT');");
+          return input;
+      }
+
+      function renderDPCMScopes() {
+          var model = @JSON_DATA@;
+          var dpcmDiv = document.getElementById("dpcm_scopes");
+          var eulas = [];
+          for (var i = 0; i < model.length; i++) {
+              if (model[i].termsOfUse) {
+                  eulas.push(model[i].purposeId);
+              } else {
+                  createPurpose(dpcmDiv, model[i]);
+              }
+          }
+          if (eulas.length > 0) {
+              for (var i = 0; i < model.length; i++) {
+                  if (eulas.indexOf(model[i].purposeId) === -1) {
+                      continue;
+                  }
+                  createPurpose(dpcmDiv, model[i]);
+              }
+          }
+      }
+
+      function createPurpose(dpcmDiv, purpose) {
+
+          if (purpose.termsOfUse) {
+
+              var inner = textReplace("$OIDC_TEXT_CONSENT_EULA$", "\x3ca target\x3d'_blank' href\x3d'"+ purpose.termsOfUse +"'\x3e"+purpose.purposeName+"\x3c/a\x3e");
+              dpcmDiv.appendChild(createHiddenInput(purpose.accessTypes[0].scope));
+              dpcmDiv.appendChild(createHiddenState(purpose.accessTypes[0]));
+              dpcmDiv.appendChild(renderCheckBox(purpose.accessTypes[0], inner));
+
+          } else {
+
+              var label, accessTypeModel, singleAccessType;
+              var uniqueAttributeIds = findUniqueAttributeIds(purpose.accessTypes);
+              if (uniqueAttributeIds.length === 0) { // No attribute at all in this purpose
+
+                  singleAccessType = purpose.accessTypes.length === 1;
+                  label = textReplace("$OIDC_TEXT_CONSENT_WITHOUT_ATTR$", purpose.purposeName);
+
+                  if (!singleAccessType) {
+                      dpcmDiv.appendChild(document.createElement("br"));
+                      dpcmDiv.appendChild(createText(label));
+                  }
+                  for (var i = 0; i < purpose.accessTypes.length; i++) {
+                      accessTypeModel = purpose.accessTypes[i];
+                      dpcmDiv.appendChild(createHiddenInput(accessTypeModel.scope));
+                      dpcmDiv.appendChild(createHiddenState(accessTypeModel));
+                      dpcmDiv.appendChild(renderCheckBox(accessTypeModel, singleAccessType ? label : accessTypeModel.accessTypeName));
+                  }
+                  if (!singleAccessType) {
+                      dpcmDiv.appendChild(document.createElement("br"));
+                  }
+
+              } else { // Has attributes
+
+                  for (var i = 0; i < uniqueAttributeIds.length; i++) {
+
+                      var accessTypeIds = findAccessTypesOfAttrId(purpose.accessTypes, uniqueAttributeIds[i]);
+                      singleAccessType = accessTypeIds.length === 1;
+
+                      for (var j = 0; j < accessTypeIds.length; j++) {
+
+                          accessTypeModel = getAccessTypeModel(purpose.accessTypes, accessTypeIds[j]);
+                          attrModel = getAttributeModel(accessTypeModel, uniqueAttributeIds[i]);
+                          label = textReplace("$OIDC_TEXT_CONSENT_WITH_ATTR$", attrModel.attributeName, purpose.purposeName);
+                          if (j == 0 && !singleAccessType) {
+                              dpcmDiv.appendChild(document.createElement("br"));
+                              dpcmDiv.appendChild(createText(label));
+                          }
+                          dpcmDiv.appendChild(createHiddenInput(attrModel.scope));
+                          dpcmDiv.appendChild(createHiddenState(attrModel));
+                          dpcmDiv.appendChild(renderCheckBox(attrModel, singleAccessType ? label : accessTypeModel.accessTypeName));
+                      }
+                      if (!singleAccessType) {
+                          dpcmDiv.appendChild(document.createElement("br"));
+                      }
+                  }
+              }
+
+          }
+      }
+      function findUniqueAttributeIds(accessTypes) {
+          var attrIds = [];
+          for (var i = 0; i < accessTypes.length; i++) {
+              var accessType = accessTypes[i];
+              if (!accessType.attributes) {
+                  continue;
+              }
+              for (var j = 0; j < accessType.attributes.length; j++) {
+                  if (attrIds.indexOf(accessType.attributes[j].attributeId) === -1) {
+                      attrIds.push(accessType.attributes[j].attributeId);
+                  }
+              }
+          }
+          return attrIds;
+      }
+      function getAccessTypeModel(accessTypes, accessTypeId) {
+          for (var i = 0; i < accessTypes.length; i++) {
+              if (accessTypes[i].accessTypeId === accessTypeId) {
+                  return accessTypes[i];
+              }
+          }
+          return null;
+      }
+      function getAttributeModel(accessType, attributeId) {
+          for (var i = 0; i < accessType.attributes.length; i++) {
+              if (accessType.attributes[i].attributeId === attributeId) {
+                  return accessType.attributes[i];
+              }
+          }
+          return null;
+      }
+      function findAccessTypesOfAttrId(accessTypes, attrId) {
+          var accessTypeIds = [];
+          for (var i = 0; i < accessTypes.length; i++) {
+              var accessType = accessTypes[i];
+              for (var j = 0; j < accessType.attributes.length; j++) {
+                  if (accessType.attributes[j].attributeId === attrId) {
+                      accessTypeIds.push(accessType.accessTypeId);
+                      break;
+                  }
+              }
+          }
+          return accessTypeIds;
+      }
+
+      function createHiddenInput(scope) {
+          var input = document.createElement("input");
+          input.type = "hidden";
+          input.name = "dscope" + scope.scopeIdx;
+          input.value = scope.scope;
+          return input;
+      }
+      function createHiddenState(model) {
+          var input = document.createElement("input");
+          input.type = "hidden";
+          input.id = "dscope" + model.scope.scopeIdx + "_state";
+          input.name = "dscope_state" + model.scope.scopeIdx;
+          if (model.legalCategory === "TRANSPARENT") {
+              input.value = "TRANSPARENCY";
+          } else if (model.legalCategory === "OPTION" || model.legalCategory === "CONSENT") {
+              input.value = findState(model);
+          }
+          return input;
+      }
+      function renderCheckBox(model, label) {
+          var cbDiv = document.createElement("div");
+          cbDiv.setAttribute("class", "bx--form-item bx--checkbox-wrapper");
+          cbDiv.appendChild(createCheckBox(model));
+          cbDiv.appendChild(createCheckBoxLabel("dscope" + model.scope.scopeIdx + "_cb", label));
+          return cbDiv;
+      }
+      function createCheckBox(model) {
+          var state = findState(model);
+          var input = document.createElement("input");
+          input.type = "checkbox";
+          input.id = "dscope" + model.scope.scopeIdx + "_cb";
+          input.setAttribute("class", "bx--checkbox");
+          if (model.legalCategory === "OPTION" || model.legalCategory === "CONSENT") {
+              if (state === "OPT_IN" || state === "CONSENT_ALLOW") {
+                  input.setAttribute("checked", "checked");
+              }
+              input.setAttribute("onclick", "changeState('dscope" + model.scope.scopeIdx + "','" + model.legalCategory + "');");
+          } else if (model.legalCategory === "TRANSPARENT") {
+              input.setAttribute("checked", "checked");
+              input.setAttribute("disabled", "true");
+          }
+          return input;
+      }
+      function findState(model) {
+          return model.currState ? model.currState : (model.defaultState ? model.defaultState :
+                  (model.legalCategory === "OPTION" ? "OPT_IN" : "CONSENT_ALLOW"));
+      }
+      function createCheckBoxLabel(cbId, label) {
+
+          var sp = document.createElement("span");
+          sp.setAttribute("class", "bx--checkbox-label-text");
+          sp.innerHTML = label;
+
+          var lbl = document.createElement("label");
+          lbl.setAttribute("for", cbId);
+          lbl.setAttribute("class","bx--checkbox-label");
+          lbl.appendChild(sp);
+          return lbl;
+      }
+
+      function textReplace(originalStr, param1, param2) {
+          var result = originalStr;
+          if (result && param1) {
+              result = result.replace('{1}', param1);
+              if (result && param2) {
+                  result = result.replace('{2}', param2);
+              }
+          }
+          return result;
+      }
+      function createText(text) {
+          var p = document.createElement("p");
+          p.appendChild(document.createTextNode(text));
+          return p;
+      }
+      function changeState(prefix, legalCategory) {
+          var cb = document.getElementById(prefix + "_cb");
+          if (cb.checked) {
+             document.getElementById(prefix + "_state").value = (legalCategory === "OPTION" ? "OPT_IN" : "CONSENT_ALLOW");
+          } else {
+             document.getElementById(prefix + "_state").value = (legalCategory === "OPTION" ? "OPT_OUT" : "CONSENT_DENY");
+          }
+      }
+    </script>
+  </head>
+  <body onload="renderConsents();">
+    <div class="cs-content usc-content usc-user-authorize-permitted">
+      @PAGE_HEADER@
+      <div class="user-authorize-main">
+        <h3>$OIDC_TEXT_CONSENT_HEADER$</h3>
+        <br/>
+        <p>$OIDC_TEXT_CONSENT_LOGIN$<br><a href="idaas/mtfim/sps/idaas/logout">$OIDC_TEXT_CONSENT_LOGOUT$</a></p>
+        <br/>
+        <p>$OIDC_TEXT_CONSENT_SUBHEADER$</p>
+        <br/>
+        <form name="consentForm" action="@OAUTH_AUTHORIZE_URI@" method="post">
+          [RPT oauthTokenScopePreapprovedRepeatable]
+          <input type="hidden" name="@OAUTH_TOKEN_SCOPE_PNAME_REPEAT@" value="@OAUTH_TOKEN_SCOPE_REPEAT@"/>
+          <input type="hidden" id="@OAUTH_TOKEN_SCOPE_PNAME_REPEAT@_state" name="@OAUTH_TOKEN_SCOPE_PSTATE_REPEAT@" value="CONSENT_ALLOW"/>
+          <input type="hidden" id="@OAUTH_TOKEN_SCOPE_PNAME_REPEAT@_label" value="@OAUTH_TOKEN_SCOPE_DESC_REPEAT@"/>
+          <div id="@OAUTH_TOKEN_SCOPE_PNAME_REPEAT@_widget" class="bx--form-item bx--checkbox-wrapper">
+          </div>
+          [ERPT oauthTokenScopePreapprovedRepeatable]
+          [RPT oauthTokenScopePredeniedRepeatable]
+          <input type="hidden" name="@OAUTH_TOKEN_SCOPE_PNAME_REPEAT@" value="@OAUTH_TOKEN_SCOPE_REPEAT@"/>
+          <input type="hidden" id="@OAUTH_TOKEN_SCOPE_PNAME_REPEAT@_state" name="@OAUTH_TOKEN_SCOPE_PSTATE_REPEAT@" value="CONSENT_DENY"/>
+          <input type="hidden" id="@OAUTH_TOKEN_SCOPE_PNAME_REPEAT@_label" value="@OAUTH_TOKEN_SCOPE_DESC_REPEAT@"/>
+          <div id="@OAUTH_TOKEN_SCOPE_PNAME_REPEAT@_widget" class="bx--form-item bx--checkbox-wrapper">
+          </div>
+          [ERPT oauthTokenScopePredeniedRepeatable]
+          [RPT oauthTokenScopeNewApprovalRepeatable]
+          <input type="hidden" name="@OAUTH_TOKEN_SCOPE_PNAME_REPEAT@" value="@OAUTH_TOKEN_SCOPE_REPEAT@"/>
+          <input type="hidden" id="@OAUTH_TOKEN_SCOPE_PNAME_REPEAT@_state" name="@OAUTH_TOKEN_SCOPE_PSTATE_REPEAT@" value="CONSENT_ALLOW"/>
+          <input type="hidden" id="@OAUTH_TOKEN_SCOPE_PNAME_REPEAT@_label" value="@OAUTH_TOKEN_SCOPE_DESC_REPEAT@"/>
+          <div id="@OAUTH_TOKEN_SCOPE_PNAME_REPEAT@_widget" class="bx--form-item bx--checkbox-wrapper">
+          </div>
+          [ERPT oauthTokenScopeNewApprovalRepeatable]
+          [RPT oauthTokenEntitlementPreapprovedRepeatable]
+          <input type="hidden" name="@OAUTH_TOKEN_ENTITLEMENT_PNAME_REPEAT@" value="@OAUTH_TOKEN_ENTITLEMENT_REPEAT@"/>
+          <input type="hidden" id="@OAUTH_TOKEN_ENTITLEMENT_PNAME_REPEAT@_state" name="@OAUTH_TOKEN_ENTITLEMENT_PSTATE_REPEAT@" value="CONSENT_ALLOW"/>
+          <input type="hidden" id="@OAUTH_TOKEN_ENTITLEMENT_PNAME_REPEAT@_label" value="@OAUTH_TOKEN_ENTITLEMENT_DESC_REPEAT@"/>
+          <div id="@OAUTH_TOKEN_ENTITLEMENT_PNAME_REPEAT@_widget" class="bx--form-item bx--checkbox-wrapper">
+          </div>
+          [ERPT oauthTokenEntitlementPreapprovedRepeatable]
+          [RPT oauthTokenEntitlementPredeniedRepeatable]
+          <input type="hidden" name="@OAUTH_TOKEN_ENTITLEMENT_PNAME_REPEAT@" value="@OAUTH_TOKEN_ENTITLEMENT_REPEAT@"/>
+          <input type="hidden" id="@OAUTH_TOKEN_ENTITLEMENT_PNAME_REPEAT@_state" name="@OAUTH_TOKEN_ENTITLEMENT_PSTATE_REPEAT@" value="CONSENT_DENY"/>
+          <input type="hidden" id="@OAUTH_TOKEN_ENTITLEMENT_PNAME_REPEAT@_label" value="@OAUTH_TOKEN_ENTITLEMENT_DESC_REPEAT@"/>
+          <div id="@OAUTH_TOKEN_ENTITLEMENT_PNAME_REPEAT@_widget" class="bx--form-item bx--checkbox-wrapper">
+          </div>
+          [ERPT oauthTokenEntitlementPredeniedRepeatable]
+          [RPT oauthTokenEntitlementNewApprovalRepeatable]
+          <input type="hidden" name="@OAUTH_TOKEN_ENTITLEMENT_PNAME_REPEAT@" value="@OAUTH_TOKEN_ENTITLEMENT_REPEAT@"/>
+          <input type="hidden" id="@OAUTH_TOKEN_ENTITLEMENT_PNAME_REPEAT@_state" name="@OAUTH_TOKEN_ENTITLEMENT_PSTATE_REPEAT@" value="CONSENT_ALLOW"/>
+          <input type="hidden" id="@OAUTH_TOKEN_ENTITLEMENT_PNAME_REPEAT@_label" value="@OAUTH_TOKEN_ENTITLEMENT_DESC_REPEAT@"/>
+          <div id="@OAUTH_TOKEN_ENTITLEMENT_PNAME_REPEAT@_widget" class="bx--form-item bx--checkbox-wrapper">
+          </div>
+          [ERPT oauthTokenEntitlementNewApprovalRepeatable]
+          <div id="dpcm_scopes">
+          </div>
+          <input type="hidden" name="consent_form_verifier" value="@CONSENT_FORM_VERIFIER@"/>
+          <input type="hidden" name="trust_level"/>
+          <input type="hidden" name="save_consent" value="true"/>
+          <table>
+            <tr>
+              <td><input class="cs-button-primary-deprecated" type="button" value="$OIDC_BUTTON_PERMIT$" onclick="approveConsent();"/></td>
+              <td>&nbsp;</td>
+              <td><input class="cs-button-secondary-deprecated" type="button" value="$OIDC_BUTTON_DENY$" onclick="denyConsent();"/></td>
+            </tr>
+          </table>
+        </form>
+      </div>
+      @PAGE_FOOTER@
+    </div>
+  </body>
+</html>

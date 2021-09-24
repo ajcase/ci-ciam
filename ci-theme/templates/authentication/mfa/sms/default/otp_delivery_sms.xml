@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Message value should be less than 70 characters -->
+<root>
+<Message>
+  <Value>
+    Your passcode is: @CORRELATION@-@OTP@. It expires in @OTP_LIFETIME@ minutes.
+  </Value>
+</Message>
+</root>

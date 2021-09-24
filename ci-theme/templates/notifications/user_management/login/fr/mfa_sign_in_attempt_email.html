@@ -1,0 +1,67 @@
+<!-- Template file path: templates/notifications/user_management/login/fr/mfa_sign_in_attempt_email.html  -->
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<Email id="default">
+    <SenderName>
+       <Value>
+        IBM Security
+       </Value>
+    </SenderName>
+    <Sender>
+       <Value>
+        ibmacct@ibm.com
+       </Value>
+    </Sender>
+    <Subject>
+      <Value>
+        Consultation d'un accès récent au compte
+      </Value>
+    </Subject>
+
+    <Message>
+      <Value>
+      <![CDATA[<html>
+<!-- Template file path: templates/notifications/user_management/login/fr/mfa_sign_in_attempt_email.html  -->
+      
+        <head />
+      
+          <body>
+            <div style="font-family: Helvetica neue, sans-serif;">
+              <table cellspacing="0" cellpadding="22" border="0" style="width: 100%; margin-bottom: 10px; top: 0px;left: 0px;">
+                <tr style="line-height: 30px; color: white; margin: 0 auto; background-color: #4178be;">
+                  <td style="font-size:24px;padding: 32px 64px 32px 72px;"><b>$PRODUCT_NAME$</b> </td>
+                </tr>
+              </table>
+            </div>
+            <div style="font-family: Helvetica neue, sans-serif; font-size: 14px; padding: 10px 64px 64px 64px; color: #121212;">
+      
+              <div>Bonjour @USER_FRIENDLY_NAME@,</div>
+      
+              <div>Nous voulions vous signaler un accès récent à votre compte $PRODUCT_NAME$, que notre système de sécurité
+                a marqué à l'aide d'un indicateur. </div>
+              <br/>
+              <div>Détails de l'appareil ayant accédé au système :</div>
+              <ul>
+                <li>Emplacement : @LOCATION@</li>
+                <li>Navigateur : @USER_AGENT@</li>
+                <li>Fournisseur de services Internet : @ISP@</li>
+                <li>Adresse IP : @IP_ADDRESS@</li>
+              </ul>
+              <br/>
+      
+              <div>Si vous êtes à l'origine de cette tentative de connexion, vous pouvez ignorer ce courrier électronique. </div>
+              <br/>
+              <div>Si vous n'êtes pas à l'origine de cette tentative de connexion, votre compte a peut-être été piraté. Changez immédiatement votre mot de passe et alertez votre                 administrateur système. </div>
+              <br/>
+              <div>Remarque : vous pouvez recevoir à nouveau ce courrier électronique en cas de modification de votre processus de connexion ou de l'appareil à l'origine de l'accès. </div>
+              <br/>
+              <div>Cordialement,</div>
+              <div>$PRODUCT_NAME$</div>
+            </div>
+          </body>
+      
+      </html>]]>
+      </Value>
+    </Message>
+</Email>
+</root>
