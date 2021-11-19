@@ -279,7 +279,8 @@ function getThemeID(appName, accessToken, callback) {
     if (response.statusCode == 200) {
       console.log("HTTP 200: Successfully retrieved app data");
       let bodyObj=JSON.parse(response.body);
-      if (bodyObj._embedded.applications[0].customization != undefined) {
+      if (bodyObj._embedded.applications.length > 0 &&
+          bodyObj._embedded.applications[0].customization != undefined) {
       // A custom theme is set.
           var themeId=bodyObj._embedded.applications[0].customization.themeId;
           console.log("themeId in JSON body = " + themeId);
@@ -288,7 +289,7 @@ function getThemeID(appName, accessToken, callback) {
         console.log("themeId set to default");
       }
       if (error) throw new Error(error);
-      callback(null, themeId);        
+      callback(null, themeId);
       } else {
         if (error) throw new Error(error);
         callback(null, false);
@@ -469,7 +470,6 @@ function changePassword(accessToken, pwVars, callback) {
 }
 
 function toggleMfa(userId, toggle, accessToken, callback) {
-  var toggleValue = ((toggle) ? "add" : "remove");
 
   if (toggle) {
     var data = `{
@@ -799,6 +799,7 @@ async function setupMfaPolicy(policyName, mfaGroup, accessToken, callback) {
   callback (null, policyId);
   // continue here
 }
+
 function findAccount(accountId, accessToken, callback) {
     var options = {
       'headers': {
@@ -842,7 +843,7 @@ function createUser(payload, flags, callback) {
 function titleCase(str) {
   str = str.toLowerCase().split(' ');
   for (var i = 0; i < str.length; i++) {
-    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1); 
+    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
   }
   return str.join(' ');
 }
