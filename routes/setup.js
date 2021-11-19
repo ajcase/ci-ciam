@@ -117,6 +117,10 @@ router.post('/', function(req, res, next) {
             {
               "name": "homeType",
               "type": "string"
+            },
+            {
+              "name": "accountId",
+              "type": "string"
             }
           ]
           bbfn.createAttributes(attributes, apiAccessToken, function(_err, results) {
@@ -129,7 +133,7 @@ router.post('/', function(req, res, next) {
               console.log(`Group ${result} created`);
               process.env.MFAGROUPID = result;
               bbfn.setupMfaPolicy(`Require 2FA for ${process.env.MFAGROUP}`, process.env.MFAGROUP, apiAccessToken, (err, result) => {
-                console.log("Done.");
+                console.log("Done. Created policy " + result);
               });
             } else {
               console.log(`Group create failed: ${err}`)
@@ -138,7 +142,7 @@ router.post('/', function(req, res, next) {
                   process.env.MFAGROUPID = result.id;
                   console.log(`MFA Group ID is ${process.env.MFAGROUPID}`);
                   bbfn.setupMfaPolicy(`Require 2FA for ${process.env.MFAGROUP}`, process.env.MFAGROUP, apiAccessToken, (err, result) => {
-                    console.log("Done.");
+                    console.log("Done. Created policy " + result);
                   });
                 } else {
                   console.log(`Group ${process.env.MFAGROUP} is invalid`);
