@@ -226,29 +226,30 @@ function getUserID(emailAddress, accessToken, callback) {
   });
 }
 
-function getGroupID(groupName, accessToken, callback) {
-  var options = {
-    method: 'GET',
-    url: process.env.OIDC_CI_BASE_URI + `/v2.0/Groups?filter=displayName+eq+"${groupName}"`,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`
-    }
-  };
+async function getGroupID(groupName, accessToken) {
+  return new Promise((resolve, reject) => {
+    var options = {
+      method: 'GET',
+      url: process.env.OIDC_CI_BASE_URI + `/v2.0/Groups?filter=displayName+eq+"${groupName}"`,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      }
+    };
 
-  console.log("Options JSON:", options)
+    console.log("Options JSON:", options)
 
-  request(options, function(error, _response, body) {
-    var jsonBody = JSON.parse(body);
-    if (jsonBody.totalResults !== 0) {
-      console.log("Get GroupID:", jsonBody.Resources[0])
-      if (error) throw new Error(error);
-      callback(null, jsonBody.Resources[0]);
-    } else {
-      console.log("Get GroupID: Failed to find group");
-      if (error) throw new Error(error);
-      callback(null, false);
-    }
+    request(options, function(error, _response, body) {
+      if (error) reject(error);
+      var jsonBody = JSON.parse(body);
+      if (jsonBody.totalResults !== 0) {
+        console.log("Get GroupID:", jsonBody.Resources[0])
+        resolve(jsonBody.Resources[0]);
+      } else {
+        console.log("Get GroupID: Failed to find group");
+        reject("Get GroupID: Failed to find group");
+      }
+    });
   });
 }
 
@@ -655,38 +656,39 @@ function setCustomAttributes(userId, operations, accessToken, callback) {
   });
 }
 
-function createGroup(groupName, accessToken, callback) {
-  var groupInfo = {
-    "displayName": groupName,
-    "urn:ietf:params:scim:schemas:extension:ibm:2.0:Group": {
-      "description": "Demo Group created via API"
-    },
-    "schemas": [
-      "urn:ietf:params:scim:schemas:core:2.0:Group",
-      "urn:ietf:params:scim:schemas:extension:ibm:2.0:Group"
-    ]
-  }
-
-  console.log("Group creation information:", groupInfo)
-  var options = {
-    'headers': {
-      'Content-Type': 'application/scim+json',
-      'Authorization': `Bearer ${accessToken}`
-    },
-    'body': JSON.stringify(groupInfo)
-  }
-  request.post(process.env.OIDC_CI_BASE_URI + '/v2.0/Groups', options, function(_err, response, body) {
-    console.log("Create group:", groupName)
-    pbody = JSON.parse(body);
-    console.log("Response code:", response.statusCode);
-    console.log("Create response:", body);
-    if (response.statusCode == 201) {
-      callback(null, pbody.id);
-    } else {
-      callback(body, false);
+async function createGroup(groupName, accessToken) {
+  return new Promise((resolve, reject) => {
+    var groupInfo = {
+      "displayName": groupName,
+      "urn:ietf:params:scim:schemas:extension:ibm:2.0:Group": {
+        "description": "Demo Group created via API"
+      },
+      "schemas": [
+        "urn:ietf:params:scim:schemas:core:2.0:Group",
+        "urn:ietf:params:scim:schemas:extension:ibm:2.0:Group"
+      ]
     }
-  });
 
+    console.log("Group creation information:", groupInfo)
+    var options = {
+      'headers': {
+        'Content-Type': 'application/scim+json',
+        'Authorization': `Bearer ${accessToken}`
+      },
+      'body': JSON.stringify(groupInfo)
+    }
+    request.post(process.env.OIDC_CI_BASE_URI + '/v2.0/Groups', options, function(_err, response, body) {
+      console.log("Create group:", groupName)
+      pbody = JSON.parse(body);
+    console.log("Response code:", response.statusCode);
+      console.log("Create response:", body);
+      if (response.statusCode == 201) {
+        resolve(pbody.id);
+      } else {
+        reject(body);
+      }
+    });
+  });
 }
 
 function getPolicyId(name, accessToken) {
@@ -716,7 +718,85 @@ function getPolicyId(name, accessToken) {
   });
 }
 
+function createApplication(appName, redirectUrl, accessToken) {
+  return new Promise((resolve, reject) => {
+    var data = {
+      "client_name": appName,
+      "redirect_uris": [ redirectUrl ],
+      "all_users_entitled": true,
+      "enforce_pkce": false,
+      "consent_action": "never_prompt"
+    }
 
+    console.log("App creation information:", data)
+
+    var options = {
+      'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      },
+      'body': JSON.stringify(data)
+    }
+    request.post(process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/client_registration', options, function(_err, response, body) {
+      console.log("Create application");
+      console.log("Response code:", response.statusCode);
+      console.log("Create response:", body);
+      if (response.statusCode == 200) {
+        resolve(body);
+      } else {
+        reject(body);
+      }
+    });
+  });
+}
+
+function getApplication(appName, accessToken) {
+  return new Promise((resolve, reject) => {
+
+    var options = {
+      'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      }
+    }
+    request.get(process.env.OIDC_CI_BASE_URI + '/v1.0/applications', options, function(_err, response, body) {
+      console.log("Get applications");
+      console.log("Response code:", response.statusCode);
+      console.log("Get response:", body);
+      if (response.statusCode == 200) {
+        var json = JSON.parse(body);
+        if (json._embedded && json._embedded.applications.length > 0) {
+          var application;
+          for (i in json._embedded.applications) {
+            if (appName == json._embedded.applications[i].name) {
+              application = json._embedded.applications[i];
+              break;
+            }
+          }
+
+          if (application) {
+            request.get(process.env.OIDC_CI_BASE_URI + application._links.self.href, options, function(_err, response, body) {
+              console.log("Get application");
+              console.log("Response code:", response.statusCode);
+              console.log("Get response:", body);
+              if (response.statusCode == 200) {
+                resolve(JSON.parse(body));
+              } else {
+                reject(body);
+              }
+            });
+          } else {
+            reject(JSON.stringify({"error": "No matching application"}));
+          }
+        } else {
+          reject(JSON.stringify({"error":"No applications returned"}));
+        }
+      } else {
+        reject(body);
+      }
+    });
+  });
+}
 
 function createMfaPolicy(policyName, mfaGroup, accessToken) {
   return new Promise((resolve, reject) => {
@@ -785,7 +865,7 @@ function createMfaPolicy(policyName, mfaGroup, accessToken) {
   });
 }
 
-async function setupMfaPolicy(policyName, mfaGroup, accessToken, callback) {
+async function setupMfaPolicy(policyName, mfaGroup, accessToken) {
 
   var policyId = await getPolicyId(policyName, accessToken);
   console.log("Initial lookup PolicyID: " + policyId);
@@ -796,8 +876,7 @@ async function setupMfaPolicy(policyName, mfaGroup, accessToken, callback) {
     }
   }
   console.log("PolicyId: " + policyId);
-  callback (null, policyId);
-  // continue here
+  return policyId;
 }
 
 function findAccount(accountId, accessToken, callback) {
@@ -822,6 +901,7 @@ function findAccount(accountId, accessToken, callback) {
       }
   });
 }
+
 function createUser(payload, flags, callback) {
   var options = {
     'headers': {
@@ -840,12 +920,47 @@ function createUser(payload, flags, callback) {
     }
   });
 }
+
 function titleCase(str) {
   str = str.toLowerCase().split(' ');
   for (var i = 0; i < str.length; i++) {
     str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
   }
   return str.join(' ');
+}
+
+async function applyPolicy(policyid,data,accessToken) {
+  return new Promise((resolve, reject) => {
+
+    var url = process.env.OIDC_CI_BASE_URI + data._links.self.href;
+
+    data.authPolicy = {};
+    data.authPolicy.id = policyid;
+    delete data._links;
+    delete data.xforce;
+    delete data.type;
+    delete data.icon;
+    delete data.defaultIcon;
+    console.log("App update information:", data)
+
+    var options = {
+      'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      },
+      'body': JSON.stringify(data)
+    }
+    request.put(url, options, function(_err, response, body) {
+      console.log("Update application");
+      console.log("Response code:", response.statusCode);
+      console.log("Update response:", body);
+      if (response.statusCode == 200) {
+        resolve(body);
+      } else {
+        reject(body);
+      }
+    });
+  });
 }
 
 module.exports = {
@@ -871,5 +986,8 @@ module.exports = {
   setupMfaPolicy: setupMfaPolicy,
   findAccount: findAccount,
   createUser: createUser,
-  titleCase: titleCase
+  titleCase: titleCase,
+  createApplication: createApplication,
+  getApplication: getApplication,
+  applyPolicy: applyPolicy,
 };

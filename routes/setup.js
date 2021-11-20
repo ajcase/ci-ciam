@@ -15,7 +15,6 @@ router.get('/', function(req, res, next) {
       message: "Dynamic Setup is disabled"
     });
   } else {
-    var loggedIn = ((req.session.loggedIn) ? true : false);
     res.render('setup', {
       baseUri: process.env.OIDC_CI_BASE_URI,
       APIclientId: process.env.API_CLIENT_ID,
@@ -27,7 +26,7 @@ router.get('/', function(req, res, next) {
 });
 
 // Post from setup page
-router.post('/', function(req, res, next) {
+router.post('/', async function(req, res, next) {
   if (process.env.ALLOW_DYNAMIC_SETUP == "false") {
     res.render('error', {
       message: "Dynamic Setup is disabled"
@@ -43,37 +42,34 @@ router.post('/', function(req, res, next) {
     if (data.OIDCredirectUri) process.env.OIDC_REDIRECT_URI = data.OIDCredirectUri;
     if (data.MFAgroup) process.env.MFAGROUP = data.MFAgroup;
 
-    passport.use(new OpenIDStrategy({
-        issuer: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default',
-        clientID: process.env.OIDC_CLIENT_ID,
-        clientSecret: process.env.OIDC_CLIENT_SECRET,
-        authorizationURL: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/authorize', // this won't change
-        userInfoURL: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/userinfo', // this won't change
-        tokenURL: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/token', // this won't change
-        callbackURL: process.env.OIDC_REDIRECT_URI,
-        passReqToCallback: true
-      },
-      function(req, issuer, userId, profile, accessToken, refreshToken, params, cb) {
-
-        console.log('issuer:', issuer);
-        console.log('userId:', userId);
-        console.log('accessToken:', accessToken);
-        console.log('refreshToken:', refreshToken);
-        console.log('params:', params);
-
-        req.session.accessToken = accessToken;
-        req.session.userId = userId;
-        req.session.loggedIn = true;
-        return cb(null, profile);
-      }));
-
-    bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err, body) {
+    bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, async function(err, body) {
       if (err) {
         console.log(err);
       } else {
         apiAccessToken = body.access_token;
 
         if (data.createObjects) {
+
+          var appl = false;
+          try {
+            await bbfn.createApplication(
+              "TrustMeInsurance",
+              process.env.OIDC_REDIRECT_URI,
+              apiAccessToken);
+          } catch (e) {
+            console.log(e);
+          }
+          try {
+            appl = await bbfn.getApplication("TrustMeInsurance", apiAccessToken);
+          } catch (e) {
+            console.log(e);
+          }
+          console.log(appl);
+          if (appl) {
+            process.env.OIDC_CLIENT_ID = appl.providers.oidc.properties.clientId;
+            process.env.OIDC_CLIENT_SECRET = appl.providers.oidc.properties.clientSecret;
+          }
+
           attributes = [{
               "name": "birthday",
               "type": "string"
@@ -128,43 +124,89 @@ router.post('/', function(req, res, next) {
 
           });
 
-          bbfn.createGroup(process.env.MFAGROUP, apiAccessToken, function(err, result) {
-            if (result) {
-              console.log(`Group ${result} created`);
-              process.env.MFAGROUPID = result;
-              bbfn.setupMfaPolicy(`Require 2FA for ${process.env.MFAGROUP}`, process.env.MFAGROUP, apiAccessToken, (err, result) => {
-                console.log("Done. Created policy " + result);
-              });
-            } else {
-              console.log(`Group create failed: ${err}`)
-              bbfn.getGroupID(process.env.MFAGROUP, apiAccessToken, (_err, result) => {
-                if (result && result['urn:ietf:params:scim:schemas:extension:ibm:2.0:Group'].groupType == "standard") {
-                  process.env.MFAGROUPID = result.id;
-                  console.log(`MFA Group ID is ${process.env.MFAGROUPID}`);
-                  bbfn.setupMfaPolicy(`Require 2FA for ${process.env.MFAGROUP}`, process.env.MFAGROUP, apiAccessToken, (err, result) => {
-                    console.log("Done. Created policy " + result);
-                  });
-                } else {
-                  console.log(`Group ${process.env.MFAGROUP} is invalid`);
-                }
-              });
+          var groupid;
+          try {
+            groupid = await bbfn.createGroup(process.env.MFAGROUP, apiAccessToken);
+            console.log(`Group ${groupid} created`);
+          } catch (e) {
+            console.log(`Group create failed: ${e}`)
+          }
 
+          if (!groupid) {
+            console.log(`Group create failed: ${err}`)
+            var result;
+            try {
+              result = await bbfn.getGroupID(process.env.MFAGROUP, apiAccessToken)
+            } catch (e) {
+              console.log("Failed to get group");
             }
-          });
-        } else {
-          bbfn.getGroupID(process.env.MFAGROUP, apiAccessToken, (_err, result) => {
             if (result && result['urn:ietf:params:scim:schemas:extension:ibm:2.0:Group'].groupType == "standard") {
-              process.env.MFAGROUPID = result.id;
-              console.log(`MFA Group ID is ${process.env.MFAGROUPID}`);
-            } else {
-              console.log(`Group ${process.env.MFAGROUP} is invalid`);
+              groupid = result.id;
             }
-          });
+          }
+
+          var policyid;
+          if (groupid) {
+            process.env.MFAGROUPID = groupid;
+            console.log(`MFA Group ID is ${process.env.MFAGROUPID}`);
+
+            policyid = await bbfn.setupMfaPolicy(`Require 2FA for ${process.env.MFAGROUP}`, process.env.MFAGROUP, apiAccessToken);
+            console.log("Done. Created policy " + policyid);
+          } else {
+            console.log(`Group ${process.env.MFAGROUP} is invalid`);
+          }
+
+          if (policyid && appl) {
+            await bbfn.applyPolicy(policyid,appl,apiAccessToken);
+            console.log("Policy applied to application");
+          } else {
+            console.log("Can't apply policy - either app or policy not found");
+          }
+
+        } else {
+          var result;
+          try {
+            result = await bbfn.getGroupID(process.env.MFAGROUP, apiAccessToken);
+          } catch (e) {
+            console.log("Group lookup failed.");
+          }
+
+          if (result && result['urn:ietf:params:scim:schemas:extension:ibm:2.0:Group'].groupType == "standard") {
+            process.env.MFAGROUPID = result.id;
+            console.log(`MFA Group ID is ${process.env.MFAGROUPID}`);
+          } else {
+            console.log(`Group ${process.env.MFAGROUP} is invalid`);
+          }
         }
       }
-    });
 
-    res.redirect('/setup');
+      passport.use(new OpenIDStrategy({
+          issuer: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default',
+          clientID: process.env.OIDC_CLIENT_ID,
+          clientSecret: process.env.OIDC_CLIENT_SECRET,
+          authorizationURL: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/authorize', // this won't change
+          userInfoURL: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/userinfo', // this won't change
+          tokenURL: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/token', // this won't change
+          callbackURL: process.env.OIDC_REDIRECT_URI,
+          passReqToCallback: true
+        },
+        function(req, issuer, userId, profile, accessToken, refreshToken, params, cb) {
+
+          console.log('issuer:', issuer);
+          console.log('userId:', userId);
+          console.log('accessToken:', accessToken);
+          console.log('refreshToken:', refreshToken);
+          console.log('params:', params);
+
+          req.session.accessToken = accessToken;
+          req.session.userId = userId;
+          req.session.loggedIn = true;
+          return cb(null, profile);
+        }));
+
+      res.redirect('/setup');
+
+    });
   }
 });
 

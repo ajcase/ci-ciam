@@ -230,20 +230,25 @@ app.use(function(err, req, res, next) {
 
 if (process.env.API_CLIENT_ID && process.env.API_SECRET && process.env.MFAGROUP && process.env.APP_NAME) {
   // Get access token for privileged API access
-  bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err, body) {
+  bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, async function(err, body) {
     if (err) {
       console.log(err);
     } else {
       apiAccessToken = body.access_token;
       // Get the MFA group's id
-      bbfn.getGroupID(process.env.MFAGROUP, apiAccessToken, (_err,result) => {
-        if (result && result['urn:ietf:params:scim:schemas:extension:ibm:2.0:Group'].groupType == "standard") {
-          process.env.MFAGROUPID = result.id;
-          console.log(`MFA Group ID is ${process.env.MFAGROUPID}`);
-        } else {
-          console.log(`Group ${process.env.MFAGROUP} is invalid`);
-        }
-      });
+      var result;
+      try {
+        result = await bbfn.getGroupID(process.env.MFAGROUP, apiAccessToken);
+      } catch (e) {
+        console.log("Group lookup failed");
+      }
+
+      if (result && result['urn:ietf:params:scim:schemas:extension:ibm:2.0:Group'].groupType == "standard") {
+        process.env.MFAGROUPID = result.id;
+        console.log(`MFA Group ID is ${process.env.MFAGROUPID}`);
+      } else {
+        console.log(`Group ${process.env.MFAGROUP} is invalid`);
+      }
       // Get the demo app's theme id
       bbfn.getThemeID(process.env.APP_NAME, apiAccessToken, (_err,result) => {
         if (result) {
