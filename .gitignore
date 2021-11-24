@@ -5,10 +5,6 @@
 # Ignore all .DS_Store file -
 .DS_Store
 
-# Ignore package-lock.json
-package-lock.json
-
-
 # Logs
 logs
 *.log

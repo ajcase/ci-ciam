@@ -1,15 +1,48 @@
-OIDC_CI_BASE_URI=https://xxxxxxxx.ice.ibmcloud.com
-OIDC_CLIENT_ID=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-OIDC_CLIENT_SECRET=XXXXXXXXXX
+# API Client for client_credentials flow
+# Give full permissions for auto-setup
+API_CLIENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+API_SECRET=xxxxxxxx
+
+# OIDC Relying Party configuration.  Auto setup will create this application
+# using BASE URI and REDIRECT URI specified here.
+OIDC_CI_BASE_URI=https://xxxxxxxxxx.verify.ibm.com
 OIDC_REDIRECT_URI=http://localhost:3000/oauth/callback
-API_CLIENT_ID=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-API_SECRET=XXXXXXXXXX
-APP=insurance
-MFAGROUP=MFAGroup
+
+# After auto setup, complete these values from application config:
+OIDC_CLIENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+OIDC_CLIENT_SECRET=xxxxxxxx
+
+# Allow dynamic setup page access (at /setup)
 ALLOW_DYNAMIC_SETUP=true
-MARKETING_PURPOSE_ID=
-PAPERLESS_PURPOSE_ID=
-READ_ACCESS_TYPE=
-TERMS_PURPOSE_ID=
+
+# Name of application in Verify to be used/created.
+APP_NAME=TrustMeInsurance
+
+# Name of theme to be used/created by application.
+# Auto setup will look for THEME_NAME.zip in ci-ciam directory.
+THEME_NAME=TrustMeInsurance
+
+# Group name to use/create to identify users that have opted-in for MFA
+MFAGROUP=MFAGroup
+
+# URL where terms can be loaded.
+EULA_URL=http://localhost:3000/terms.html
+
+# Purpose IDs to use/create for DPCM
+MARKETING_PURPOSE_ID=communications
+PAPERLESS_PURPOSE_ID=paperless-billing
+TERMS_PURPOSE_ID=terms
+
+# Access type names to use/create in DPCM
+READ_ACCESS_TYPE=read
 DEFAULT_ACCESS_TYPE=default
+
+# Attribute ID for e-mail attribute.  Should not need to be changed.
 EMAIL_ATTRIBUTE_ID=3
+
+# BRAND_ID should be 'false'. Any other value will create users with an @BRAND_ID suffix
+# BRAND_ID is used in open-account.js and some theme files.
+BRAND_ID=false
+
+#If true will request DPCM scopes in OIDC request
+SEND_PRIVACY_SCOPES=false

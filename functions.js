@@ -1,5 +1,5 @@
 var request = require('request');
-var express = require('express');
+var fs = require('fs');
 
 function getRandomInt() {
   return Math.floor(1000 + Math.random() * 9000)
@@ -929,26 +929,33 @@ function titleCase(str) {
   return str.join(' ');
 }
 
-async function applyPolicy(policyid,data,accessToken) {
+async function applyPolicyAndTheme(policyid,themeId,app,accessToken) {
   return new Promise((resolve, reject) => {
 
-    var url = process.env.OIDC_CI_BASE_URI + data._links.self.href;
+    var url = process.env.OIDC_CI_BASE_URI + app._links.self.href;
 
-    data.authPolicy = {};
-    data.authPolicy.id = policyid;
-    delete data._links;
-    delete data.xforce;
-    delete data.type;
-    delete data.icon;
-    delete data.defaultIcon;
-    console.log("App update information:", data)
+    if (policyid) {
+      app.authPolicy = {};
+      app.authPolicy.id = policyid;
+    }
+
+    if (themeId) {
+      app.customization = {themeId: themeId};
+    }
+
+    delete app._links;
+    delete app.xforce;
+    delete app.type;
+    delete app.icon;
+    delete app.defaultIcon;
+    console.log("App update information:", app)
 
     var options = {
       'headers': {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`
       },
-      'body': JSON.stringify(data)
+      'body': JSON.stringify(app)
     }
     request.put(url, options, function(_err, response, body) {
       console.log("Update application");
@@ -956,6 +963,384 @@ async function applyPolicy(policyid,data,accessToken) {
       console.log("Update response:", body);
       if (response.statusCode == 200) {
         resolve(body);
+      } else {
+        reject(body);
+      }
+    });
+  });
+}
+
+async function createEula(id,description,url, accessToken) {
+  return new Promise((resolve, reject) => {
+    var purposeInfo = {
+      "accessTypes": [{
+        "id": "default"
+      }],
+      "category": "eula",
+      "customAttributes": [],
+      "defaultConsentDuration": null,
+      "description": description,
+      "id": id,
+      "name": id,
+      "previousConsentApply": false,
+      "tags": [],
+      "termsOfUse": {
+        "ref": url
+      }
+    }
+
+    console.log("EULA creation information:", purposeInfo)
+    var options = {
+      'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      },
+      'body': JSON.stringify(purposeInfo)
+    }
+    request.post(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purposes', options, function(_err, response, body) {
+      console.log("Create EULA:", id)
+      console.log("Response code:", response.statusCode);
+      console.log("Create response:", body);
+      if (response.statusCode == 201) {
+        var patchInfo = {"op":"replace","path":"state","value":1}
+
+        console.log("EULA publish information:", patchInfo)
+        var options = {
+          'headers': {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+          },
+          'body': JSON.stringify(patchInfo)
+        }
+        request.patch(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purposes/'+id+'/0', options, function(_err, response, body) {
+          console.log("Publish EULA:", id)
+          console.log("Response code:", response.statusCode);
+          console.log("Publish response:", body);
+          if (response.statusCode == 204) {
+            resolve(true);
+          } else {
+            reject(body);
+          }
+        });
+      } else {
+        reject(body);
+      }
+    });
+  });
+}
+
+async function createAccessType(accessId, accessToken) {
+  return new Promise((resolve, reject) => {
+    var accessInfo = {id: accessId, name: accessId}
+
+    console.log("Access type creation information:", accessInfo)
+    var options = {
+      'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      },
+      'body': JSON.stringify(accessInfo)
+    }
+    request.post(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/access-types', options, function(_err, response, body) {
+      console.log("Create AccessType:", accessId)
+      console.log("Response code:", response.statusCode);
+      console.log("Create response:", body);
+      if (response.statusCode == 201) {
+        resolve(true);
+      } else {
+        reject(body);
+      }
+    });
+  });
+}
+
+async function createPurpose(purposeId, attrId, description, readAT, defaultAT, accessToken) {
+  return new Promise((resolve, reject) => {
+    var purposeInfo = {
+      "accessTypes": [
+        {"id": defaultAT},
+        {"id": readAT}
+      ],
+      "attributes": [{
+        "accessTypes": [
+          {"id": readAT}
+        ],
+        "id": "" + attrId,
+        "mandatory": true,
+        "retentionPeriod": null
+      }],
+      "category": "default",
+      "customAttributes": [],
+      "defaultConsentDuration": null,
+      "description": description,
+      "id": purposeId,
+      "name": purposeId,
+      "previousConsentApply": false,
+      "tags": []
+    }
+
+    console.log("Purpose creation information:", purposeInfo)
+    var options = {
+      'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      },
+      'body': JSON.stringify(purposeInfo)
+    }
+    request.post(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purposes', options, function(_err, response, body) {
+      console.log("Create Purpose:", purposeId)
+      console.log("Response code:", response.statusCode);
+      console.log("Create response:", body);
+      if (response.statusCode == 201) {
+        var patchInfo = {"op":"replace","path":"state","value":1}
+
+        console.log("Purpose publish information:", patchInfo)
+        var options = {
+          'headers': {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+          },
+          'body': JSON.stringify(patchInfo)
+        }
+        request.patch(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purposes/'+purposeId+'/0', options, function(_err, response, body) {
+          console.log("Publish Purpose:", purposeId)
+          console.log("Response code:", response.statusCode);
+          console.log("Publish response:", body);
+          if (response.statusCode == 204) {
+            resolve(true);
+          } else {
+            reject(body);
+          }
+        });
+      } else {
+        reject(body);
+      }
+    });
+  });
+}
+
+async function purposeExists(id, accessToken) {
+  return new Promise((resolve, reject) => {
+
+    console.log("EULA check: ", id)
+    var options = {
+      'headers': {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      }
+    }
+    request.get(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purposes/'+id, options, function(_err, response, body) {
+      console.log("Response code:", response.statusCode);
+      console.log("GET response:", body);
+      if (response.statusCode == 200) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
+  });
+}
+
+async function createDpcmRule(ruleName, conditions, decision, preChecked, description, accessToken) {
+  return new Promise((resolve, reject) => {
+    var ruleInfo = {
+      "assentUIDefault": preChecked,
+      "conditions": conditions,
+      "decision": {
+        "reason": "",
+        "result": decision,
+        "script": ""
+      },
+      "description": description,
+      "discloseable": true,
+      "legalCategory": 4,
+      "name": ruleName,
+      "tags": []
+    }
+
+    console.log("Rule creation information:", ruleInfo)
+    var options = {
+      'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      },
+      'body': JSON.stringify(ruleInfo)
+    }
+    request.post(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/rules', options, function(_err, response, body) {
+      console.log("Create Rule:", ruleName)
+      console.log("Response code:", response.statusCode);
+      console.log("Create response:", body);
+      if (response.statusCode == 201) {
+        resolve(true);
+      } else {
+        reject(body);
+      }
+    });
+  });
+}
+
+function registerTheme(name, accessToken) {
+  // Register the theme
+  return new Promise((resolve, reject) => {
+
+    var zipfileName=name + ".zip";
+    var themeConfig='{"name": "' + name + '", "description": "Theme for CIAM demo app."}';
+    var themeFilename='"' + zipfileName + '"';
+
+    console.log("Registering theme '" + name + "'" + " using file " + zipfileName);
+
+    var options = {
+      method: 'POST',
+      url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes',
+      headers: {
+        'Authorization': 'Bearer ' + accessToken,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      formData: {
+        'files': {
+          'value': fs.createReadStream("ci-theme/" + zipfileName),
+          'options': {
+            'filename': themeFilename
+          }
+        },
+        'configuration': themeConfig
+      }
+    };
+    console.log("Making API call...");
+    console.log(options);
+    request(options, (error, response, body) => {
+      if (error) {
+        reject(error);
+      } else {
+        if (response.statusCode == 201) {
+          console.log("Successfully registered theme '" + name + "'");
+          resolve(true);
+        } else reject(body);
+      }
+    });
+  });
+}
+
+function getThemeId(name, accessToken) {
+  return new Promise((resolve, reject) => {
+    var options = {
+      'headers': {
+        'Content-Type': 'application/scim+json',
+        'Authorization': `Bearer ${accessToken}`
+      }
+    }
+    console.log("Lookup Theme:" + name);
+    request.get(process.env.OIDC_CI_BASE_URI + '/template/v1.0/branding/themes', options, function(_err, response, body) {
+      console.log("Response code:", response.statusCode);
+      console.log("Lookup response:", body);
+      if (response.statusCode == 200) {
+        var pbody = JSON.parse(body);
+        if (pbody.themeRegistrations) {
+          for (i in pbody.themeRegistrations) {
+            if (pbody.themeRegistrations[i].name == name) {
+              resolve(pbody.themeRegistrations[i].id);
+              break;
+            }
+          }
+        }
+      }
+      resolve(false);
+    });
+  });
+}
+
+function getDpcmRuleId(name, accessToken) {
+  return new Promise((resolve, reject) => {
+    var options = {
+      'headers': {
+        'Content-Type': 'application/scim+json',
+        'Authorization': `Bearer ${accessToken}`
+      }
+    }
+    console.log("Lookup Rule:" + name);
+    request.get(process.env.OIDC_CI_BASE_URI + `/dpcm-mgmt/config/v1.0/privacy/rules?search=name%20=%20%22${name}%22`, options, function(_err, response, body) {
+      pbody = JSON.parse(body);
+      console.log("Response code:", response.statusCode);
+      console.log("Lookup response:", body);
+      if (response.statusCode == 200) {
+        if (pbody.rules[0]) {
+          console.log("Returning id: " + pbody.rules[0].id);
+          resolve(pbody.rules[0].id);
+        } else {
+          resolve(false);
+        }
+      } else {
+        resolve(false);
+      }
+    });
+  });
+}
+
+async function createDpcmPolicy(rules, accessToken) {
+  return new Promise((resolve, reject) => {
+    console.log("Policy lookup");
+    var options = {
+      'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      }
+    }
+    request.get(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/policies/default', options, function(_err, policyResp, policyBody) {
+      console.log("Response code:", policyResp.statusCode);
+      if (policyResp.statusCode == 200) {
+        var version = '' + JSON.parse(policyBody).version;
+        var ruleList = {"ruleList": rules};
+        console.log("Policy creation information:", ruleList)
+        var options = {
+          'headers': {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+            'if-match': version
+          },
+          'body': JSON.stringify(ruleList)
+        }
+        request.put(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/policies/default', options, function(_err, response, body) {
+          console.log("Response code:", response.statusCode);
+          if (response.statusCode == 204) {
+            resolve(true);
+          } else {
+            reject(body);
+          }
+        });
+      } else {
+        reject(body);
+      }
+    });
+  });
+}
+
+async function associatePurpose(appId, purposeIds, accessToken) {
+  return new Promise((resolve, reject) => {
+    var input = [];
+    for (i in purposeIds) {
+      input.push({
+        "op": "add",
+        "value": {
+          "extCategory": "app",
+          "extId": appId,
+          "purposeId": purposeIds[i]
+        }
+      });
+    }
+
+    console.log("Associate purpose:", input)
+    var options = {
+      'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      },
+      'body': JSON.stringify(input)
+    }
+    request.patch(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purpose-relationships', options, function(_err, response, body) {
+      console.log("Response code:", response.statusCode);
+      console.log("Create response:", body);
+      if (response.statusCode == 204) {
+        resolve(true);
       } else {
         reject(body);
       }
@@ -989,5 +1374,15 @@ module.exports = {
   titleCase: titleCase,
   createApplication: createApplication,
   getApplication: getApplication,
-  applyPolicy: applyPolicy,
+  applyPolicyAndTheme: applyPolicyAndTheme,
+  createEula: createEula,
+  createAccessType: createAccessType,
+  createPurpose: createPurpose,
+  purposeExists: purposeExists,
+  createDpcmRule: createDpcmRule,
+  getDpcmRuleId: getDpcmRuleId,
+  createDpcmPolicy: createDpcmPolicy,
+  associatePurpose: associatePurpose,
+  getThemeId: getThemeId,
+  registerTheme: registerTheme
 };

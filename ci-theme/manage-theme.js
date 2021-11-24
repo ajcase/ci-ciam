@@ -15,13 +15,13 @@
  *  delete:
  *    Delete the TrustMeInsurance theme.
  *    For this to work you must configure all apps such that they do not use the theme
- *      
- *      
+ *
+ *
  * Note: this script uses the .env file in ci-ciam for following parameters:
  * - THEME_NAME: defaults to TrustMeInsurance
- * - API_CLIENT_ID and API_SECRET: credentials for privileged API access      
- * - OIDC_CI_BASE_URI: points to your tenant     
- *      
+ * - API_CLIENT_ID and API_SECRET: credentials for privileged API access
+ * - OIDC_CI_BASE_URI: points to your tenant
+ *
  */
 
 var request = require('request');
@@ -71,7 +71,7 @@ function getThemesData(accessToken) {
   // get registered themes in Verify
   // returns the body of the GET call as an object
   return new Promise((resolve, reject) => {
-    // Query registered themes using API and return these in a JS object 
+    // Query registered themes using API and return these in a JS object
     var options = {
       method: 'GET',
       url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes',
@@ -79,13 +79,13 @@ function getThemesData(accessToken) {
         'Authorization': 'Bearer ' + accessToken
       }
     };
-   
-    request(options, (error, response, _body) => { 
+
+    request(options, (error, response, _body) => {
       if (error) {
         reject(error);
       } else {
         if (response.statusCode == 200) {
-          // Parse JSON-formatted body of the response into an object 
+          // Parse JSON-formatted body of the response into an object
           let bodyObj=JSON.parse(response.body);
           resolve(bodyObj);
         } else reject(response);
@@ -106,10 +106,10 @@ function listThemes(themes) {
 
 function registerTheme(accessToken) {
   // Register the theme
-  return new Promise((resolve, reject) => {  
-   
+  return new Promise((resolve, reject) => {
+
     var zipfileName=process.env.THEME_NAME + ".zip";
-    var themeConfig='{"name": "' + process.env.THEME_NAME + '", "description": "' + process.env.THEME_DESC + '"}';
+    var themeConfig='{"name": "' + process.env.THEME_NAME + '", "description": "Theme for ' + process.env.APP_NAME + ' Demo App"}';
     var themeFilename='"' + process.env.THEME_NAME + ".zip" + '"';
 
     console.log("Registering theme '" + process.env.THEME_NAME + "'" + " using file " + zipfileName);
@@ -149,11 +149,11 @@ function registerTheme(accessToken) {
 
 function updateTheme(accessToken,themeID) {
   // Update the theme
-  return new Promise((resolve, reject) => {  
-   
+  return new Promise((resolve, reject) => {
+
     var zipfileName=process.env.THEME_NAME + ".zip";
-    var themeConfig='{"name": "' + process.env.THEME_NAME + '", "description": "' + process.env.THEME_DESC + '"}';
-    var themeFilename='"' + process.env.THEME_NAME + ".zip" + '"'; 
+    var themeConfig='{"name": "' + process.env.THEME_NAME + '", "description": "Theme for ' + process.env.APP_NAME + ' Demo App"}';
+    var themeFilename='"' + process.env.THEME_NAME + ".zip" + '"';
     console.log("Updating theme for '" + process.env.THEME_NAME + "'" + " using file " + zipfileName);
 
     templateFile = fs.createReadStream(zipfileName);
@@ -211,7 +211,7 @@ function deleteTheme(accessToken,themeID) {
       }
     };
     console.log("Making API call...");
-    request(options, (error, response, _body) => { 
+    request(options, (error, response, _body) => {
       if (error) {
         //console.log("deleteTheme:Error: " + error);
         //console.log("deleteTheme:Response: " + JSON.stringify(response));
@@ -220,7 +220,7 @@ function deleteTheme(accessToken,themeID) {
         //console.log("Response code: " + response.statusCode);
         //console.log("Response : " + JSON.stringify(response));
         if (response.statusCode == 204) resolve(true);
-        else reject(response);
+        else reject(response.body);
       }
     });
   });
@@ -236,9 +236,11 @@ async function deleteMyTheme(accessToken,themes) {
       if (reg.name == process.env.THEME_NAME) {
         // There's an existing theme for this app: delete this theme
         themefound=true;
-        var result = await deleteTheme(accessToken, reg.id);
-        if (result) console.log("Successfully deleted theme '" + process.env.THEME_NAME + "'");
-        else console.log("Failed to delete theme " + process.env.THEME_NAME);
+	try {
+        	var result = await deleteTheme(accessToken, reg.id);
+        	if (result) console.log("Successfully deleted theme '" + process.env.THEME_NAME + "'");
+        	else console.log("Failed to delete theme " + process.env.THEME_NAME);
+        } catch (e) { console.log("Failed to delete theme: " + e); }
       }
     }
     if (!themefound) console.log("Cannot delete theme " + process.env.THEME_NAME + ". It does not exist.");

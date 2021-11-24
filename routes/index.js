@@ -9,13 +9,6 @@ var dpcmClient = new DPCMClient({
   tenantUrl: process.env.OIDC_CI_BASE_URI,
 });
 
-function evaluateAttr(attribute) {
-  if (attribute == 'true') {
-    return true
-  } else {
-    return false
-  }
-}
 // GET homepage
 router.get('/', function(req, res, next) {
   var loggedIn = ((req.session.loggedIn) ? true : false);
@@ -45,8 +38,6 @@ router.get('/app/profile', function(req, res, next) {
   var loggedIn = ((req.session.loggedIn) ? true : false);
   if (loggedIn) {
     var userAccessToken = req.session.accessToken;
-    var userId = req.session.userId;
-    var purposeID = process.env.TERMS_PURPOSE_ID;
 
     dpcmClient.performDUA(userAccessToken, {
       trace: false,
@@ -57,10 +48,18 @@ router.get('/app/profile', function(req, res, next) {
         }
       ]
     }, function(_err, duaRespItems) {
-      var approved = duaRespItems[0].result[0].approved;
+      var result = duaRespItems[0].result[0];
+      var approved = result.approved;
       if (!approved) {
-        res.redirect("/app/consent/terms");
-        return;
+        if (!(result.reason && (
+          result.reason.messageId == "CSIBT0022E" ||
+          result.reason.messageId == "CSIBT0016E"
+        ))) {
+          res.redirect("/app/consent/terms");
+          return;
+        } else {
+          console.log("DPCM is not configured - skipping EULA");
+        }
       }
 
       request.get(process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/userinfo', {
@@ -70,26 +69,22 @@ router.get('/app/profile', function(req, res, next) {
       }, function(err, response, body) {
         console.log('---- User ID token ----')
         console.log(JSON.parse(body));
-  
-        var userinfo = JSON.parse(body);
-        var userinfo_string = JSON.stringify(userinfo, null, 2);
-  
+
         request.get(process.env.OIDC_CI_BASE_URI + '/v2.0/Me', {
           'auth': {
             'bearer': req.session.accessToken
           }
         }, function(err, response, body) {
-  
+
           console.log('---- User profile ----')
           console.log(JSON.parse(body));
           var me = JSON.parse(body);
           req.session.userprofile = me;
-          var meExt = me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"];
-  
+
           var mfaEnabled = (typeof(_.filter(me.groups, {
             'id': process.env.MFAGROUPID
           }))[0] !== 'undefined') ? true : false;
-  
+
           var meLinked = (typeof me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["linkedAccounts"] != 'undefined') ? true : false;
           if (meLinked) {
             var linkedAccounts = me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["linkedAccounts"]
@@ -116,32 +111,17 @@ router.get('/app/profile', function(req, res, next) {
               }))[0] !== 'undefined') ? true : false
             }
           }
-  
+
           console.log(linkedAccountsTotal)
-  
+
           var customAttributes = me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["customAttributes"]
-  
-          var consentPaperless = (typeof(_.filter(customAttributes, {
-            'name': 'consentPaperless'
-          }))[0] !== 'undefined') ? (_.filter(customAttributes, {
-            'name': 'consentPaperless'
-          }))[0].values.toString() : false;
-          var consentNotifications = (typeof(_.filter(customAttributes, {
-            'name': 'consentNotifications'
-          }))[0] !== 'undefined') ? (_.filter(customAttributes, {
-            'name': 'consentNotifications'
-          }))[0].values.toString() : false;
-          var consentPromotions = (typeof(_.filter(customAttributes, {
-            'name': 'consentPromotions'
-          }))[0] !== 'undefined') ? (_.filter(customAttributes, {
-            'name': 'consentPromotions'
-          }))[0].values.toString() : false;
+
           var quoteCount = (typeof(_.filter(customAttributes, {
             'name': 'quoteCount'
           }))[0] !== 'undefined') ? (_.filter(customAttributes, {
             'name': 'quoteCount'
           }))[0].values.toString() : false;
-  
+
           var buildExtProfile = {
             'car': {
               'displayName': "Car",
@@ -159,7 +139,7 @@ router.get('/app/profile', function(req, res, next) {
           // This URL is then passed to the renderer; reference to file profile.hbs
           var buildChangePasswordURL = process.env.OIDC_CI_BASE_URI + "/authsvc/mtfim/sps/authsvc?PolicyId=urn:ibm:security:authentication:asf:changepassword&login_hint=" + me.userName + "&themeId=" + process.env.THEME_ID;
           console.log("--- Change Password URL --- is: " + buildChangePasswordURL);
-          
+
           //// BUILD CONSENT
           dpcmClient.performDUA(req.session.accessToken, {
             trace: false,
@@ -178,7 +158,7 @@ router.get('/app/profile', function(req, res, next) {
           }, function(_err, duaRespItems) {
             var consentMarketing = false;
             var consentPaperless = false;
-            
+
             duaRespItems.forEach(function(item, index) {
               if (item.purposeId == process.env.MARKETING_PURPOSE_ID) {
                 consentMarketing = item.result[0].approved;
@@ -186,7 +166,7 @@ router.get('/app/profile', function(req, res, next) {
                 consentPaperless = item.result[0].approved;
               }
             });
-          
+
             console.log(`This user has logged consent for
               Marketing ${consentMarketing}
               Paperless ${consentPaperless}`);
@@ -199,9 +179,9 @@ router.get('/app/profile', function(req, res, next) {
               consentPaperlessAccessTypeID: process.env.READ_ACCESS_TYPE,
               consentMarketingAccessTypeID: process.env.READ_ACCESS_TYPE,
               consentAction: "/app/dpcm",
-              actionCar: "/open-account",
-              actionHome: "/open-account",
-              actionLife: "/open-account",
+              actionCar: "/open-account?type=car",
+              actionHome: "/open-account?type=home",
+              actionLife: "/open-account?type=life",
               mfaStatus: mfaEnabled,
               linkedAccounts: linkedAccountsTotal,
               hasAddress: hasAddress,
@@ -210,7 +190,7 @@ router.get('/app/profile', function(req, res, next) {
             });
           });
           ////
-          
+
         });
       });
     });
@@ -220,7 +200,6 @@ router.get('/app/profile', function(req, res, next) {
 });
 
 router.post('/app/preferences', function(req, res, next) {
-  var loggedIn = ((req.session.loggedIn) ? true : false);
   var userId = req.session.userId;
   var data = req.body;
   console.log("Editing preferences for:", userId)

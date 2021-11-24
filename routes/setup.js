@@ -1,6 +1,4 @@
 var express = require('express');
-var request = require('request');
-var _ = require('lodash');
 var bbfn = require('../functions.js');
 var router = express.Router();
 var passport = require('passport');
@@ -53,14 +51,14 @@ router.post('/', async function(req, res, next) {
           var appl = false;
           try {
             await bbfn.createApplication(
-              "TrustMeInsurance",
+              process.env.APP_NAME,
               process.env.OIDC_REDIRECT_URI,
               apiAccessToken);
           } catch (e) {
             console.log(e);
           }
           try {
-            appl = await bbfn.getApplication("TrustMeInsurance", apiAccessToken);
+            appl = await bbfn.getApplication(process.env.APP_NAME, apiAccessToken);
           } catch (e) {
             console.log(e);
           }
@@ -72,18 +70,6 @@ router.post('/', async function(req, res, next) {
 
           attributes = [{
               "name": "birthday",
-              "type": "string"
-            },
-            {
-              "name": "consentPaperless",
-              "type": "string"
-            },
-            {
-              "name": "consentNotifications",
-              "type": "string"
-            },
-            {
-              "name": "consentPromotions",
               "type": "string"
             },
             {
@@ -145,23 +131,123 @@ router.post('/', async function(req, res, next) {
             }
           }
 
-          var policyid;
+          var termsExists = await bbfn.purposeExists(process.env.TERMS_PURPOSE_ID, apiAccessToken);
+          if (!termsExists) {
+            await bbfn.createEula(
+              process.env.TERMS_PURPOSE_ID,
+              "EULA for TrustMe sites",
+              process.env.EULA_URL,
+              apiAccessToken);
+          }
+
+          try {
+            await bbfn.createAccessType(process.env.READ_ACCESS_TYPE,apiAccessToken);
+          } catch (e) {
+            console.log(e);
+          }
+
+          var marketingExists = await bbfn.purposeExists(process.env.MARKETING_PURPOSE_ID, apiAccessToken);
+          if (!marketingExists) {
+            await bbfn.createPurpose(
+              process.env.MARKETING_PURPOSE_ID,
+              "3",
+              "A preference that indicates that the customer agrees with receiving information on promotions, new products, and personalized advice weekly.",
+              process.env.READ_ACCESS_TYPE,
+              process.env.DEFAULT_ACCESS_TYPE,
+              apiAccessToken);
+          }
+
+          var paperlessExists = await bbfn.purposeExists(process.env.PAPERLESS_PURPOSE_ID, apiAccessToken);
+          if (!paperlessExists) {
+            await bbfn.createPurpose(
+              process.env.PAPERLESS_PURPOSE_ID,
+              "3",
+              "A preference that indicates that the customer agrees to paperless billing.",
+              process.env.READ_ACCESS_TYPE,
+              process.env.DEFAULT_ACCESS_TYPE,
+              apiAccessToken);
+          }
+
+          try {
+            await bbfn.createDpcmRule(
+              "Paperless Billing",
+              [{"purposeId": "paperless-billing"}],
+              "ASSENT_EXPLICIT",
+              true,
+              "Require consent for paperless billing.  Opt-out.",
+              apiAccessToken
+            )
+          } catch (e) {
+            console.log(e);
+          }
+
+          try {
+            await bbfn.createDpcmRule(
+              "Communication-Europe",
+              [{
+                "purposeId": "communications",
+                "geography": {
+                  "continentCode": "EU",
+                  "countryCode": "",
+                  "subdivisionOneCode": "",
+                  "subdivisionTwoCode": ""
+                }
+              }],
+              "ASSENT_EXPLICIT",
+              false,
+              "Require opt-in consent for communications in Europe.",
+              apiAccessToken
+            )
+          } catch (e) {
+            console.log(e);
+          }
+
+          var communicationsRuleId = await bbfn.getDpcmRuleId("Communication-Europe", apiAccessToken);
+          var paperlessRuleId = await bbfn.getDpcmRuleId("Paperless Billing", apiAccessToken);
+
+          await bbfn.createDpcmPolicy([paperlessRuleId, communicationsRuleId], apiAccessToken);
+
+          if (appl) {
+            var applId = appl._links.self.href.substring(appl._links.self.href.lastIndexOf('/')+1);
+            try {
+              await bbfn.associatePurpose(applId, [
+                  process.env.MARKETING_PURPOSE_ID,
+                  process.env.PAPERLESS_PURPOSE_ID,
+                  process.env.TERMS_PURPOSE_ID],
+                  apiAccessToken);
+            } catch (e) {
+              console.log(e);
+            }
+          }
+
+          var policyId;
           if (groupid) {
             process.env.MFAGROUPID = groupid;
             console.log(`MFA Group ID is ${process.env.MFAGROUPID}`);
 
-            policyid = await bbfn.setupMfaPolicy(`Require 2FA for ${process.env.MFAGROUP}`, process.env.MFAGROUP, apiAccessToken);
-            console.log("Done. Created policy " + policyid);
+            policyId = await bbfn.setupMfaPolicy(`Require 2FA for ${process.env.MFAGROUP}`, process.env.MFAGROUP, apiAccessToken);
+            console.log("Done. Created policy " + policyId);
           } else {
             console.log(`Group ${process.env.MFAGROUP} is invalid`);
           }
 
-          if (policyid && appl) {
-            await bbfn.applyPolicy(policyid,appl,apiAccessToken);
-            console.log("Policy applied to application");
-          } else {
-            console.log("Can't apply policy - either app or policy not found");
+          try {
+            await bbfn.registerTheme(process.env.THEME_NAME, apiAccessToken);
+          } catch (e) {console.log(e)};
+
+          var themeId;
+          try {
+            var themeId = await bbfn.getThemeId(process.env.THEME_NAME,apiAccessToken);
+            console.log(themeId);
+          } catch (e) {console.log(e)};
+
+          await bbfn.applyPolicyAndTheme(policyId,themeId,appl,apiAccessToken);
+          console.log("Policy applied to application");
+
+          if (themeId) {
+            process.env.THEME_ID = themeId;
           }
+
 
         } else {
           var result;

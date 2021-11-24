@@ -3,8 +3,6 @@ require('dotenv').config();
 var request = require('request');
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
@@ -43,7 +41,6 @@ hbs.registerHelper('formatAttribute', function(attribute) {
   }
 })
 
-
 // Use Passport with OpenId Connect strategy to
 // Authenticate users with IBM Cloud Identity Connect
 var passport = require('passport')
@@ -63,9 +60,6 @@ function titleCase(string) {
   }
   return sentence.join(" ");
 }
-
-// edit this URL with your base URL for IBM Cloud Identity OIDC default endpoint
-var APP = process.env.APP || "Demo Site";
 
 // Configure the OpenId Connect Strategy
 // with credentials obtained from env details (.env)
@@ -106,7 +100,6 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
@@ -137,8 +130,6 @@ function checkAuthentication(req, res, next) {
   }
 }
 
-app.locals.pageTitle = titleCase(APP);
-app.locals.bodyCSS = APP;
 app.use('/', index);
 app.use('/setup', setup);
 app.use('/app/profile', checkAuthentication, profile);
@@ -149,21 +140,28 @@ app.use('/app/consent', checkAuthentication, consent);
 //app.use('/users', checkAuthentication, users);
 // Only allow authenticated users to access the /users route
 
+var scopes = "";
+if (process.env.SEND_PRIVACY_SCOPES == "true") {
+  scopes = process.env.MARKETING_PURPOSE_ID +
+    "/email." + process.env.READ_ACCESS_TYPE +
+    " " + process.env.PAPERLESS_PURPOSE_ID +
+    "/email." + process.env.READ_ACCESS_TYPE;
+}
 // Initiates an authentication request with IBM
 // The user will be redirect to IBM and once authenticated
 // they will be returned to the callback handler below
 app.get('/login', passport.authenticate('openidconnect', {
   successReturnToOrRedirect: "/",
-  scope: 'email profile privacyPolicy'
+  scope: scopes
 }));
 app.get('/login-linkedin', passport.authenticate('openidconnect', {
   successReturnToOrRedirect: "/",
-  scope: 'email profile',
+  scope: scopes,
   login_hint: `{"realm":"www.linkedin.com"}`
 }));
 app.get('/login-google', passport.authenticate('openidconnect', {
   successReturnToOrRedirect: "/",
-  scope: 'email profile',
+  scope: scopes,
   login_hint: `{"realm":"www.google.com"}`
 }));
 // app.get('/new-linkedin', passport.authenticate('openidconnect', {

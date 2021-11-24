@@ -1,7 +1,6 @@
 var request = require('request');
 var express = require('express');
 var _ = require('lodash');
-var json2csv = require('json2csv');
 var bbfn = require('../functions.js');
 var router = express.Router();
 
@@ -17,6 +16,7 @@ function match(a,b){
 // GET profile
 router.get('/', function(req, res, next) {
     if(req.session.loggedIn){
+      req.session.type = req.query.type;
       bbfn.oidcIdToken(req, function(err,  body){
         if (err) {
           console.log(err);
@@ -45,12 +45,20 @@ router.post('/step-two', function(req, res, next) {
     req.session.familyName = req.body.familyName
     req.session.givenName = req.body.givenName
     console.log("Quote started for:", req.session.userEmail);
-    res.render('insurance/open-account-choose', {
-       actionCar: '/open-account/car',
-       actionHome: '/open-account/home',
-       actionLife: '/open-account/life',
-       loggedIn: loggedIn
-    });
+    if (!req.session.type) {
+      res.render('insurance/open-account-choose', {
+        actionCar: '/open-account/car',
+        actionHome: '/open-account/home',
+        actionLife: '/open-account/life',
+        loggedIn: loggedIn
+     });
+     return;
+    }
+    if (req.session.type) {
+      res.redirect("/open-account/" + req.session.type);
+      delete req.session.type;
+      return;
+    }
 });
 
 router.get('/car', function(req, res, next) {
@@ -75,7 +83,7 @@ router.post('/car', function(req, res, next) {
     var data = req.body;
     console.log("Car quote submitted for:", req.session.userEmail);
     console.log("Car form submitted:", data);
-    
+
     var brandIdvalue=process.env.BRAND_ID;
     if (brandIdvalue == "false") {
       var brandIdsuffix = "";
@@ -83,7 +91,7 @@ router.post('/car', function(req, res, next) {
       var brandIdsuffix = "@" + brandIdvalue;
     }
     console.log("BrandIdvalue:", brandIdvalue);
-    
+
     bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err,  body){
         if (err) {
           console.log(err);
