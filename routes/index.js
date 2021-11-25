@@ -79,6 +79,16 @@ router.get('/app/profile', function(req, res, next) {
           console.log('---- User profile ----')
           console.log(JSON.parse(body));
           var me = JSON.parse(body);
+
+          var phones = [];
+          if (me.phoneNumbers)
+            phones = me.phoneNumbers.filter(phone => phone.value);
+          if (phones.length == 0) {
+            delete me.phoneNumbers;
+          } else {
+            me.phoneNumbers = phones;
+          }
+
           req.session.userprofile = me;
 
           var mfaEnabled = (typeof(_.filter(me.groups, {
