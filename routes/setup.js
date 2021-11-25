@@ -241,7 +241,37 @@ router.post('/', async function(req, res, next) {
             console.log(themeId);
           } catch (e) {console.log(e)};
 
-          await bbfn.applyPolicyAndTheme(policyId,themeId,appl,apiAccessToken);
+          var googleId;
+          try {
+            var googleId = await bbfn.getIndentitySourceId("www.google.com", apiAccessToken);
+            console.log(googleId);
+          } catch (e) {console.log(e)}
+
+          var linkedInID;
+          try {
+            var linkedInID = await bbfn.getIndentitySourceId("www.linkedin.com", apiAccessToken);
+            console.log(linkedInID);
+          } catch (e) {console.log(e)}
+
+          var facebookID;
+          try {
+            var facebookID = await bbfn.getIndentitySourceId("www.facebook.com", apiAccessToken);
+            console.log(facebookID);
+          } catch (e) {console.log(e)}
+
+          var cloudId;
+          try {
+            var cloudId = await bbfn.getIndentitySourceId("cloudIdentityRealm", apiAccessToken);
+            console.log(cloudId);
+          } catch (e) {console.log(e)}
+
+          var sources = [];
+          if (googleId) sources.push(googleId);
+          if (linkedInID) source.push(linkedInID);
+          if (facebookID) sources.push(facebookID);
+          if (cloudId) sources.push(cloudId);
+
+          await bbfn.applyPolicyThemeSources(policyId,themeId,sources,appl,apiAccessToken);
           console.log("Policy applied to application");
 
           if (themeId) {

@@ -140,9 +140,9 @@ app.use('/app/consent', checkAuthentication, consent);
 //app.use('/users', checkAuthentication, users);
 // Only allow authenticated users to access the /users route
 
-var scopes = "";
+var scopes = "profile email";
 if (process.env.SEND_PRIVACY_SCOPES == "true") {
-  scopes = process.env.MARKETING_PURPOSE_ID +
+  scopes = scopes + " " + process.env.MARKETING_PURPOSE_ID +
     "/email." + process.env.READ_ACCESS_TYPE +
     " " + process.env.PAPERLESS_PURPOSE_ID +
     "/email." + process.env.READ_ACCESS_TYPE;

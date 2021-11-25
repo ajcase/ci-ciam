@@ -104,15 +104,15 @@ function listThemes(themes) {
   return (true);
 }
 
-function registerTheme(accessToken) {
+function registerTheme(accessToken,themeName) {
   // Register the theme
   return new Promise((resolve, reject) => {
 
-    var zipfileName=process.env.THEME_NAME + ".zip";
-    var themeConfig='{"name": "' + process.env.THEME_NAME + '", "description": "Theme for ' + process.env.APP_NAME + ' Demo App"}';
-    var themeFilename='"' + process.env.THEME_NAME + ".zip" + '"';
+    var zipfileName=themeName + ".zip";
+    var themeConfig='{"name": "' + themeName + '", "description": "Uploaded via API"}';
+    var themeFilename='"' + themeName + ".zip" + '"';
 
-    console.log("Registering theme '" + process.env.THEME_NAME + "'" + " using file " + zipfileName);
+    console.log("Registering theme '" + themeName + "'" + " using file " + zipfileName);
 
     // Register the theme
     // console.log("Preparing API call...");
@@ -139,7 +139,7 @@ function registerTheme(accessToken) {
         reject(error);
       } else {
         if (response.statusCode == 201) {
-          console.log("Successfully registered theme '" + process.env.THEME_NAME + "'");
+          console.log("Successfully registered theme '" + themeName + "'");
           resolve(true);
         } else reject(response);
       }
@@ -147,14 +147,14 @@ function registerTheme(accessToken) {
   }).catch(error => console.log("ERROR details: \n\t" + error.stack));
 }
 
-function updateTheme(accessToken,themeID) {
+function updateTheme(accessToken,themeID,themeName) {
   // Update the theme
   return new Promise((resolve, reject) => {
 
-    var zipfileName=process.env.THEME_NAME + ".zip";
-    var themeConfig='{"name": "' + process.env.THEME_NAME + '", "description": "Theme for ' + process.env.APP_NAME + ' Demo App"}';
-    var themeFilename='"' + process.env.THEME_NAME + ".zip" + '"';
-    console.log("Updating theme for '" + process.env.THEME_NAME + "'" + " using file " + zipfileName);
+    var zipfileName=themeName + ".zip";
+    var themeConfig='{"name": "' + themeName + '", "description": "Theme uploaded via API"}';
+    var themeFilename='"' + themeName + ".zip" + '"';
+    console.log("Updating theme for '" + themeName + "'" + " using file " + zipfileName);
 
     templateFile = fs.createReadStream(zipfileName);
 
@@ -199,10 +199,10 @@ function updateTheme(accessToken,themeID) {
 }
 
 
-function deleteTheme(accessToken,themeID) {
+function deleteTheme(accessToken,themeID,themeName) {
   return new Promise((resolve, reject) => {
     // Delete registered theme by id
-    console.log("Deleting theme '" + process.env.THEME_NAME + "'");
+    console.log("Deleting theme '" + themeName + "'");
     var options = {
       method: 'DELETE',
       url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes/' + themeID,
@@ -226,67 +226,111 @@ function deleteTheme(accessToken,themeID) {
   });
 }
 
+function downloadTheme(accessToken,themeID,themeName) {
+  return new Promise((resolve, reject) => {
+    // Download registered theme by id
+    console.log("Get theme '" + themeName + "'");
+    var options = {
+      method: 'GET',
+      url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes/' + themeID,
+      headers: {
+        'Authorization': 'Bearer ' + accessToken
+      },
+      gzip: true
+    };
+    console.log("Making API call...");
+    var file = fs.createWriteStream(themeName + ".zip");
+    let stream = request(options).pipe(file)
+    .on('finish', () => {
+      console.log(`The file has finished downloading.`);
+      resolve(true);
+    })
+    .on('error', (error) => {
+      reject(error);
+    });
+  });
+}
 
-async function deleteMyTheme(accessToken,themes) {
+
+async function deleteMyTheme(accessToken,themes,themeName) {
     // Only async functions can call other functions with "await"
     // themes contains the parsed JSON content of the body of the response to GET /v1.0/branding/themes
     themefound=false;
     for (i=0;i < themes.total;i++) {
       reg=themes.themeRegistrations[i];
-      if (reg.name == process.env.THEME_NAME) {
+      if (reg.name == themeName) {
         // There's an existing theme for this app: delete this theme
         themefound=true;
 	try {
-        	var result = await deleteTheme(accessToken, reg.id);
-        	if (result) console.log("Successfully deleted theme '" + process.env.THEME_NAME + "'");
-        	else console.log("Failed to delete theme " + process.env.THEME_NAME);
+        	var result = await deleteTheme(accessToken, reg.id,themeName);
+        	if (result) console.log("Successfully deleted theme '" + themeName + "'");
+        	else console.log("Failed to delete theme " + themeName);
         } catch (e) { console.log("Failed to delete theme: " + e); }
       }
     }
-    if (!themefound) console.log("Cannot delete theme " + process.env.THEME_NAME + ". It does not exist.");
+    if (!themefound) console.log("Cannot delete theme " + themeName + ". It does not exist.");
     return (themefound);
   }
 
-async function updateMyTheme(accessToken,themes) {
+async function updateMyTheme(accessToken,themes,themeName) {
     // Only async functions can call other functions with "await"
     // themes contains the parsed JSON content of the body of the response to GET /v1.0/branding/themes
     themefound=false;
     for (i=0;i < themes.total;i++) {
       reg=themes.themeRegistrations[i];
-      if (reg.name == process.env.THEME_NAME) {
+      if (reg.name == themeName) {
         // There's an existing theme for this app: update this theme
         themefound=true;
-        var result = await updateTheme(accessToken, reg.id);
-        if (result) console.log("Successfully updated theme '" + process.env.THEME_NAME + "'");
-        else console.log("Failed to update theme " + process.env.THEME_NAME);
+        var result = await updateTheme(accessToken, reg.id,themeName);
+        if (result) console.log("Successfully updated theme '" + themeName + "'");
+        else console.log("Failed to update theme " + themeName);
       }
     }
-    if (!themefound) console.log("Cannot update theme " + process.env.THEME_NAME + ". It does not exist.");
+    if (!themefound) console.log("Cannot update theme " + themeName + ". It does not exist.");
     return (themefound);
   }
 
+  async function downloadMyTheme(accessToken,themes,themeName) {
+      // Only async functions can call other functions with "await"
+      // themes contains the parsed JSON content of the body of the response to GET /v1.0/branding/themes
+      themefound=false;
+      for (i=0;i < themes.total;i++) {
+        reg=themes.themeRegistrations[i];
+        if (reg.name == themeName) {
+          // There's an existing theme for this app: download this theme
+          themefound=true;
+          var result = await downloadTheme(accessToken, reg.id, themeName);
+          if (result) console.log("Successfully downloaded theme '" + themeName + "'");
+          else console.log("Failed to download theme " + themeName);
+        }
+      }
+      if (!themefound) console.log("Cannot download theme " + themeName + ". It does not exist.");
+      return (themefound);
+    }
 
 /*
  * Main Logic
  */
-async function main(action) {
-
+async function main(args) {
   var tokenData = await getAccessToken();
-
+  var themeName = args[3] ? args[3] : process.env.THEME_NAME;
   var themesData = await getThemesData(tokenData.access_token);
 
-  switch(action) {
+  switch(args[2]) {
     case "list":
       listThemes(themesData);
       break;
     case "register":
-      await registerTheme(tokenData.access_token);
+      await registerTheme(tokenData.access_token,themeName);
       break;
     case "delete":
-      await deleteMyTheme(tokenData.access_token,themesData);
+      await deleteMyTheme(tokenData.access_token,themesData,themeName);
       break;
     case "update":
-      await updateMyTheme(tokenData.access_token,themesData);
+      await updateMyTheme(tokenData.access_token,themesData,themeName);
+      break;
+    case "download":
+      await downloadMyTheme(tokenData.access_token,themesData, themeName);
       break;
     default:
       // code block
@@ -300,8 +344,8 @@ async function main(action) {
 
 args = process.argv;
 
-if (args.length != 3) {
-  console.log("Usage: node " + filenameOnly(args[1]) + " list | register | update | delete ");
+if (args.length < 3) {
+  console.log("Usage: node " + filenameOnly(args[1]) + " <list | download | register | update | delete> [theme]");
 } else {
-  main(args[2]);
+  main(args);
 }

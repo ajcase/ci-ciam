@@ -1,169 +1,143 @@
-<!-- Template file path: templates/authentication/login/cloud_directory/user_login/default/cloud_directory_login.html  -->
-<!doctype html>
+<!-- Template file path: templates/authentication/login/identity_source/identity_source_selection/default/combined_login_selection.html  -->
+<!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<title>$LOGIN_TITLE$</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <title>$LOGIN_TITLE$</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
 
-<link rel="apple-touch-icon" sizes="180x180" href="$DEMO_APPLICATION_URL$/favicon/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="$DEMO_APPLICATION_URL$/favicon/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="$DEMO_APPLICATION_URL$/favicon/favicon-16x16.png">
-<link rel="manifest" href="$DEMO_APPLICATION_URL$/favicon/site.webmanifest">
-<link rel="mask-icon" href="$DEMO_APPLICATION_URL$/favicon/safari-pinned-tab.svg" color="#7a6f6f">
-<link rel="shortcut icon" href="$DEMO_APPLICATION_URL$/f8avicon/favicon.ico">
-<meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-config" content="$DEMO_APPLICATION_URL$/favicon/browserconfig.xml">
-<meta name="theme-color" content="#ffffff">
+    <!-- Load the Verify-specific stylesheets -->
+    <link
+      rel="stylesheet"
+      href="/template/v1.0/static/theme.css?themeId=@THEME_ID@"
+    />
 
-<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-<link href="$DEMO_APPLICATION_URL$/stylesheets/style.css" rel="stylesheet" type="text/css">
-<link href="$DEMO_APPLICATION_URL$/stylesheets/social.css" rel="stylesheet" type="text/css">
-<link href="$DEMO_APPLICATION_URL$/stylesheets/overrides.css" rel="stylesheet" type="text/css">
+    <script>
+  		// START NON-TRANSLATABLE
+  		const action = "@ACTION@";
+  		const themeId = "@THEME_ID@";
+  		var errorMessage = "@ERROR_MESSAGE@";
+  		var isForgotUsernameEnabled = "@SHOW_FORGOT_USERNAME_LINK@";
+      var isForgotPasswordEnabled = "@SHOW_FORGOT_PASSWORD_LINK@";
+  		var username = "@USERNAME@";
+  		// END NON-TRANSLATABLE
+  	</script>
 
-<!-- Load the Verify-specific stylesheets -->
-<link rel="stylesheet" href="/idaas/mtfim/static/styles.css">
-<link rel="stylesheet" href="/template/v1.0/static/theme.css?themeId=@THEME_ID@" />
-
-<!-- Don't think this is needed. lsp.js fixes passwordless options and sets loginURLs
-<script type="text/javascript" src="/idaas/mtfim/static/lsp.js?locale=@LOCALE@"></script>
--->
-<script type="text/javascript" src="/idaas/mtfim/static/lsp.js?locale=@LOCALE@"></script>
-
-
-<script>
-const idSources = @ID_SOURCES@;
-
-function getIdSourcesData(){
-  // Read the JSON provided by the @ID_SOURCES@ macro to determine URLs.
-  // This script is run when the page is loaded
-  for(let i = 0; i < idSources.length; i++) {
-        const idSource = idSources[i];
-
-        if(idSource.type === 'CLOUDDIRECTORY') {
-            document.getElementById('cloud-directory-form').action = idSource.loginUrl;
-            // get the "forgot password" URL
-            document.getElementById("forgot-password-link").href = idSource.forgotPasswordOptions.forgotPasswordUrl;
+    <script>
+      function DoSubmit() {
+        let brand = "$BRAND_ID$";
+        if (brand != "false") {
+          document.getElementById("cloud-directory-form").username.value =
+            document.getElementById("cloud-directory-form").realusername.value +
+            "@" +
+            brand;
+        } else {
+          document.getElementById(
+            "cloud-directory-form"
+          ).username.value = document.getElementById(
+            "cloud-directory-form"
+          ).realusername.value;
         }
-        if(idSource.type === 'LINKEDIN') {
-            document.getElementById('linkedin-connect').href = idSource.loginUrl;
-        }
-        if(idSource.type === 'GOOGLE') {
-            document.getElementById('google-connect').href = idSource.loginUrl;
-        }
-        if(idSource.type === 'FACEBOOK') {
-            document.getElementById('facebook-connect').href = idSource.loginUrl;
-        }
-    }
-}
-</script>
-
-<script>
-  function DoSubmit(){
-    let brand="$BRAND_ID$";
-    if (brand != "false") {
-      document.getElementById('cloud-directory-form').username.value = document.getElementById('cloud-directory-form').realusername.value + "@" + brand;
-    } else {
-    document.getElementById('cloud-directory-form').username.value = document.getElementById('cloud-directory-form').realusername.value;
-    }
-    return true;
-  }
-</script>
+        return true;
+      }
+    </script>
 
 
-<style>
-.alert {
-  padding: 20px;
-  background-color: #f44336;
-  color: white;
-}
-.alert.warning{
-  background-color: #ff9800;
-  margin-bottom:30px;
-}
-
-.closebtn {
-  margin-left: 15px;
-  color: white;
-  font-weight: bold;
-  float: right;
-  font-size: 22px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.closebtn:hover {
-  color: black;
-}
-</style></head>
-<body class="insurance-page gary-bg">
-  <div class="overlay-background">
-
+    <!-- Read the JQuery library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
+    <!-- A minified version of the demo apps's /javascripts/init.js with JQuery code -->
+    <script>
+    jQuery(document).ready(function(){jQuery(".close-popup").on("click",function(){return jQuery(".popup").fadeOut(),!1}),jQuery(".hamburger-menu").on("click",function(){jQuery(this).toggleClass("active"),jQuery(".main-menu").slideToggle()}),jQuery(".formRow input").focus(function(){jQuery(this).siblings(".formRow label").animate({opacity:1},800),jQuery(this).siblings(".formRow .inputLine").removeClass("active").animate({width:"100%"},800)}),jQuery(".formRow input").focusout(function(){jQuery(this).siblings(".formRow .inputLine").animate({width:0},800)}),jQuery(".formRow select").focus(function(){jQuery(this).siblings(".formRow label").animate({opacity:1},800),jQuery(this).siblings(".formRow .inputLine").removeClass("active").animate({width:"100%"},800)}),jQuery(".formRow select").focusout(function(){jQuery(this).siblings(".formRow .inputLine").addClass("active")}),jQuery(".show-password").click(function(){jQuery(this).toggleClass("active"),jQuery(this).hasClass("active")?jQuery(this).prev("input").attr("type","text"):jQuery(this).prev("input").attr("type","password")})}),jQuery(window).load(function(){jQuery(".shield").css({right:0});var e,i,n;e=$(".range-slider"),i=$(".range-slider__range"),n=$(".range-slider__value"),e.each(function(){n.each(function(){var e=$(this).prev().attr("value");$(this).html(e)}),i.on("input",function(){$(this).parents(".range-slider").find(".slider__value",n).html(this.value)})}),jQuery(".inline-popup-close").click(function(){return jQuery(".inline-popup").fadeOut(),jQuery(".inline-popup").removeClass("active"),!1}),jQuery(".inline-popup-open").click(function(){return jQuery(".inline-popup").fadeIn(),jQuery(".inline-popup").addClass("active"),!1}),jQuery(".inline-popup-close-2").click(function(){return jQuery(".inline-popup").fadeOut(),jQuery(".inline-popup").removeClass("active"),!1}),jQuery(".inline-popup-open-2").click(function(){return jQuery(".inline-popup-2").fadeIn(),jQuery(".inline-popup-2").addClass("active"),!1})});
+    </script>
+  </head>
+  <body class="insurance-page gary-bg" onload="getIdSourcesData()">
+    <div class="overlay-background">
       <div class="overlay-content login-wrap">
+        <div class="overlay-logo">
+          <a href="$DEMO_APPLICATION_URL$/"
+            ><img src="/template/v1.0/static/logo.svg?themeId=@THEME_ID@"
+          /></a>
+        </div>
 
-          <div class="overlay-logo">
-          	<a href="$DEMO_APPLICATION_URL$/"><img src="$DEMO_APPLICATION_URL$/images/insurance_logo.svg"></a>
-          </div>
-
-
-		      <div class="alert warning">
-            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-            @ERROR_MESSAGE@
-          </div>
-        <form id="cloud-directory-form" method="post">
-
+        <form id="cloud-directory-form" method="post" action="@ACTION@">
+          <br />
           <div class="formRow">
             <label>$LOGIN_USER_NAME$</label>
             <!--
               This input has no "name"-tag and so will not be send. See: https://www.w3schools.com/html/html_forms.asp
               Instead it will be used to determine the username with a suffix
             -->
-            <input type="email" id="realusername" placeholder="$LOGIN_USER_NAME$" onFocus="this.placeholder = ''" value="@LOGIN_HINT@">
-              <div class="inputLine"></div>
+            <input
+              type="email"
+              id="realusername"
+              placeholder="$LOGIN_USER_NAME$"
+              onfocus="this.placeholder = ''"
+              value="@LOGIN_HINT@"
+            />
+            <div class="inputLine"></div>
           </div>
 
           <div class="formRow">
             <label>$LOGIN_PASSWORD$</label>
-            <input type="password" name="password" placeholder="$LOGIN_PASSWORD$" onFocus="this.placeholder = ''">
-                    <div class="show-password"></div>
+            <input
+              type="password"
+              name="password"
+              placeholder="$LOGIN_PASSWORD$"
+              onfocus="this.placeholder = ''"
+            />
+            <div class="show-password"></div>
             <div class="inputLine"></div>
           </div>
 
           <div class="formRow-bottom clearfix">
             <div class="col">
-              <input type="checkbox" id="remember">
+              <input type="checkbox" id="remember" />
               <label for="remember">$REMEMBER_ME$</label>
             </div>
 
             <div class="col">
-              <a href="$DEMO_APPLICATION_URL$/app/forgot-username">$LOGIN_WITH_FORGOT_USERNAME$</a><br>
               <!--
               <a href="$DEMO_APPLICATION_URL$/app/forgot-password">$LOGIN_WITH_FORGOT_PASSWORD$</a>
               -->
               <!--The URL for the forgotten password is read from the Javascript above that sets forgot-password-link-->
-              <a id="forgot-password-link" href="">$LOGIN_WITH_FORGOT_PASSWORD$</a>
+              <a id="forgot-password-link" href="@SHOW_FORGOT_PASSWORD_LINK@"
+                >$LOGIN_WITH_FORGOT_PASSWORD$</a
+              >
             </div>
 
             <div class="clear"></div>
-            <input type="hidden" name="operation" value="verify">
-            <input type="hidden" name="username">
-            <input class="input-cta" type="submit" value="$LOGIN_BUTTON$" onclick="DoSubmit()">
-            <p>$REGISTER_ACCOUNT$  <a href="$DEMO_APPLICATION_URL$/open-account" class="blue" id="open-new-account-link">$OPEN_AN_ACCOUNT$</a>
-            </p>
+            <input type="hidden" name="operation" value="verify" />
+            <input type="hidden" name="username" />
+            <input
+              class="input-cta"
+              type="submit"
+              value="$LOGIN_BUTTON$"
+              onclick="DoSubmit()"
+            />
           </div>
-
         </form>
-
+        <br />
+        <div>
+          <p>
+            $REGISTER_ACCOUNT$
+            <a
+              href="$DEMO_APPLICATION_URL$/open-account"
+              class="blue"
+              id="open-new-account-link"
+              >$OPEN_AN_ACCOUNT$</a
+            >
+          </p>
+        </div>
       </div>
-
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.2/jquery.min.js"></script>
-    <script src="$DEMO_APPLICATION_URL$/javascripts/init.js"></script>
     <div class="footer">
-      <div class="container">
+      <div class="footer-container">
         @PAGE_FOOTER@
       </div>
     </div>
-</body>
+    <!-- Please do not move JS code from here, it may affect functionality -->
+<script type="text/javascript" src="/authsvc/mtfim/sps/static/common.js"></script>
+<script type="text/javascript" src="/authsvc/mtfim/sps/static/basicldapuser_login.js"></script>
+  </body>
 </html>

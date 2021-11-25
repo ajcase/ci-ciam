@@ -929,10 +929,14 @@ function titleCase(str) {
   return str.join(' ');
 }
 
-async function applyPolicyAndTheme(policyid,themeId,app,accessToken) {
+async function applyPolicyThemeSources(policyid,themeId,sources,app,accessToken) {
   return new Promise((resolve, reject) => {
 
     var url = process.env.OIDC_CI_BASE_URI + app._links.self.href;
+
+    if (sources.length > 0) {
+      app.identitySources = sources;
+    }
 
     if (policyid) {
       app.authPolicy = {};
@@ -1348,6 +1352,35 @@ async function associatePurpose(appId, purposeIds, accessToken) {
   });
 }
 
+function getIndentitySourceId(realm, accessToken) {
+  return new Promise((resolve, reject) => {
+    var options = {
+      'headers': {
+        'Content-Type': 'application/scim+json',
+        'Authorization': `Bearer ${accessToken}`
+      }
+    }
+    console.log("Lookup Identity Source:" + realm);
+    request.get(process.env.OIDC_CI_BASE_URI + '/v1.0/identitysources', options, function(_err, response, body) {
+      console.log("Response code:", response.statusCode);
+      console.log("Lookup response:", body);
+      if (response.statusCode == 200) {
+        pbody = JSON.parse(body);
+        for (i in pbody.identitySources) {
+          for (j in pbody.identitySources[i].properties) {
+            if (pbody.identitySources[i].properties[j].key == "realm" &&
+                pbody.identitySources[i].properties[j].value == realm) {
+              resolve(pbody.identitySources[i].id);
+              break;
+            }
+          }
+        }
+        reject(false);
+      } else reject(false);
+    });
+  });
+}
+
 module.exports = {
   oidcIdToken: oidcIdToken,
   authorize: authorize,
@@ -1374,7 +1407,7 @@ module.exports = {
   titleCase: titleCase,
   createApplication: createApplication,
   getApplication: getApplication,
-  applyPolicyAndTheme: applyPolicyAndTheme,
+  applyPolicyThemeSources: applyPolicyThemeSources,
   createEula: createEula,
   createAccessType: createAccessType,
   createPurpose: createPurpose,
@@ -1384,5 +1417,6 @@ module.exports = {
   createDpcmPolicy: createDpcmPolicy,
   associatePurpose: associatePurpose,
   getThemeId: getThemeId,
-  registerTheme: registerTheme
+  registerTheme: registerTheme,
+  getIndentitySourceId: getIndentitySourceId
 };
