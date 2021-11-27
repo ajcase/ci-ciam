@@ -1,6 +1,7 @@
 require('dotenv').config();
 
-var request = require('request');
+var axios = require('axios');
+var qs = require('qs');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -53,14 +54,6 @@ var openaccount = require('./routes/open-account');
 var accountclaim = require('./routes/account-claim');
 var consent = require('./routes/consent');
 
-function titleCase(string) {
-  var sentence = string.toLowerCase().split(" ");
-  for (var i = 0; i < sentence.length; i++) {
-    sentence[i] = sentence[i][0].toUpperCase() + sentence[i].slice(1);
-  }
-  return sentence.join(" ");
-}
-
 // Configure the OpenId Connect Strategy
 // with credentials obtained from env details (.env)
 passport.use(new OpenIDStrategy({
@@ -73,18 +66,18 @@ passport.use(new OpenIDStrategy({
     callbackURL: process.env.OIDC_REDIRECT_URI, // from .env file
     passReqToCallback: true
   },
-  function(req, issuer, userId, profile, accessToken, refreshToken, params, cb) {
-
+  function(req, issuer, claims, acr, idToken, accessToken, params, cb) {
     console.log('issuer:', issuer);
-    console.log('userId:', userId);
+    console.log('claims:', claims);
+    console.log('acr:', acr);
+    console.log('idtoken:', idToken);
     console.log('accessToken:', accessToken);
-    console.log('refreshToken:', refreshToken);
     console.log('params:', params);
 
     req.session.accessToken = accessToken;
-    req.session.userId = userId;
+    req.session.userId = claims.userId;
     req.session.loggedIn = true;
-    return cb(null, profile);
+    return cb(null, claims);
   }));
 
 passport.serializeUser(function(user, done) {
@@ -177,32 +170,41 @@ app.get('/login-google', passport.authenticate('openidconnect', {
 
 // Callback handler that IBM will redirect back to
 // after successfully authenticating the user
-app.get('/oauth/callback', passport.authenticate('openidconnect', {
-  callback: true,
-  successReturnToOrRedirect: '/app/profile',
-  failureRedirect: '/'
-}))
-
-
+app.get('/oauth/callback', passport.authenticate(
+  'openidconnect',
+  {
+    failureRedirect: '/'
+  }),
+  function(req,res) {
+    res.redirect('/app/profile');
+  });
 
 // Destroy both the local session and
 // revoke the access_token at IBM
 app.get('/logout', function(req, res) {
-  request.post(process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/revoke', {
-    'form': {
-      'client_id': process.env.OIDC_CLIENT_ID,
-      'client_secret': process.env.OIDC_CLIENT_SECRET,
-      'token': req.session.accessToken,
-      'token_type_hint': 'access_token'
-    }
-  }, function(err, respose, body) {
 
-    console.log('Session Revoked at IBM');
+  var data = {
+    'client_id': process.env.OIDC_CLIENT_ID,
+    'client_secret': process.env.OIDC_CLIENT_SECRET,
+    'token': req.session.accessToken,
+    'token_type_hint': 'access_token'
+  };
+
+  var options = {
+    method: 'post',
+    url: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/revoke',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    data: qs.stringify(data)
+  };
+
+  axios(options).then(response => {
+    console.log('Session Revoked at Verify. Status',response.status);
     req.session.loggedIn = false;
     console.log('process.env.THEME_ID in /logout is: ' + process.env.THEME_ID);
     req.session.loggedIn = false;
     res.redirect(process.env.OIDC_CI_BASE_URI + '/idaas/mtfim/sps/idaas/logout' + '?themeId=' + process.env.THEME_ID);
-
   });
 });
 

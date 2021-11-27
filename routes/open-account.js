@@ -1,17 +1,7 @@
-var request = require('request');
 var express = require('express');
 var _ = require('lodash');
 var bbfn = require('../functions.js');
 var router = express.Router();
-
-function match(a,b){
-  if(a === b){
-    return a;
-  }
-  else{
-    return false;
-  }
-}
 
 // GET profile
 router.get('/', function(req, res, next) {
@@ -97,7 +87,7 @@ router.post('/car', function(req, res, next) {
           console.log(err);
         } else {
           var accessToken = body.access_token;
-          bbfn.getUserID(req.session.userEmail, accessToken, function(err,  body){
+          bbfn.getUserID(req.session.userEmail, accessToken, async function(err,  body){
               if(body === false)
               {
                 var userInfo = {
@@ -158,35 +148,37 @@ router.post('/car', function(req, res, next) {
                 console.log("User creation information:", userInfo)
                 // Peter V: note the themeId query parameter!
                 var options = {
+                  'method': 'post',
+                  'url': process.env.OIDC_CI_BASE_URI + '/v2.0/Users',
                   'headers': {
                     'Content-Type':'application/scim+json',
                     'Authorization': `Bearer ${accessToken}`
                   },
-                  'body': JSON.stringify(userInfo),
-                  'qs': {
+                  'data': userInfo,
+                  'params': {
                     'themeId': process.env.THEME_ID
                   },
                 }
-                request.post(process.env.OIDC_CI_BASE_URI + '/v2.0/Users', options, function(err, response, body){
-                  console.log("Create user:", req.session.userEmail)
-                  pbody = JSON.parse(body);
-                  console.log("Response code:", response.statusCode);
-                  console.log("Create response:", body);
-                  if(response.statusCode == 201){
-                    //success
-                    res.render('insurance/open-account-car-success', {
-                       quote: 'car',
-                       formSubmission: JSON.stringify(req.body),
-                       profileLink: '/app/profile',
-                       message: `A password has been generated for you and sent to the email you provided us.`,
-                       loggedIn: loggedIn
-                    });
-                  }
-                  else{
-                    //fail
-                    res.render('insurance/open-account-failed');
-                  }
-                });
+
+                var response = await axios(options);
+                console.log("Create user:", req.session.userEmail)
+                pbody = response.data;
+                console.log("Response code:", response.statusCode);
+                console.log("Create response:", JSON.stringify(pbody));
+                if(response.status == 201){
+                  //success
+                  res.render('insurance/open-account-car-success', {
+                     quote: 'car',
+                     formSubmission: JSON.stringify(req.body),
+                     profileLink: '/app/profile',
+                     message: `A password has been generated for you and sent to the email you provided us.`,
+                     loggedIn: loggedIn
+                  });
+                }
+                else{
+                  //fail
+                  res.render('insurance/open-account-failed');
+                }
               }
               else{
                 var userId = body.id;
@@ -293,7 +285,7 @@ router.post('/home', function(req, res, next) {
           console.log(err);
         } else {
           var accessToken = body.access_token;
-          bbfn.getUserID(req.session.userEmail, accessToken, function(err,  body){
+          bbfn.getUserID(req.session.userEmail, accessToken, async function(err,  body){
               if(body === false)
               {
                 var userInfo = {
@@ -348,35 +340,37 @@ router.post('/home', function(req, res, next) {
 
                 console.log("User creation information:", userInfo)
                 var options = {
+                  'method': 'post',
+                  'url': process.env.OIDC_CI_BASE_URI + '/v2.0/Users',
                   'headers': {
                     'Content-Type':'application/scim+json',
                     'Authorization': `Bearer ${accessToken}`
                   },
-                  'body': JSON.stringify(userInfo),
-                  'qs': {
+                  'data': userInfo,
+                  'params': {
                     'themeId': process.env.THEME_ID
                   },
                 }
-                request.post(process.env.OIDC_CI_BASE_URI + '/v2.0/Users', options, function(err, response, body){
-                  console.log("Create user:", req.session.userEmail)
-                  pbody = JSON.parse(body);
-                  console.log("Response code:", response.statusCode);
-                  console.log("Create response:", body);
-                  if(response.statusCode == 201){
-                    //success
-                    res.render('insurance/open-account-home-success', {
-                       quote: 'home',
-                       formSubmission: JSON.stringify(req.body),
-                       profileLink: '/app/profile',
-                       message: `A password has been generated for you and sent to the email you provided us.`,
-                       loggedIn: loggedIn
-                    });
-                  }
-                  else{
-                    //fail
-                    res.render('insurance/open-account-failed');
-                  }
-                });
+
+                var response = await axios(options);
+                console.log("Create user:", req.session.userEmail)
+                pbody = response.data;
+                console.log("Response code:", response.status);
+                console.log("Create response:", JSON.stringify(pbody));
+                if(response.status == 201){
+                  //success
+                  res.render('insurance/open-account-home-success', {
+                     quote: 'home',
+                     formSubmission: JSON.stringify(req.body),
+                     profileLink: '/app/profile',
+                     message: `A password has been generated for you and sent to the email you provided us.`,
+                     loggedIn: loggedIn
+                  });
+                }
+                else{
+                  //fail
+                  res.render('insurance/open-account-failed');
+                }
               }
               else{
                 var userId = body.id;

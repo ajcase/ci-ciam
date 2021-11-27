@@ -24,9 +24,11 @@
  *
  */
 
-var request = require('request');
 var dotenv = require('dotenv');
 var fs = require('fs');
+var axios = require('axios');
+var qs = require('qs');
+const FormData = require('form-data');
 
 // read the .env environment file
 dotenv.config({
@@ -38,10 +40,15 @@ function filenameOnly(path) {
     return(path.split('\\').pop().split('/').pop());
 }
 
-function getAccessToken() {
+async function getAccessToken() {
   // get token to talk with Verify
   // returns the body of the POST call as an object
-  return new Promise((resolve, reject) => {
+
+    var data = {
+      grant_type: 'client_credentials',
+      client_id: process.env.API_CLIENT_ID,
+      client_secret: process.env.API_SECRET,
+    };
 
     var options = {
       method: 'POST',
@@ -49,49 +56,29 @@ function getAccessToken() {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      form: {
-        grant_type: 'client_credentials',
-        client_id: process.env.API_CLIENT_ID,
-        client_secret: process.env.API_SECRET,
-      }
+      data: qs.stringify(data)
     };
 
-    request(options, (error, _response, body) => {
-      if (error) {
-        reject(error);
-      } else {
-        let pb = JSON.parse(body);
-        resolve(pb);
-      }
-    });
-  });
+    var response = await axios(options);
+    return response.data;
 }
 
-function getThemesData(accessToken) {
+async function getThemesData(accessToken) {
   // get registered themes in Verify
   // returns the body of the GET call as an object
-  return new Promise((resolve, reject) => {
-    // Query registered themes using API and return these in a JS object
-    var options = {
-      method: 'GET',
-      url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes',
-      headers: {
-        'Authorization': 'Bearer ' + accessToken
-      }
-    };
+  // Query registered themes using API and return these in a JS object
+  var options = {
+    method: 'GET',
+    url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes',
+    headers: {
+      'Authorization': 'Bearer ' + accessToken
+    }
+  };
 
-    request(options, (error, response, _body) => {
-      if (error) {
-        reject(error);
-      } else {
-        if (response.statusCode == 200) {
-          // Parse JSON-formatted body of the response into an object
-          let bodyObj=JSON.parse(response.body);
-          resolve(bodyObj);
-        } else reject(response);
-      }
-    });
-  });
+  var response = await axios(options);
+  if (response.status == 200) {
+    return response.data;
+  } else throw("Failed to get themes");
 }
 
 function listThemes(themes) {
@@ -99,14 +86,13 @@ function listThemes(themes) {
   for (i=0;i < themes.total;i++) {
     theme=themes.themeRegistrations[i];
     // print name, id and description of a registered theme
-    console.log(theme.name.padEnd(20)+" | "+theme.id.padEnd(35)+" | "+theme.description.padEnd(35));
+    console.log(theme.name.padEnd(20)+" | "+theme.id.padEnd(36)+" | "+theme.description);
   }
   return (true);
 }
 
 function registerTheme(accessToken,themeName) {
   // Register the theme
-  return new Promise((resolve, reject) => {
 
     var zipfileName=themeName + ".zip";
     var themeConfig='{"name": "' + themeName + '", "description": "Uploaded via API"}';
@@ -114,143 +100,107 @@ function registerTheme(accessToken,themeName) {
 
     console.log("Registering theme '" + themeName + "'" + " using file " + zipfileName);
 
-    // Register the theme
-    // console.log("Preparing API call...");
+    const form = new FormData();
+
+    form.append("configuration", themeConfig);
+    form.append("files", fs.createReadStream(zipfileName), themeFilename);
+
     var options = {
       method: 'POST',
       url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes',
       headers: {
+        ...form.getHeaders(),
         'Authorization': 'Bearer ' + accessToken,
-        'Content-Type': 'application/x-www-form-urlencoded'
       },
-      formData: {
-        'files': {
-          'value': fs.createReadStream(zipfileName),
-          'options': {
-            'filename': themeFilename
-          }
-        },
-        'configuration': themeConfig
-      }
+      data: form
     };
+
     console.log("Making API call...");
-    request(options, (error, response, _body) => {
-      if (error) {
-        reject(error);
-      } else {
-        if (response.statusCode == 201) {
+    return axios(options).then(response =>{
+        if (response.status == 201) {
           console.log("Successfully registered theme '" + themeName + "'");
-          resolve(true);
-        } else reject(response);
-      }
-    });
-  }).catch(error => console.log("ERROR details: \n\t" + error.stack));
+          return true;
+        } else throw(JSON.stringify(response.data));
+    }).catch(e => {throw("Error" + e.stack)});
 }
 
 function updateTheme(accessToken,themeID,themeName) {
   // Update the theme
-  return new Promise((resolve, reject) => {
 
     var zipfileName=themeName + ".zip";
-    var themeConfig='{"name": "' + themeName + '", "description": "Theme uploaded via API"}';
+    var themeConfig='{"name": "' + themeName + '", "description": "Uploaded via API"}';
     var themeFilename='"' + themeName + ".zip" + '"';
-    console.log("Updating theme for '" + themeName + "'" + " using file " + zipfileName);
 
-    templateFile = fs.createReadStream(zipfileName);
+    console.log("Updating theme '" + themeName + "'" + " using file " + zipfileName);
 
-    templateFile.on('error', function(error) {
-      console.log("ERROR: Cannot access file " + zipfileName);
-      // console.log("Detailed error: " + error.stack);
-      reject(error);
-    });
+    const form = new FormData();
 
-    //templateFile.on('end',function() {
-      // Update the theme
-      var options = {
-        method: 'PUT',
-        url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes/' + themeID,
-        headers: {
-          'Authorization': 'Bearer ' + accessToken,
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        formData: {
-          'files': {
-            'value': templateFile,
-            'options': {
-              'filename': themeFilename
-            }
-          },
-          'configuration': themeConfig
-        }
-      };
-      console.log("Making API call...");
-      request(options, (error, response, _body) => {
-        if (error) {
-          reject(error);
-        } else {
-          if (response.statusCode == 204) {
-            // console.log("Successfully updated theme id " + themeID);
-            resolve(true);
-          } else reject(response);
-        }
-      });
-    //});
-  }).catch(error => console.log("ERROR details: \n\t" + error.stack));
-}
+    form.append("configuration", themeConfig);
+    form.append("files", fs.createReadStream(zipfileName), themeFilename);
 
-
-function deleteTheme(accessToken,themeID,themeName) {
-  return new Promise((resolve, reject) => {
-    // Delete registered theme by id
-    console.log("Deleting theme '" + themeName + "'");
     var options = {
-      method: 'DELETE',
+      method: 'PUT',
       url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes/' + themeID,
       headers: {
-        'Authorization': 'Bearer ' + accessToken
-      }
-    };
-    console.log("Making API call...");
-    request(options, (error, response, _body) => {
-      if (error) {
-        //console.log("deleteTheme:Error: " + error);
-        //console.log("deleteTheme:Response: " + JSON.stringify(response));
-        reject(error);
-      } else {
-        //console.log("Response code: " + response.statusCode);
-        //console.log("Response : " + JSON.stringify(response));
-        if (response.statusCode == 204) resolve(true);
-        else reject(response.body);
-      }
-    });
-  });
-}
-
-function downloadTheme(accessToken,themeID,themeName) {
-  return new Promise((resolve, reject) => {
-    // Download registered theme by id
-    console.log("Get theme '" + themeName + "'");
-    var options = {
-      method: 'GET',
-      url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes/' + themeID,
-      headers: {
-        'Authorization': 'Bearer ' + accessToken
+        ...form.getHeaders(),
+        'Authorization': 'Bearer ' + accessToken,
       },
-      gzip: true
+      data: form
     };
+
     console.log("Making API call...");
-    var file = fs.createWriteStream(themeName + ".zip");
-    let stream = request(options).pipe(file)
+    return axios(options).then(response =>{
+        if (response.status == 204) {
+          return true;
+        } else throw(JSON.stringify(response.data));
+    }).catch(e => {throw("Error" + e.stack)});
+}
+
+async function deleteTheme(accessToken,themeID,themeName) {
+  // Delete registered theme by id
+  console.log("Deleting theme '" + themeName + "'");
+  var options = {
+    method: 'DELETE',
+    url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes/' + themeID,
+    headers: {
+      'Authorization': 'Bearer ' + accessToken
+    }
+  };
+
+  console.log("Making API call...");
+  var response = await axios(options);
+  if (response.status == 204) return true;
+  else reject(response.data);
+}
+
+async function downloadTheme(accessToken,themeID,themeName) {
+  // Download registered theme by id
+  console.log("Get theme '" + themeName + "'");
+  var options = {
+    method: 'GET',
+    url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes/' + themeID,
+    headers: {
+      'Authorization': 'Bearer ' + accessToken
+    },
+    responseType: 'stream'
+  };
+  console.log("Making API call...");
+
+  var file = fs.createWriteStream(themeName + ".zip");
+
+  response = await axios(options);
+  return new Promise((resolve,reject) => {
+    response.data.pipe(file)
     .on('finish', () => {
-      console.log(`The file has finished downloading.`);
+      console.log('The file has finished downloading.');
       resolve(true);
     })
     .on('error', (error) => {
+      console.log("File download failed: " + error);
       reject(error);
     });
   });
 }
-
 
 async function deleteMyTheme(accessToken,themes,themeName) {
     // Only async functions can call other functions with "await"

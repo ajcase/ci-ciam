@@ -1,5 +1,5 @@
 var express = require('express');
-var request = require('request');
+var axios = require('axios');
 var _ = require('lodash');
 var bbfn = require('../functions.js');
 var router = express.Router();
@@ -34,6 +34,7 @@ router.get('/app/dashboard', function(req, res, next) {
     loggedIn: loggedIn
   });
 });
+
 router.get('/app/profile', function(req, res, next) {
   var loggedIn = ((req.session.loggedIn) ? true : false);
   if (loggedIn) {
@@ -47,7 +48,7 @@ router.get('/app/profile', function(req, res, next) {
           accessTypeId: process.env.DEFAULT_ACCESS_TYPE
         }
       ]
-    }, function(_err, duaRespItems) {
+    }, async function(_err, duaRespItems) {
       var result = duaRespItems[0].result[0];
       var approved = result.approved;
       if (!approved) {
@@ -62,145 +63,141 @@ router.get('/app/profile', function(req, res, next) {
         }
       }
 
-      request.get(process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/userinfo', {
-        'auth': {
-          'bearer': req.session.accessToken
+      var options = {
+        method: 'GET',
+        url: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/userinfo',
+        headers: {
+          'Authorization': `Bearer ${userAccessToken}`
         }
-      }, function(err, response, body) {
-        console.log('---- User ID token ----')
-        console.log(JSON.parse(body));
+      };
 
-        request.get(process.env.OIDC_CI_BASE_URI + '/v2.0/Me', {
-          'auth': {
-            'bearer': req.session.accessToken
+      var response = await axios(options);
+      console.log('---- User ID token ----');
+      console.log(response.data);
+
+      options.url = process.env.OIDC_CI_BASE_URI + '/v2.0/Me';
+      response = await axios(options);
+
+      console.log('---- User profile ----');
+      var me = response.data;
+      console.log(me);
+
+      var phones = [];
+      if (me.phoneNumbers)
+        phones = me.phoneNumbers.filter(phone => phone.value);
+      if (phones.length == 0) {
+        delete me.phoneNumbers;
+      } else {
+        me.phoneNumbers = phones;
+      }
+
+      req.session.userprofile = me;
+
+      var mfaEnabled = (typeof(_.filter(me.groups, {
+        'id': process.env.MFAGROUPID
+      }))[0] !== 'undefined') ? true : false;
+        var meLinked = (typeof me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["linkedAccounts"] != 'undefined') ? true : false;
+      if (meLinked) {
+        var linkedAccounts = me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["linkedAccounts"]
+      } else {
+        var linkedAccounts = false
+      }
+      var addresses = (typeof me["addresses"] != 'undefined') ? true : false
+      if (addresses) {
+        var hasAddress = (typeof me["addresses"][0]["streetAddress"] !== 'undefined') ? true : false;
+      }
+      console.log(addresses, hasAddress)
+      if (!linkedAccounts) {
+        var linkedAccountsTotal = false;
+      } else {
+        var linkedAccountsTotal = {
+          'facebook': (typeof(_.filter(linkedAccounts, {
+            'realm': "www.facebook.com"
+          }))[0] !== 'undefined') ? true : false,
+          'linkedin': (typeof(_.filter(linkedAccounts, {
+            'realm': "www.linkedin.com"
+          }))[0] !== 'undefined') ? true : false,
+          'google': (typeof(_.filter(linkedAccounts, {
+            'realm': "www.google.com"
+          }))[0] !== 'undefined') ? true : false
+        }
+      }
+
+      console.log(linkedAccountsTotal)
+
+      var customAttributes = me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["customAttributes"]
+
+      var quoteCount = (typeof(_.filter(customAttributes, {
+        'name': 'quoteCount'
+      }))[0] !== 'undefined') ? (_.filter(customAttributes, {
+        'name': 'quoteCount'
+      }))[0].values.toString() : false;
+
+      var buildExtProfile = {
+        'car': {
+          'displayName': "Car",
+          'value': (typeof(_.filter(customAttributes, {
+            'name': 'carModel'
+          }))[0] !== 'undefined') ? `${(_.filter(customAttributes, {'name': 'carYear'}))[0].values.toString()} ${(_.filter(customAttributes, {'name': 'carMake'}))[0].values.toString()} ${(_.filter(customAttributes, {'name': 'carModel'}))[0].values.toString()}` : false,
+          'status': ((typeof(_.filter(customAttributes, {
+            'name': 'carModel'
+          }))[0] !== 'undefined') ? true : false)
+        }
+      }
+      console.log(buildExtProfile);
+
+      // For the "Change Password" button a direct URL to Verify's authn service is used
+      // This URL is then passed to the renderer; reference to file profile.hbs
+      var buildChangePasswordURL = process.env.OIDC_CI_BASE_URI + "/authsvc/mtfim/sps/authsvc?PolicyId=urn:ibm:security:authentication:asf:changepassword&login_hint=" + me.userName + "&themeId=" + process.env.THEME_ID;
+      console.log("--- Change Password URL --- is: " + buildChangePasswordURL);
+
+      //// BUILD CONSENT
+      dpcmClient.performDUA(req.session.accessToken, {
+        trace: false,
+        items: [
+          {
+            purposeId: process.env.MARKETING_PURPOSE_ID,
+            accessTypeId: process.env.READ_ACCESS_TYPE,
+            attributeId: process.env.EMAIL_ATTRIBUTE_ID
+          },
+          {
+            purposeId: process.env.PAPERLESS_PURPOSE_ID,
+            accessTypeId: process.env.READ_ACCESS_TYPE,
+            attributeId: process.env.EMAIL_ATTRIBUTE_ID
+          },
+        ]
+      }, function(_err, duaRespItems) {
+        var consentMarketing = false;
+        var consentPaperless = false;
+
+        duaRespItems.forEach(function(item, index) {
+          if (item.purposeId == process.env.MARKETING_PURPOSE_ID) {
+            consentMarketing = item.result[0].approved;
+          } else if (item.purposeId == process.env.PAPERLESS_PURPOSE_ID) {
+            consentPaperless = item.result[0].approved;
           }
-        }, function(err, response, body) {
+        });
 
-          console.log('---- User profile ----')
-          console.log(JSON.parse(body));
-          var me = JSON.parse(body);
-
-          var phones = [];
-          if (me.phoneNumbers)
-            phones = me.phoneNumbers.filter(phone => phone.value);
-          if (phones.length == 0) {
-            delete me.phoneNumbers;
-          } else {
-            me.phoneNumbers = phones;
-          }
-
-          req.session.userprofile = me;
-
-          var mfaEnabled = (typeof(_.filter(me.groups, {
-            'id': process.env.MFAGROUPID
-          }))[0] !== 'undefined') ? true : false;
-
-          var meLinked = (typeof me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["linkedAccounts"] != 'undefined') ? true : false;
-          if (meLinked) {
-            var linkedAccounts = me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["linkedAccounts"]
-          } else {
-            var linkedAccounts = false
-          }
-          var addresses = (typeof me["addresses"] != 'undefined') ? true : false
-          if (addresses) {
-            var hasAddress = (typeof me["addresses"][0]["streetAddress"] !== 'undefined') ? true : false;
-          }
-          console.log(addresses, hasAddress)
-          if (!linkedAccounts) {
-            var linkedAccountsTotal = false;
-          } else {
-            var linkedAccountsTotal = {
-              'facebook': (typeof(_.filter(linkedAccounts, {
-                'realm': "www.facebook.com"
-              }))[0] !== 'undefined') ? true : false,
-              'linkedin': (typeof(_.filter(linkedAccounts, {
-                'realm': "www.linkedin.com"
-              }))[0] !== 'undefined') ? true : false,
-              'google': (typeof(_.filter(linkedAccounts, {
-                'realm': "www.google.com"
-              }))[0] !== 'undefined') ? true : false
-            }
-          }
-
-          console.log(linkedAccountsTotal)
-
-          var customAttributes = me["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["customAttributes"]
-
-          var quoteCount = (typeof(_.filter(customAttributes, {
-            'name': 'quoteCount'
-          }))[0] !== 'undefined') ? (_.filter(customAttributes, {
-            'name': 'quoteCount'
-          }))[0].values.toString() : false;
-
-          var buildExtProfile = {
-            'car': {
-              'displayName': "Car",
-              'value': (typeof(_.filter(customAttributes, {
-                'name': 'carModel'
-              }))[0] !== 'undefined') ? `${(_.filter(customAttributes, {'name': 'carYear'}))[0].values.toString()} ${(_.filter(customAttributes, {'name': 'carMake'}))[0].values.toString()} ${(_.filter(customAttributes, {'name': 'carModel'}))[0].values.toString()}` : false,
-              'status': ((typeof(_.filter(customAttributes, {
-                'name': 'carModel'
-              }))[0] !== 'undefined') ? true : false)
-            }
-          }
-          console.log(buildExtProfile);
-
-          // For the "Change Password" button a direct URL to Verify's authn service is used
-          // This URL is then passed to the renderer; reference to file profile.hbs
-          var buildChangePasswordURL = process.env.OIDC_CI_BASE_URI + "/authsvc/mtfim/sps/authsvc?PolicyId=urn:ibm:security:authentication:asf:changepassword&login_hint=" + me.userName + "&themeId=" + process.env.THEME_ID;
-          console.log("--- Change Password URL --- is: " + buildChangePasswordURL);
-
-          //// BUILD CONSENT
-          dpcmClient.performDUA(req.session.accessToken, {
-            trace: false,
-            items: [
-              {
-                purposeId: process.env.MARKETING_PURPOSE_ID,
-                accessTypeId: process.env.READ_ACCESS_TYPE,
-                attributeId: process.env.EMAIL_ATTRIBUTE_ID
-              },
-              {
-                purposeId: process.env.PAPERLESS_PURPOSE_ID,
-                accessTypeId: process.env.READ_ACCESS_TYPE,
-                attributeId: process.env.EMAIL_ATTRIBUTE_ID
-              },
-            ]
-          }, function(_err, duaRespItems) {
-            var consentMarketing = false;
-            var consentPaperless = false;
-
-            duaRespItems.forEach(function(item, index) {
-              if (item.purposeId == process.env.MARKETING_PURPOSE_ID) {
-                consentMarketing = item.result[0].approved;
-              } else if (item.purposeId == process.env.PAPERLESS_PURPOSE_ID) {
-                consentPaperless = item.result[0].approved;
-              }
-            });
-
-            console.log(`This user has logged consent for
-              Marketing ${consentMarketing}
-              Paperless ${consentPaperless}`);
-            res.render('insurance/profile', {
-              user: me,
-              loggedIn: loggedIn,
-              quotes: quoteCount,
-              consentMarketing: consentMarketing,
-              consentPaperless: consentPaperless,
-              consentPaperlessAccessTypeID: process.env.READ_ACCESS_TYPE,
-              consentMarketingAccessTypeID: process.env.READ_ACCESS_TYPE,
-              consentAction: "/app/dpcm",
-              actionCar: "/open-account?type=car",
-              actionHome: "/open-account?type=home",
-              actionLife: "/open-account?type=life",
-              mfaStatus: mfaEnabled,
-              linkedAccounts: linkedAccountsTotal,
-              hasAddress: hasAddress,
-              extProfile: buildExtProfile,
-              changePasswordURL: buildChangePasswordURL
-            });
-          });
-          ////
-
+        console.log(`This user has logged consent for
+          Marketing ${consentMarketing}
+          Paperless ${consentPaperless}`);
+        res.render('insurance/profile', {
+          user: me,
+          loggedIn: loggedIn,
+          quotes: quoteCount,
+          consentMarketing: consentMarketing,
+          consentPaperless: consentPaperless,
+          consentPaperlessAccessTypeID: process.env.READ_ACCESS_TYPE,
+          consentMarketingAccessTypeID: process.env.READ_ACCESS_TYPE,
+          consentAction: "/app/dpcm",
+          actionCar: "/open-account?type=car",
+          actionHome: "/open-account?type=home",
+          actionLife: "/open-account?type=life",
+          mfaStatus: mfaEnabled,
+          linkedAccounts: linkedAccountsTotal,
+          hasAddress: hasAddress,
+          extProfile: buildExtProfile,
+          changePasswordURL: buildChangePasswordURL
         });
       });
     });

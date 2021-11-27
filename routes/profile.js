@@ -1,54 +1,40 @@
-var request = require('request');
 var express = require('express');
 var router = express.Router();
+var axios = require('axios');
 
 // GET profile
-router.get('/', function(req, res, next) {
+router.get('/', async function(req, res, next) {
 
-  request.get(process.env.OIDC_CI_BASE_URI+'/oidc/endpoint/default/userinfo', {
-    'auth': {
-      'bearer': req.session.accessToken
+  options = {
+    headers: {
+      'Authorization': 'Bearer ' + req.session.accessToken
     }
-  },function(err, response, body){
-    console.log('profile.js: ---- User ID token ----');
-    console.log(body);
+  }
 
-    var userinfo = JSON.parse(body);
-    var userinfo_string = JSON.stringify(userinfo, null, 2);
+  var response = await axios.get(process.env.OIDC_CI_BASE_URI+'/oidc/endpoint/default/userinfo', options);
+  console.log('profile.js: ---- User ID token ----');
+  var userinfo = response.data;
+  var userinfo_string = JSON.stringify(userinfo, null, 2);
+  console.log(userinfo_string);
 
-    request.get(process.env.OIDC_CI_BASE_URI + '/v2.0/Me', {
-      'auth': {
-        'bearer': req.session.accessToken
-      }
-    },function(err, response, body){
+  response = await axios.get(process.env.OIDC_CI_BASE_URI + '/v2.0/Me', options);
+  console.log('profile.js: ---- User profile ----');
+  var me = response.data;
+  var me_string = JSON.stringify(me, null, 2);
+  console.log(me_string);
+  req.session.userprofile = me;
 
-      console.log('profile.js: ---- User profile ----');
-      console.log(body);
+  response = await axios.get(process.env.OIDC_CI_BASE_URI+'/v1.0/attributes', options);
 
-      var me = JSON.parse(body);
-      var me_string = JSON.stringify(me, null, 2);
-      req.session.userprofile = me;
-
-      request.get(process.env.OIDC_CI_BASE_URI+'/v1.0/attributes', {
-        'auth': {
-          'bearer': req.session.accessToken
-        }
-      },function(err, response, body){
-
-        console.log('profile.js: ---- Attributes ----');
-        console.log(body);
-
-        attributes = JSON.parse(body);
-        attributes_string = JSON.stringify(attributes, null, 2);
-
-        res.render('credential', {
-          loggedIn: true,
-          idtoken: userinfo_string,
-          user: me_string,
-          attributes: attributes_string
-        });
-      });
-    });
+  console.log('profile.js: ---- Attributes ----');
+  attributes = JSON.parse(body);
+  attributes_string = JSON.stringify(attributes, null, 2);
+  console.log(attributes_string);
+  res.render('credential', {
+    loggedIn: true,
+    idtoken: userinfo_string,
+    user: me_string,
+    attributes: attributes_string
   });
 });
 

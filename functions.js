@@ -1,5 +1,7 @@
-var request = require('request');
+var axios = require('axios');
+const qs = require('qs');
 var fs = require('fs');
+const FormData = require('form-data');
 
 function getRandomInt() {
   return Math.floor(1000 + Math.random() * 9000)
@@ -19,16 +21,22 @@ function random_id() {
 
 function oidcIdToken(req, callback) {
   console.log(req.session.accessToken);
-  request.get(process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/userinfo', {
-    'auth': {
-      'bearer': req.session.accessToken
+
+  options = {
+    method: 'GET',
+    url: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/userinfo',
+    headers: {'Authorization': 'Bearer ' + req.session.accessToken}
+  }
+
+  axios(options).then( (response) => {
+    if (response.status == 200) {
+      console.log("User ID token:", response.data);
+      var userinfo = response.data;
+      callback(null, userinfo);
+    } else {
+      callback(response.status, null);
     }
-  }, function(err, response, body) {
-    console.log("User ID token:", body);
-    var userinfo = JSON.parse(body);
-    var userinfo_string = JSON.stringify(userinfo, null, 2);
-    callback(null, userinfo);
-  });
+  }).catch((e) => callback(e,null));
 }
 
 function authorize(clientID, clientSecret, callback) {
@@ -38,61 +46,66 @@ function authorize(clientID, clientSecret, callback) {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
-    form: {
+    data: qs.stringify({
       grant_type: 'client_credentials',
       client_id: clientID,
       client_secret: clientSecret,
       scope: 'openid'
-    }
+    })
   };
 
   console.log("Options JSON:", options)
 
-  request(options, function(error, response, body) {
-    console.log("Authorize API:", JSON.parse(body))
-    if (error) throw new Error(error);
-    callback(null, JSON.parse(body));
-  });
+  axios(options).then( (response) => {
+    console.log("Authorize API:", response.data)
+    callback(null, response.data);
+  }).catch((e) => {callback(e,null)});
 }
 
 function emailOtp(emailAddress, accessToken, callback) {
   var correlation = getRandomInt();
   var options = {
     method: 'POST',
-    url: process.env.OIDC_CI_BASE_URI + '/v1.0/authnmethods/emailotp/transient/verification',
+    url: process.env.OIDC_CI_BASE_URI + '/v2.0/factors/emailotp/transient/verifications',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${accessToken}`
     },
-    body: `{"correlation":"${correlation}","otpDeliveryEmailAddress":"${emailAddress}"}`
+    data: {
+      "correlation": `${correlation}`,
+      "emailAddress": emailAddress
+    }
   };
+
   console.log("Options JSON:", options)
 
-  request(options, function(error, response, body) {
-    console.log("Email OTP initiated:", body);
-    if (error) throw new Error(error);
-    callback(null, JSON.parse(body));
-  });
+  axios(options).then( (response) => {
+    console.log("Email OTP initiated:", response.data);
+    callback(null, response.data);
+  }).catch((e) => {callback(e,null)});
 }
 
 function smsOtp(phone, accessToken, callback) {
   var correlation = getRandomInt();
   var options = {
     method: 'POST',
-    url: process.env.OIDC_CI_BASE_URI + '/v1.0/authnmethods/smsotp/transient/verification',
+    url: process.env.OIDC_CI_BASE_URI + '/v2.0/factors/smsotp/transient/verifications',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${accessToken}`
     },
-    body: `{"correlation":"${correlation}","otpDeliveryMobileNumber":"${phone}"}`
+    data: {
+      "correlation": `${correlation}`,
+      "phoneNumber": phone
+    }
   };
+
   console.log("Options JSON:", options)
 
-  request(options, function(error, response, body) {
-    console.log("SMS OTP initiated:", body);
-    if (error) throw new Error(error);
-    callback(null, JSON.parse(body));
-  });
+  axios(options).then( (response) => {
+    console.log("SMS OTP initiated:", response.data);
+    callback(null, response.data);
+  }).catch((e) => {callback(e,null)});
 }
 
 function recoverUsername(step, accessToken, callback) {
@@ -105,35 +118,34 @@ function recoverUsername(step, accessToken, callback) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`
       },
-      body: `{
+      data: {
                 "attributes": [
                   {
                     "name": "email",
-                    "value": "${step.emailAddress}"
+                    "value": step.emailAddress
                   }
                 ],
                 "steps": [
                   {
                     "data": {
-                      "correlation": "${correlation}"
+                      "correlation": ""+correlation
                     },
                     "method": "emailotp"
                   }
                 ],
-                "stateId": "BB${correlation}"
-              }`
+                "stateId": "BB" + correlation
+              }
     };
     console.log("Options JSON:", options)
 
-    request(options, function(error, response, body) {
+    axios(options).then ((response) => {
       var buildResponse = {
         'correlation': correlation,
-        'txnId': (typeof JSON.parse(body).trxId !== 'undefined') ? JSON.parse(body).trxId : uuidv4(),
+        'txnId': (typeof response.data.trxId !== 'undefined') ? response.data.trxId : uuidv4(),
       }
-      console.log("Username Recovery OTP initiated:", JSON.parse(body));
-      if (error) throw new Error(error);
+      console.log("Username Recovery OTP initiated:", response.data);
       callback(null, buildResponse);
-    });
+    }).catch(e => callback(e,null));
   } else if (step.step == 2) {
     var options = {
       method: 'PUT',
@@ -142,20 +154,20 @@ function recoverUsername(step, accessToken, callback) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`
       },
-      body: `{
-                "otp": "${step.otp}"
-              }`
+      data: {
+        "otp": step.otp
+      }
     };
+
     console.log("Options JSON:", options)
 
-    request(options, function(error, response, body) {
-      if (error) throw new Error(error);
-      console.log("2.0 Username Recovery OTP verification:", JSON.parse(body));
-      console.log("2.1 Response code:", response.statusCode)
-      if (response.statusCode == '200') {
+    axios(options).then(response => {
+      console.log("2.0 Username Recovery OTP verification:", response.data);
+      console.log("2.1 Response code:", response.status)
+      if (response.status == '200') {
         var buildResponse = {
-          'responseCode': response.statusCode,
-          'userName': JSON.parse(body).userName,
+          'responseCode': response.status,
+          'userName': response.data.userName,
         }
         callback(null, buildResponse);
       } else {
@@ -166,7 +178,8 @@ function recoverUsername(step, accessToken, callback) {
         console.log("Error response information:", buildResponse)
         callback(null, buildResponse);
       }
-    });
+    }).catch(e => callback(e,null));
+
   } else {
     console.log("Username Recovery OTP failed");
     callback(null, 500);
@@ -176,28 +189,25 @@ function recoverUsername(step, accessToken, callback) {
 function verifyOtp(code, txnId, method, accessToken, callback) {
   var options = {
     method: 'POST',
-    url: process.env.OIDC_CI_BASE_URI + '/v1.0/authnmethods/' + method + '/transient/verification/' + txnId,
+    url: process.env.OIDC_CI_BASE_URI + '/v2.0/factors/' + method + '/transient/verifications/' + txnId,
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${accessToken}`
     },
-    body: `{"otp":"${code}"}`
+    data: `{"otp":"${code}"}`
   };
   console.log("Verify transaction JSON:", options)
 
-  request(options, function(error, response, body) {
-    var jsonBody = JSON.parse(body);
-    if (jsonBody.messageId == "CSIAH0620I") {
-      console.log("Verify OTP completed:", jsonBody)
-      if (error) throw new Error(error);
-      callback(null, JSON.parse(body));
+  axios(options).then( (response) => {
+    if (response.status == 204) {
+      console.log("Verify OTP completed:")
+      callback(null, true);
     } else {
       console.log("Verify OTP failed: The code provided was not correct.")
-      console.log("Error message", jsonBody.messageId)
-      if (error) throw new Error(error);
+      console.log("Error message", response.data);
       callback(null, false);
     }
-  });
+  }).catch((e) => {callback(e,false)});
 }
 
 function getUserID(emailAddress, accessToken, callback) {
@@ -212,46 +222,40 @@ function getUserID(emailAddress, accessToken, callback) {
 
   console.log("Options JSON:", options)
 
-  request(options, function(error, response, body) {
-    var jsonBody = JSON.parse(body);
+  axios(options).then(response => {
+    var jsonBody = response.data;
     if (jsonBody.totalResults !== 0) {
       console.log("Get UserID:", jsonBody.Resources[0])
-      if (error) throw new Error(error);
       callback(null, jsonBody.Resources[0]);
     } else {
       console.log("Get UserID: Failed to find user");
-      if (error) throw new Error(error);
       callback(null, false);
     }
-  });
+  }).catch(e => callback(e,false));
 }
 
 async function getGroupID(groupName, accessToken) {
-  return new Promise((resolve, reject) => {
-    var options = {
-      method: 'GET',
-      url: process.env.OIDC_CI_BASE_URI + `/v2.0/Groups?filter=displayName+eq+"${groupName}"`,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
-      }
-    };
+  var options = {
+    method: 'GET',
+    url: process.env.OIDC_CI_BASE_URI + `/v2.0/Groups?filter=displayName+eq+"${groupName}"`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    }
+  };
 
-    console.log("Options JSON:", options)
+  console.log("Options JSON:", options)
 
-    request(options, function(error, _response, body) {
-      if (error) reject(error);
-      var jsonBody = JSON.parse(body);
-      if (jsonBody.totalResults !== 0) {
-        console.log("Get GroupID:", jsonBody.Resources[0])
-        resolve(jsonBody.Resources[0]);
-      } else {
-        console.log("Get GroupID: Failed to find group");
-        reject("Get GroupID: Failed to find group");
-      }
-    });
-  });
-}
+  var response = await axios(options);
+  var jsonBody = response.data;
+  if (jsonBody.totalResults !== 0) {
+    console.log("Get GroupID:", jsonBody.Resources[0])
+    return jsonBody.Resources[0];
+  } else {
+    console.log("Get GroupID: Failed to find group");
+    throw("Get GroupID: Failed to find group");
+  }
+};
 
 function getThemeID(appName, accessToken, callback) {
 
@@ -264,7 +268,7 @@ function getThemeID(appName, accessToken, callback) {
         'Authorization': 'Bearer ' + accessToken,
         'Content-Type': 'application/json'
       },
-      qs: {
+      params: {
         'limit': 1,
         'search': 'name="' + appName + '"'
       },
@@ -272,35 +276,29 @@ function getThemeID(appName, accessToken, callback) {
 
   console.log("Options JSON:", options)
 
-  request(options, function(error, response, body) {
-    if (error) throw new Error(error);
-    console.log("HTTP response code is: "+response.statusCode);
-    //let bodyObj=JSON.parse(response.body);
-    //console.log("HTTP body is: " + response.body);
-    if (response.statusCode == 200) {
+  axios(options).then(response => {
+    console.log("HTTP response code is: "+response.status);
+    if (response.status == 200) {
       console.log("HTTP 200: Successfully retrieved app data");
-      let bodyObj=JSON.parse(response.body);
+      let bodyObj=response.data;
       if (bodyObj._embedded.applications.length > 0 &&
           bodyObj._embedded.applications[0].customization != undefined) {
-      // A custom theme is set.
-          var themeId=bodyObj._embedded.applications[0].customization.themeId;
-          console.log("themeId in JSON body = " + themeId);
+        // A custom theme is set.
+        var themeId=bodyObj._embedded.applications[0].customization.themeId;
+        console.log("themeId in JSON body = " + themeId);
       } else {
         var themeId="default";
         console.log("themeId set to default");
       }
-      if (error) throw new Error(error);
       callback(null, themeId);
-      } else {
-        if (error) throw new Error(error);
-        callback(null, false);
-      }
-  });
+    } else {
+      callback(null, false);
+    }
+  }).catch(_e => {callback(null,false)});;
 }
 
-
-
 function getFullProfile(userId, accessToken, callback) {
+
   var options = {
     method: 'GET',
     url: process.env.OIDC_CI_BASE_URI + `/v2.0/Users/${userId}`,
@@ -311,15 +309,13 @@ function getFullProfile(userId, accessToken, callback) {
 
   console.log("Options JSON:", options)
 
-  request(options, function(error, response, body) {
-    var jsonBody = JSON.parse(body);
+  axios(options).then(response => {
+    var jsonBody = response.data;
     if (jsonBody.totalResults !== 0) {
       console.log(`Get full profile of ${userId}:`, jsonBody)
-      if (error) throw new Error(error);
       callback(null, jsonBody);
     } else {
       console.log("Get UserID: Failed to find user");
-      if (error) throw new Error(error);
       callback(null, false);
     }
   });
@@ -337,21 +333,20 @@ function getQuoteCount(emailAddress, accessToken, callback) {
 
   console.log("Options JSON:", options)
 
-  request(options, function(error, response, body) {
-    var jsonBody = JSON.parse(body);
+  axios(options).then(response => {
+    var jsonBody = response.data;
     if (jsonBody.totalResults !== 0) {
       console.log("Get UserID:", jsonBody.Resources[0])
-      if (error) throw new Error(error);
       callback(null, jsonBody.Resources[0]["urn:ietf:params:scim:schemas:extension:ibm:2.0:User"]["customAttributes"][0]["values"][0]);
     } else {
       console.log("Get UserID: Failed to find user");
-      if (error) throw new Error(error);
       callback(null, false);
     }
   });
 }
 
 function resetPassword(userId, accessToken, callback) {
+
   var options = {
     method: 'PATCH',
     url: process.env.OIDC_CI_BASE_URI + `/v2.0/Users/${userId}/passwordResetter`,
@@ -359,7 +354,7 @@ function resetPassword(userId, accessToken, callback) {
       'Content-Type': 'application/scim+json',
       'Authorization': `Bearer ${accessToken}`
     },
-    body: `{
+    data: {
               "schemas": [
                   "urn:ietf:params:scim:api:messages:2.0:PatchOp"
               ],
@@ -376,20 +371,19 @@ function resetPassword(userId, accessToken, callback) {
                       }
                   }
               ]
-          }`
+          }
   };
 
   console.log("Options JSON:", options)
 
-  request(options, function(error, response, body) {
-    if (error) throw new Error(error);
-    console.log("Password reset response code:", response.statusCode)
-    if (response.statusCode == 204) {
+  axios(options).then(response => {
+    console.log("Password reset response code:", response.status)
+    if (response.status == 204) {
       callback(null, true);
     } else {
       callback(null, false);
     }
-  });
+  }).catch(_e => {callback(null,false)});
 }
 
 function deleteUser(userId, accessToken, callback) {
@@ -403,16 +397,15 @@ function deleteUser(userId, accessToken, callback) {
 
   console.log("Options JSON:", options)
 
-  request(options, function(error, response, _body) {
-    if (error) throw new Error(error);
-    if (response.statusCode == 204) {
+  axios(options).then(response =>{
+    if (response.status == 204) {
       console.log(`User Deleted: ${userId}`);
       callback(null, true);
     } else {
       console.log(`Failed to delete user: ${userId}`);
       callback(null, false);
     }
-  });
+  }).catch(_e => {callback(null,false)});
 }
 
 function changePassword(accessToken, pwVars, callback) {
@@ -425,9 +418,9 @@ function changePassword(accessToken, pwVars, callback) {
 
   // Check if passwords match
   if (pwVars.newPw == pwVars.confirmPw) {
-    var data = `{
-                    "currentPassword": "${pwVars.currentPw}",
-                    "newPassword": "${pwVars.newPw}",
+    var data = {
+                    "currentPassword": pwVars.currentPw,
+                    "newPassword": pwVars.newPw,
                     "schemas": [
                       "urn:ietf:params:scim:schemas:ibm:core:2.0:ChangePassword",
                       "urn:ietf:params:scim:schemas:extension:ibm:2.0:Notification"
@@ -436,7 +429,7 @@ function changePassword(accessToken, pwVars, callback) {
                       "notifyPassword": false,
                       "notifyType": "EMAIL"
                     }
-                  }`
+                }
 
     var options = {
       method: 'POST',
@@ -446,34 +439,33 @@ function changePassword(accessToken, pwVars, callback) {
         'Accept': 'application/scim+json',
         'Authorization': `Bearer ${accessToken}`
       },
-      body: data
+      data: data
     };
 
     console.log("Options JSON:", options)
 
-    request(options, function(error, response, body) {
-      if (error) throw new Error(error);
-      console.log("Passsword reset response code:", response.statusCode)
+    axios(options).then(response => {
+      console.log("Passsword reset response code:", response.status)
 
-      if (response.statusCode == 204) {
+      if (response.status == 204) {
         callback(null, true);
       } else {
         // unauthorized / error in API call
-        callback(null, response.statusCode);
-        console.log("Password change error:", body)
+        callback(null, response.status);
+        console.log("Password change error:", response.data)
       }
-    });
+    }).catch(_e => {callback(null,false)});
   } else {
     // bad request / passwords didn't match
     callback(null, 400);
-    console.log("Password change error:", body)
+    console.log("Password change error: Passwords didn't match");
   }
 }
 
 function toggleMfa(userId, toggle, accessToken, callback) {
 
   if (toggle) {
-    var data = `{
+    var data = {
                   "schemas": [
                       "urn:ietf:params:scim:api:messages:2.0:PatchOp"
                   ],
@@ -484,14 +476,24 @@ function toggleMfa(userId, toggle, accessToken, callback) {
                           "value": [
                               {
                                   "type": "user",
-                                  "value": "${userId}"
+                                  "value": userId
                               }
                           ]
                       }
                   ]
-              }`
+              }
   } else {
-    var data = '{\n    "schemas": [\n        "urn:ietf:params:scim:api:messages:2.0:PatchOp"\n    ],\n    "Operations": [\n        {\n            "op": "remove",\n            "path": "members[value eq \\"' + userId + '\\"]"\n        }\n    ]\n}'
+    var data = {
+      "schemas": [
+        "urn:ietf:params:scim:api:messages:2.0:PatchOp"
+      ],
+      "Operations": [
+        {
+          "op": "remove",
+          "path": "members[value eq \"" + userId + "\"]"
+        }
+      ]
+    }
   }
 
   var options = {
@@ -502,62 +504,62 @@ function toggleMfa(userId, toggle, accessToken, callback) {
       'Accept': 'application/scim+json',
       'Authorization': `Bearer ${accessToken}`
     },
-    body: data
+    data: data
   };
 
   console.log("Options JSON:", options)
 
-  request(options, function(error, response, body) {
-    if (error) throw new Error(error);
-    console.log("Group modified response code:", response.statusCode)
-
-    if (response.statusCode == 204) {
+  axios(options).then(response => {
+    console.log("Group modified response code:", response.status)
+    if (response.status == 204) {
       callback(null, true);
     } else {
       callback(null, false);
-      console.log("Group modified body:", body)
+      console.log("Group modified body:", response.data);
     }
-  });
+  }).catch(_e => {callback(null,false)});
 }
 
-function createCustomAttr(thisAttr, customName, accessToken) {
-  return new Promise((resolve, reject) => {
-    var data = `{
-                "args": {
-                  "name":"${thisAttr.name}"
-                },
-                "datatype":"${thisAttr.type}",
-                "name":"${thisAttr.name}",
-                "description": "Created for Demo App",
-                "schemaAttribute":{
-                  "customAttribute":true,
-                  "name":"${customName}",
-                  "scimName":"${thisAttr.name}"},
-                  "scope":"tenant",
-                  "sourceType":"schema",
-                  "tags":[]
-                }`
+async function createCustomAttr(thisAttr, customName, accessToken) {
+  var data = {
+              "args": {
+                "name": thisAttr.name
+              },
+              "datatype": thisAttr.type,
+              "name": thisAttr.name,
+              "description": "Created for Demo App",
+              "schemaAttribute":{
+                "customAttribute":true,
+                "name": customName,
+                "scimName":thisAttr.name
+              },
+              "scope":"tenant",
+              "sourceType":"schema",
+              "tags":[]
+             }
 
-    var options = {
-      method: 'POST',
-      url: process.env.OIDC_CI_BASE_URI + '/v1.0/attributes/',
-      headers: {
-        'Content-Type': 'application/scim',
-        'Authorization': `Bearer ${accessToken}`
-      },
-      body: data
-    };
+  var options = {
+    method: 'POST',
+    url: process.env.OIDC_CI_BASE_URI + '/v1.0/attributes/',
+    headers: {
+      'Content-Type': 'application/scim',
+      'Authorization': `Bearer ${accessToken}`
+    },
+    data: data
+  };
 
-    request(options, function(error, response, body) {
-      if (error) throw new Error(error);
-      if (response.statusCode == 201) {
-        thisAttr.result = `created as ${customName}`;
-      } else {
-        thisAttr.result = JSON.parse(body).messageDescription;
-      }
-      resolve(thisAttr);
-    });
+  return axios(options).then(response => {
+    if (response.status == 201) {
+      thisAttr.result = `created as ${customName}`;
+    } else {
+      thisAttr.result = response.data.messageDescription;
+    }
+    return thisAttr;
+  }).catch(e => {
+    thisAttr.result = e.response.data.messageDescription
+    return thisAttr;
   });
+
 }
 
 function createAttributes(attrList, accessToken, callback) {
@@ -573,12 +575,11 @@ function createAttributes(attrList, accessToken, callback) {
     }
   };
 
-  request(options, async function(error, response, body) {
-    if (error) throw new Error(error);
-    if (response.statusCode != 200) {
-      callback("list failed: " + body, null);
+  axios(options).then(async response => {
+    if (response.status != 200) {
+      callback("list failed: " + response.data, null);
     } else {
-      var attributes = JSON.parse(body).Resources;
+      var attributes = response.data.Resources;
       var attrNames = [];
       for (i in attributes) {
         attrNames.push(attributes[i].name);
@@ -598,7 +599,7 @@ function createAttributes(attrList, accessToken, callback) {
       }
       callback(null, results);
     }
-  });
+  }).catch(e => callback("list failed: " + e.response.data));
 }
 
 function setFullProfile(userId, body, accessToken, callback) {
@@ -609,23 +610,32 @@ function setFullProfile(userId, body, accessToken, callback) {
       'Content-Type': 'application/scim+json',
       'Authorization': `Bearer ${accessToken}`
     },
-    body: JSON.stringify(body)
+    data: body
   };
 
   console.log("Options JSON:", options)
 
-  request(options, function(error, response, body) {
-    if (error) throw new Error(error);
-    console.log("Profile modified", response.statusCode)
-    if (response.statusCode == 200) {
+  axios(options).then(response => {
+    console.log("Profile modified", response.status)
+    if (response.status == 200) {
       callback(null, true);
     } else {
       callback(null, false);
     }
-  });
+  }).catch(_e => {callback(null,false)});
 }
 
 function setCustomAttributes(userId, operations, accessToken, callback) {
+
+  var dataStr = `{
+          "Operations": [
+            ${operations}
+          ],
+          "schemas": [
+            "urn:ietf:params:scim:api:messages:2.0:PatchOp"
+          ]
+        }`
+
   var options = {
     method: 'PATCH',
     url: process.env.OIDC_CI_BASE_URI + `/v2.0/Users/${userId}`,
@@ -633,31 +643,22 @@ function setCustomAttributes(userId, operations, accessToken, callback) {
       'Content-Type': 'application/scim+json',
       'Authorization': `Bearer ${accessToken}`
     },
-    body: `{
-            "Operations": [
-              ${operations}
-            ],
-            "schemas": [
-              "urn:ietf:params:scim:api:messages:2.0:PatchOp"
-            ]
-          }`
+    data: JSON.parse(dataStr)
   };
 
   console.log("Options JSON:", options)
 
-  request(options, function(error, response, body) {
-    if (error) throw new Error(error);
-    console.log("Profile modified", response.statusCode)
-    if (response.statusCode == 204) {
+  axios(options).then(response => {
+    console.log("Profile modified", response.status)
+    if (response.status == 204) {
       callback(null, true);
     } else {
       callback(null, false);
     }
-  });
+  }).catch(_e => {callback(null,false)});
 }
 
 async function createGroup(groupName, accessToken) {
-  return new Promise((resolve, reject) => {
     var groupInfo = {
       "displayName": groupName,
       "urn:ietf:params:scim:schemas:extension:ibm:2.0:Group": {
@@ -671,55 +672,57 @@ async function createGroup(groupName, accessToken) {
 
     console.log("Group creation information:", groupInfo)
     var options = {
+      'method': 'post',
+      'url': process.env.OIDC_CI_BASE_URI + '/v2.0/Groups',
       'headers': {
         'Content-Type': 'application/scim+json',
         'Authorization': `Bearer ${accessToken}`
       },
-      'body': JSON.stringify(groupInfo)
+      'data': groupInfo
     }
-    request.post(process.env.OIDC_CI_BASE_URI + '/v2.0/Groups', options, function(_err, response, body) {
-      console.log("Create group:", groupName)
-      pbody = JSON.parse(body);
-    console.log("Response code:", response.statusCode);
-      console.log("Create response:", body);
+    console.log("Create group:", groupName)
+    return axios(options).then(response => {
+      pbody = response.data;
+    console.log("Response code:", response.status);
+      console.log("Create response:", JSON.stringify(pbody));
       if (response.statusCode == 201) {
-        resolve(pbody.id);
+        return pbody.id;
       } else {
-        reject(body);
+        throw(response.data);
       }
     });
-  });
 }
 
-function getPolicyId(name, accessToken) {
-  return new Promise((resolve, reject) => {
+async function getPolicyId(name, accessToken) {
     var options = {
+      'method': 'get',
+      'url': process.env.OIDC_CI_BASE_URI + `/v1.0/policyvault/accesspolicy?search=name = ${name}`,
       'headers': {
         'Content-Type': 'application/scim+json',
         'Authorization': `Bearer ${accessToken}`
       }
     }
     console.log("Lookup Policy:" + name);
-    request.get(process.env.OIDC_CI_BASE_URI + `/v1.0/policyvault/accesspolicy?search=name = ${name}`, options, function(_err, response, body) {
-      pbody = JSON.parse(body);
-      console.log("Response code:", response.statusCode);
-      console.log("Lookup response:", body);
-      if (response.statusCode == 200) {
+    return axios(options).then(response => {
+      pbody = response.data;
+      console.log("Response code:", response.status);
+      console.log("Lookup response:", JSON.stringify(pbody));
+      if (response.status == 200) {
         if (pbody.policies[0]) {
           console.log("Returning id: " + pbody.policies[0].id);
-          resolve(pbody.policies[0].id);
+          return pbody.policies[0].id;
         } else {
-          resolve(false);
+          console.log("Policy not found");
+          return false;
         }
       } else {
-        resolve(false);
+        return false;
       }
     });
-  });
 }
 
-function createApplication(appName, redirectUrl, accessToken) {
-  return new Promise((resolve, reject) => {
+async function createApplication(appName, redirectUrl, accessToken) {
+
     var data = {
       "client_name": appName,
       "redirect_uris": [ redirectUrl ],
@@ -731,138 +734,136 @@ function createApplication(appName, redirectUrl, accessToken) {
     console.log("App creation information:", data)
 
     var options = {
+      'method': 'post',
+      'url': process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/client_registration',
       'headers': {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`
       },
-      'body': JSON.stringify(data)
+      'data': data
     }
-    request.post(process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/client_registration', options, function(_err, response, body) {
+    return axios(options).then(response => {
       console.log("Create application");
-      console.log("Response code:", response.statusCode);
-      console.log("Create response:", body);
-      if (response.statusCode == 200) {
-        resolve(body);
-      } else {
-        reject(body);
-      }
-    });
-  });
+      console.log("Response code:", response.status);
+      console.log("Create response:", response.data);
+      return response.data;
+    }).catch( e => { throw e.response ? e.response.data : e });
 }
 
-function getApplication(appName, accessToken) {
-  return new Promise((resolve, reject) => {
-
-    var options = {
-      'headers': {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
-      }
+async function getApplication(appName, accessToken) {
+  var options = {
+    'method': 'get',
+    'url': process.env.OIDC_CI_BASE_URI + '/v1.0/applications',
+    'headers': {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
     }
-    request.get(process.env.OIDC_CI_BASE_URI + '/v1.0/applications', options, function(_err, response, body) {
-      console.log("Get applications");
-      console.log("Response code:", response.statusCode);
-      console.log("Get response:", body);
-      if (response.statusCode == 200) {
-        var json = JSON.parse(body);
-        if (json._embedded && json._embedded.applications.length > 0) {
-          var application;
-          for (i in json._embedded.applications) {
-            if (appName == json._embedded.applications[i].name) {
-              application = json._embedded.applications[i];
-              break;
-            }
-          }
+  }
 
-          if (application) {
-            request.get(process.env.OIDC_CI_BASE_URI + application._links.self.href, options, function(_err, response, body) {
-              console.log("Get application");
-              console.log("Response code:", response.statusCode);
-              console.log("Get response:", body);
-              if (response.statusCode == 200) {
-                resolve(JSON.parse(body));
-              } else {
-                reject(body);
-              }
-            });
-          } else {
-            reject(JSON.stringify({"error": "No matching application"}));
-          }
-        } else {
-          reject(JSON.stringify({"error":"No applications returned"}));
+  console.log("Get applications");
+  var response = await axios(options);
+
+  console.log("Response code:", response.status);
+  console.log("Get response:", JSON.stringify(response.data));
+  if (response.status == 200) {
+    var json = response.data;
+    if (json._embedded && json._embedded.applications.length > 0) {
+      var application;
+      for (i in json._embedded.applications) {
+        if (appName == json._embedded.applications[i].name) {
+          application = json._embedded.applications[i];
+          break;
         }
-      } else {
-        reject(body);
       }
-    });
-  });
-}
 
-function createMfaPolicy(policyName, mfaGroup, accessToken) {
-  return new Promise((resolve, reject) => {
-    var data = {
-"description": "2FA Policy for Demo.  Added via API",
-"format": "json",
-"name": policyName,
-"rules": [{
-  "alwaysRun": false,
-  "conditions": {
-    "subjectAttributes": {
-      "attributes": [{
-        "name": "groupIds",
-        "opCode": "EQ",
-        "values": [ mfaGroup ]
-      }]
+      if (application) {
+        options.url = process.env.OIDC_CI_BASE_URI + application._links.self.href;
+        response = await axios(options);
+        console.log("Get application");
+        console.log("Response code:", response.status);
+        console.log("Get response:", JSON.stringify(response.data));
+        if (response.status == 200) {
+            return response.data;
+          } else {
+            throw(response.data);
+          }
+      } else {
+        throw(JSON.stringify({"error": "No matching application"}));
+      }
+    } else {
+      throw(JSON.stringify({"error":"No applications returned"}));
     }
-  },
-  "id": random_id(),
-  "name": `2FA for ${mfaGroup}`,
-  "result": {
-    "action": {
-      "allowAccess": false,
-      "factorFrequency": "ALWAYS",
-      "requireFactor": true
-    },
-    "authnMethods": ["urn:ibm:security:authentication:asf:macotp"],
-    "serverSideActions": []
+  } else {
+    throw(JSON.stringify(response.data));
   }
-}, {
-  "alwaysRun": false,
-  "conditions": {},
-  "id": random_id(),
-  "name": "Default rule",
-  "result": {
-    "action": {
-      "allowAccess": true,
-      "requireFactor": false
-    },
-    "authnMethods": ["urn:ibm:security:authentication:asf:macotp"],
-    "serverSideActions": []
-  }
-}],
-"schemaVersion": "urn:access:policy:3.0:schema"
 }
 
-    console.log("Policy creation information:", data)
-
-    var options = {
-      'headers': {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
+async function createMfaPolicy(policyName, mfaGroup, accessToken) {
+  var data = {
+    "description": "2FA Policy for Demo.  Added via API",
+    "format": "json",
+    "name": policyName,
+    "rules": [{
+      "alwaysRun": false,
+      "conditions": {
+        "subjectAttributes": {
+          "attributes": [{
+            "name": "groupIds",
+            "opCode": "EQ",
+            "values": [ mfaGroup ]
+          }]
+        }
       },
-      'body': JSON.stringify(data)
-    }
-    request.post(process.env.OIDC_CI_BASE_URI + '/v1.0/policyvault/accesspolicy', options, function(_err, response, body) {
-      console.log("Create policy");
-      console.log("Response code:", response.statusCode);
-      if (response.statusCode == 201) {
-        resolve(true);
-      } else {
-        console.log("Create response:", body);
-        reject(body);
+      "id": random_id(),
+      "name": `2FA for ${mfaGroup}`,
+      "result": {
+        "action": {
+          "allowAccess": false,
+          "factorFrequency": "ALWAYS",
+          "requireFactor": true
+        },
+        "authnMethods": ["urn:ibm:security:authentication:asf:macotp"],
+        "serverSideActions": []
       }
-    });
-  });
+    }, {
+      "alwaysRun": false,
+      "conditions": {},
+      "id": random_id(),
+      "name": "Default rule",
+      "result": {
+        "action": {
+          "allowAccess": true,
+          "requireFactor": false
+        },
+        "authnMethods": ["urn:ibm:security:authentication:asf:macotp"],
+        "serverSideActions": []
+      }
+    }],
+    "schemaVersion": "urn:access:policy:3.0:schema"
+  }
+
+  console.log("Policy creation information:", data)
+
+  var options = {
+    'method': 'post',
+    'url': process.env.OIDC_CI_BASE_URI + '/v1.0/policyvault/accesspolicy',
+    'headers': {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    },
+    'data': data
+  }
+
+  console.log("Create policy");
+  return axios(options).then(response => {
+    console.log("Response code:", response.status);
+    if (response.status == 201) {
+      return true;
+    } else {
+      console.log("Create response:", response.data);
+      throw(response.data);
+    }
+    }).catch( e => { throw e.response ? e.response.data : e });
 }
 
 async function setupMfaPolicy(policyName, mfaGroup, accessToken) {
@@ -881,17 +882,20 @@ async function setupMfaPolicy(policyName, mfaGroup, accessToken) {
 
 function findAccount(accountId, accessToken, callback) {
     var options = {
+      'method': 'get',
+      'url': process.env.OIDC_CI_BASE_URI + `/v2.0/Users?filter=urn:ietf:params:scim:schemas:extension:ibm:2.0:User:customAttributes.accountId eq "${accountId}" and active eq "false"`,
       'headers': {
         'Content-Type': 'application/scim+json',
         'Authorization': `Bearer ${accessToken}`
       }
     }
+
     console.log("Lookup accountID:" + accountId);
-    request.get(process.env.OIDC_CI_BASE_URI + `/v2.0/Users?filter=urn:ietf:params:scim:schemas:extension:ibm:2.0:User:customAttributes.accountId eq "${accountId}" and active eq "false"`, options, function(_err, response, body) {
-      pbody = JSON.parse(body);
-      console.log("Response code:", response.statusCode);
-      console.log("Lookup response:", body);
-      if (response.statusCode == 200) {
+    axios(options).then(response => {
+      pbody = response.data;
+      console.log("Response code:", response.status);
+      console.log("Lookup response:", JSON.stringify(pbody));
+      if (response.status == 200) {
         if (pbody.totalResults == 1) { // only 1 allowed to be returned
           console.log("Returning user record: " + pbody.Resources[0].id);
           callback(null, pbody.Resources[0]);
@@ -902,23 +906,27 @@ function findAccount(accountId, accessToken, callback) {
   });
 }
 
-function createUser(payload, flags, callback) {
+function createUser(payload, callback) {
   var options = {
+    'method': 'post',
+    'url': process.env.OIDC_CI_BASE_URI + `/v2.0/Users`,
     'headers': {
       'Content-Type': 'application/scim+json',
       'Authorization': `Bearer ${accessToken}`
-    }
+    },
+    'data': payload
   }
+
   console.log("Create user:" + payload.userName);
-  request.post(process.env.OIDC_CI_BASE_URI + `/v2.0/Users`, options, function(_err, response, body) {
-    pbody = JSON.parse(body);
-    console.log("Response code:", response.statusCode);
-    if (response.statusCode == 201) {
+  axios(options).then(response => {
+    pbody = response.data;
+    console.log("Response code:", response.status);
+    if (response.status == 201) {
       callback(null, true);
     } else {
       callback(null, false);
     }
-  });
+  }).catch( () => {callback(null,false)});
 }
 
 function titleCase(str) {
@@ -930,455 +938,455 @@ function titleCase(str) {
 }
 
 async function applyPolicyThemeSources(policyid,themeId,sources,app,accessToken) {
-  return new Promise((resolve, reject) => {
 
-    var url = process.env.OIDC_CI_BASE_URI + app._links.self.href;
+  var url = process.env.OIDC_CI_BASE_URI + app._links.self.href;
+  if (sources.length > 0) {
+    app.identitySources = sources;
+  }
+  if (policyid) {
+    app.authPolicy = {};
+    app.authPolicy.id = policyid;
+  }
+  if (themeId) {
+    app.customization = {themeId: themeId};
+  }
+  delete app._links;
+  delete app.xforce;
+  delete app.type;
+  delete app.icon;
+  delete app.defaultIcon;
 
-    if (sources.length > 0) {
-      app.identitySources = sources;
+  console.log("App update information:", app)
+  var options = {
+    'method': 'put',
+    'url': url,
+    'headers': {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    },
+    'data': app
+  }
+  console.log("Update application");
+  return axios(options).then(response => {
+    console.log("Response code:", response.status);
+    console.log("Update response:", JSON.stringify(response.data));
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      throw(response.data);
     }
-
-    if (policyid) {
-      app.authPolicy = {};
-      app.authPolicy.id = policyid;
-    }
-
-    if (themeId) {
-      app.customization = {themeId: themeId};
-    }
-
-    delete app._links;
-    delete app.xforce;
-    delete app.type;
-    delete app.icon;
-    delete app.defaultIcon;
-    console.log("App update information:", app)
-
-    var options = {
-      'headers': {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
-      },
-      'body': JSON.stringify(app)
-    }
-    request.put(url, options, function(_err, response, body) {
-      console.log("Update application");
-      console.log("Response code:", response.statusCode);
-      console.log("Update response:", body);
-      if (response.statusCode == 200) {
-        resolve(body);
-      } else {
-        reject(body);
-      }
-    });
   });
 }
 
 async function createEula(id,description,url, accessToken) {
-  return new Promise((resolve, reject) => {
-    var purposeInfo = {
-      "accessTypes": [{
-        "id": "default"
-      }],
-      "category": "eula",
-      "customAttributes": [],
-      "defaultConsentDuration": null,
-      "description": description,
-      "id": id,
-      "name": id,
-      "previousConsentApply": false,
-      "tags": [],
-      "termsOfUse": {
-        "ref": url
-      }
+  var purposeInfo = {
+    "accessTypes": [{
+      "id": "default"
+    }],
+    "category": "eula",
+    "customAttributes": [],
+    "defaultConsentDuration": null,
+    "description": description,
+    "id": id,
+    "name": id,
+    "previousConsentApply": false,
+    "tags": [],
+    "termsOfUse": {
+      "ref": url
     }
+  }
 
-    console.log("EULA creation information:", purposeInfo)
+  console.log("EULA creation information:", purposeInfo)
+  var options = {
+    'method': 'post',
+    'url': process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purposes',
+    'headers': {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    },
+    'data': purposeInfo
+  }
+
+  console.log("Create EULA:", id)
+  var response = await axios(options);
+  console.log("Response code:", response.status);
+  console.log("Create response:", response.data);
+
+  if (response.status == 201) {
+    var patchInfo = {"op":"replace","path":"state","value":1}
+    console.log("EULA publish information:", patchInfo)
+
     var options = {
+      'method': 'patch',
+      'url': process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purposes/'+id+'/0',
       'headers': {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`
       },
-      'body': JSON.stringify(purposeInfo)
+      'data': patchInfo
     }
-    request.post(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purposes', options, function(_err, response, body) {
-      console.log("Create EULA:", id)
-      console.log("Response code:", response.statusCode);
-      console.log("Create response:", body);
-      if (response.statusCode == 201) {
-        var patchInfo = {"op":"replace","path":"state","value":1}
 
-        console.log("EULA publish information:", patchInfo)
-        var options = {
-          'headers': {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`
-          },
-          'body': JSON.stringify(patchInfo)
-        }
-        request.patch(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purposes/'+id+'/0', options, function(_err, response, body) {
-          console.log("Publish EULA:", id)
-          console.log("Response code:", response.statusCode);
-          console.log("Publish response:", body);
-          if (response.statusCode == 204) {
-            resolve(true);
-          } else {
-            reject(body);
-          }
-        });
-      } else {
-        reject(body);
-      }
-    });
-  });
+    console.log("Publish EULA:", id)
+    var response = await axios(options);
+    console.log("Response code:", response.status);
+    console.log("Publish response:", response.data);
+    if (response.status == 204) {
+      return true;
+    } else {
+      throw(response.data);
+    }
+  } else {
+    throw(response.data);
+  }
 }
 
 async function createAccessType(accessId, accessToken) {
-  return new Promise((resolve, reject) => {
-    var accessInfo = {id: accessId, name: accessId}
 
-    console.log("Access type creation information:", accessInfo)
-    var options = {
-      'headers': {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
-      },
-      'body': JSON.stringify(accessInfo)
+  var accessInfo = {id: accessId, name: accessId}
+  console.log("Access type creation information:", accessInfo)
+  var options = {
+    'method': 'post',
+    'url': process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/access-types',
+    'headers': {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    },
+    'data': accessInfo
+  }
+  console.log("Create AccessType:", accessId)
+  return axios(options).then(response => {
+    console.log("Response code:", response.status);
+    console.log("Create response:", response.data);
+    if (response.status == 201) {
+      return true;
+    } else {
+      throw(JSON.stringify(response.data));
     }
-    request.post(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/access-types', options, function(_err, response, body) {
-      console.log("Create AccessType:", accessId)
-      console.log("Response code:", response.statusCode);
-      console.log("Create response:", body);
-      if (response.statusCode == 201) {
-        resolve(true);
-      } else {
-        reject(body);
-      }
-    });
   });
 }
 
 async function createPurpose(purposeId, attrId, description, readAT, defaultAT, accessToken) {
-  return new Promise((resolve, reject) => {
-    var purposeInfo = {
+  var purposeInfo = {
+    "accessTypes": [
+      {"id": defaultAT},
+      {"id": readAT}
+    ],
+    "attributes": [{
       "accessTypes": [
-        {"id": defaultAT},
         {"id": readAT}
       ],
-      "attributes": [{
-        "accessTypes": [
-          {"id": readAT}
-        ],
-        "id": "" + attrId,
-        "mandatory": true,
-        "retentionPeriod": null
-      }],
-      "category": "default",
-      "customAttributes": [],
-      "defaultConsentDuration": null,
-      "description": description,
-      "id": purposeId,
-      "name": purposeId,
-      "previousConsentApply": false,
-      "tags": []
-    }
+      "id": "" + attrId,
+      "mandatory": true,
+      "retentionPeriod": null
+    }],
+    "category": "default",
+    "customAttributes": [],
+    "defaultConsentDuration": null,
+    "description": description,
+    "id": purposeId,
+    "name": purposeId,
+    "previousConsentApply": false,
+    "tags": []
+  }
 
-    console.log("Purpose creation information:", purposeInfo)
+  console.log("Purpose creation information:", purposeInfo)
+  var options = {
+    'method': 'post',
+    'url': process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purposes',
+    'headers': {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    },
+    'data': purposeInfo
+  }
+
+  var response = await axios(options);
+  console.log("Create Purpose:", purposeId)
+  console.log("Response code:", response.statusCode);
+  console.log("Create response:", response.data);
+  if (response.status == 201) {
+    var patchInfo = {"op":"replace","path":"state","value":1}
+
+    console.log("Purpose publish information:", patchInfo)
     var options = {
+      'method': 'patch',
+      'url': process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purposes/'+purposeId+'/0',
       'headers': {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`
       },
-      'body': JSON.stringify(purposeInfo)
+      'data': patchInfo
     }
-    request.post(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purposes', options, function(_err, response, body) {
-      console.log("Create Purpose:", purposeId)
-      console.log("Response code:", response.statusCode);
-      console.log("Create response:", body);
-      if (response.statusCode == 201) {
-        var patchInfo = {"op":"replace","path":"state","value":1}
 
-        console.log("Purpose publish information:", patchInfo)
-        var options = {
-          'headers': {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`
-          },
-          'body': JSON.stringify(patchInfo)
-        }
-        request.patch(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purposes/'+purposeId+'/0', options, function(_err, response, body) {
-          console.log("Publish Purpose:", purposeId)
-          console.log("Response code:", response.statusCode);
-          console.log("Publish response:", body);
-          if (response.statusCode == 204) {
-            resolve(true);
-          } else {
-            reject(body);
-          }
-        });
+      var presponse = await axios(options);
+      console.log("Publish Purpose:", purposeId)
+      console.log("Response code:", presponse.status);
+      console.log("Publish response:", presponse.data);
+      if (presponse.status == 204) {
+        return true;
       } else {
-        reject(body);
+        throw(JSON.stringify(presponse.data));
       }
-    });
-  });
+  } else {
+    throw(JSON.stringify(response.data));
+  }
 }
 
 async function purposeExists(id, accessToken) {
-  return new Promise((resolve, reject) => {
 
-    console.log("EULA check: ", id)
-    var options = {
-      'headers': {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
-      }
+  console.log("Purpose check: ", id)
+  var options = {
+    'method': 'get',
+    'url': process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purposes/'+id,
+    'headers': {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
     }
-    request.get(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purposes/'+id, options, function(_err, response, body) {
-      console.log("Response code:", response.statusCode);
-      console.log("GET response:", body);
-      if (response.statusCode == 200) {
-        resolve(true);
-      } else {
-        resolve(false);
-      }
-    });
-  });
+  }
+
+  return axios(options).then(response => {
+    console.log("Response code:", response.status);
+    console.log("GET response:", response.data);
+    if (response.status == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }).catch( () => {return false});
 }
 
 async function createDpcmRule(ruleName, conditions, decision, preChecked, description, accessToken) {
-  return new Promise((resolve, reject) => {
-    var ruleInfo = {
-      "assentUIDefault": preChecked,
-      "conditions": conditions,
-      "decision": {
-        "reason": "",
-        "result": decision,
-        "script": ""
-      },
-      "description": description,
-      "discloseable": true,
-      "legalCategory": 4,
-      "name": ruleName,
-      "tags": []
-    }
 
-    console.log("Rule creation information:", ruleInfo)
-    var options = {
-      'headers': {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
-      },
-      'body': JSON.stringify(ruleInfo)
+  var ruleInfo = {
+    "assentUIDefault": preChecked,
+    "conditions": conditions,
+    "decision": {
+      "reason": "",
+      "result": decision,
+      "script": ""
+    },
+    "description": description,
+    "discloseable": true,
+    "legalCategory": 4,
+    "name": ruleName,
+    "tags": []
+  }
+
+  console.log("Rule creation information:", ruleInfo)
+  var options = {
+    'method': 'post',
+    'url': process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/rules',
+    'headers': {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    },
+    'data': ruleInfo
+  }
+  return axios(options).then(response => {
+    console.log("Create Rule:", ruleName)
+    console.log("Response code:", response.statusCode);
+    console.log("Create response:", response.data);
+    if (response.statusCode == 201) {
+      return true;
+    } else {
+      throw(response.data);
     }
-    request.post(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/rules', options, function(_err, response, body) {
-      console.log("Create Rule:", ruleName)
-      console.log("Response code:", response.statusCode);
-      console.log("Create response:", body);
-      if (response.statusCode == 201) {
-        resolve(true);
-      } else {
-        reject(body);
-      }
-    });
   });
 }
 
-function registerTheme(name, accessToken) {
+async function registerTheme(name, accessToken) {
   // Register the theme
-  return new Promise((resolve, reject) => {
 
-    var zipfileName=name + ".zip";
-    var themeConfig='{"name": "' + name + '", "description": "Theme for CIAM demo app."}';
-    var themeFilename='"' + zipfileName + '"';
+  var zipfileName=name + ".zip";
+  var themeConfig='{"name": "' + name + '", "description": "Theme for CIAM demo app."}';
+  var themeFilename='"' + zipfileName + '"';
 
-    console.log("Registering theme '" + name + "'" + " using file " + zipfileName);
+  console.log("Registering theme '" + name + "'" + " using file " + zipfileName);
 
-    var options = {
-      method: 'POST',
-      url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes',
-      headers: {
-        'Authorization': 'Bearer ' + accessToken,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      formData: {
-        'files': {
-          'value': fs.createReadStream("ci-theme/" + zipfileName),
-          'options': {
-            'filename': themeFilename
-          }
-        },
-        'configuration': themeConfig
-      }
-    };
-    console.log("Making API call...");
-    console.log(options);
-    request(options, (error, response, body) => {
-      if (error) {
-        reject(error);
-      } else {
-        if (response.statusCode == 201) {
-          console.log("Successfully registered theme '" + name + "'");
-          resolve(true);
-        } else reject(body);
-      }
-    });
-  });
+  var form = new FormData();
+
+  form.append("configuration", themeConfig);
+  form.append("files", fs.createReadStream("ci-theme/"+zipfileName), themeFilename);
+
+  var options = {
+    method: 'POST',
+    url: process.env.OIDC_CI_BASE_URI + '/v1.0/branding/themes',
+    headers: {
+      ...form.getHeaders(),
+      'Authorization': 'Bearer ' + accessToken,
+    },
+    data: form
+  };
+
+  console.log("Making API call...");
+  var response = await axios(options).catch(e => {throw(e.stack)});
+  if (response.status == 201) {
+    console.log("Successfully registered theme '" + name + "'");
+    return true;
+  } else throw(JSON.stringify(response.data));
 }
 
-function getThemeId(name, accessToken) {
-  return new Promise((resolve, reject) => {
-    var options = {
-      'headers': {
-        'Content-Type': 'application/scim+json',
-        'Authorization': `Bearer ${accessToken}`
-      }
+async function getThemeId(name, accessToken) {
+  var options = {
+    'method': 'get',
+    'url': process.env.OIDC_CI_BASE_URI + '/template/v1.0/branding/themes',
+    'headers': {
+      'Content-Type': 'application/scim+json',
+      'Authorization': `Bearer ${accessToken}`
     }
-    console.log("Lookup Theme:" + name);
-    request.get(process.env.OIDC_CI_BASE_URI + '/template/v1.0/branding/themes', options, function(_err, response, body) {
-      console.log("Response code:", response.statusCode);
-      console.log("Lookup response:", body);
-      if (response.statusCode == 200) {
-        var pbody = JSON.parse(body);
-        if (pbody.themeRegistrations) {
-          for (i in pbody.themeRegistrations) {
-            if (pbody.themeRegistrations[i].name == name) {
-              resolve(pbody.themeRegistrations[i].id);
-              break;
-            }
+  }
+
+  console.log("Lookup Theme:" + name);
+  return axios(options).then(response => {
+    console.log("Response code:", response.status);
+    console.log("Lookup response:", response.data);
+    if (response.status == 200) {
+      var pbody = response.data;
+      if (pbody.themeRegistrations) {
+        for (i in pbody.themeRegistrations) {
+          if (pbody.themeRegistrations[i].name == name) {
+            return pbody.themeRegistrations[i].id;
           }
         }
       }
-      resolve(false);
-    });
+    }
+    return false;
   });
 }
 
 function getDpcmRuleId(name, accessToken) {
-  return new Promise((resolve, reject) => {
-    var options = {
-      'headers': {
-        'Content-Type': 'application/scim+json',
-        'Authorization': `Bearer ${accessToken}`
-      }
+  var options = {
+    'method': 'get',
+    'url': process.env.OIDC_CI_BASE_URI + `/dpcm-mgmt/config/v1.0/privacy/rules?search=name%20=%20%22${name}%22`,
+    'headers': {
+      'Content-Type': 'application/scim+json',
+      'Authorization': `Bearer ${accessToken}`
     }
-    console.log("Lookup Rule:" + name);
-    request.get(process.env.OIDC_CI_BASE_URI + `/dpcm-mgmt/config/v1.0/privacy/rules?search=name%20=%20%22${name}%22`, options, function(_err, response, body) {
-      pbody = JSON.parse(body);
-      console.log("Response code:", response.statusCode);
-      console.log("Lookup response:", body);
-      if (response.statusCode == 200) {
-        if (pbody.rules[0]) {
-          console.log("Returning id: " + pbody.rules[0].id);
-          resolve(pbody.rules[0].id);
-        } else {
-          resolve(false);
-        }
+  }
+  console.log("Lookup Rule:" + name);
+
+  return axios(options).then(response => {
+    pbody = response.data
+    console.log("Response code:", response.status);
+    console.log("Lookup response:", JSON.stringify(pbody));
+    if (response.status == 200) {
+      if (pbody.rules[0]) {
+        console.log("Returning id: " + pbody.rules[0].id);
+        return pbody.rules[0].id;
       } else {
-        resolve(false);
+        return false;
       }
-    });
-  });
+    } else {
+      return false;
+    }
+  }).catch( () => {return false});
 }
 
 async function createDpcmPolicy(rules, accessToken) {
-  return new Promise((resolve, reject) => {
-    console.log("Policy lookup");
+  console.log("Policy lookup");
+  var options = {
+    'method': 'get',
+    'url': process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/policies/default',
+    'headers': {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    }
+  }
+
+  var policyResp = await axios(options);
+  console.log("Response code:", policyResp.status);
+
+  if (policyResp.status == 200) {
+    var version = '' + policyResp.data.version;
+    var ruleList = {"ruleList": rules};
+    console.log("Policy creation information:", ruleList)
+
     var options = {
+      'method': 'put',
+      'url': process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/policies/default',
       'headers': {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
-      }
+        'Authorization': `Bearer ${accessToken}`,
+        'if-match': version
+      },
+      'data': ruleList
     }
-    request.get(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/policies/default', options, function(_err, policyResp, policyBody) {
-      console.log("Response code:", policyResp.statusCode);
-      if (policyResp.statusCode == 200) {
-        var version = '' + JSON.parse(policyBody).version;
-        var ruleList = {"ruleList": rules};
-        console.log("Policy creation information:", ruleList)
-        var options = {
-          'headers': {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`,
-            'if-match': version
-          },
-          'body': JSON.stringify(ruleList)
-        }
-        request.put(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/policies/default', options, function(_err, response, body) {
-          console.log("Response code:", response.statusCode);
-          if (response.statusCode == 204) {
-            resolve(true);
-          } else {
-            reject(body);
-          }
-        });
-      } else {
-        reject(body);
-      }
-    });
-  });
+
+    var response = await axios(options);
+    console.log("Response code:", response.status);
+    if (response.status == 204) {
+      return true;
+    } else {
+      throw(response.data);
+    }
+  } else {
+    throw(policyResp.data);
+  }
 }
 
 async function associatePurpose(appId, purposeIds, accessToken) {
-  return new Promise((resolve, reject) => {
-    var input = [];
-    for (i in purposeIds) {
-      input.push({
-        "op": "add",
-        "value": {
-          "extCategory": "app",
-          "extId": appId,
-          "purposeId": purposeIds[i]
-        }
-      });
-    }
-
-    console.log("Associate purpose:", input)
-    var options = {
-      'headers': {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
-      },
-      'body': JSON.stringify(input)
-    }
-    request.patch(process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purpose-relationships', options, function(_err, response, body) {
-      console.log("Response code:", response.statusCode);
-      console.log("Create response:", body);
-      if (response.statusCode == 204) {
-        resolve(true);
-      } else {
-        reject(body);
+  var input = [];
+  for (i in purposeIds) {
+    input.push({
+      "op": "add",
+      "value": {
+        "extCategory": "app",
+        "extId": appId,
+        "purposeId": purposeIds[i]
       }
     });
+  }
+
+  console.log("Associate purpose:", input)
+  var options = {
+    'method': 'patch',
+    'url': process.env.OIDC_CI_BASE_URI + '/dpcm-mgmt/config/v1.0/privacy/purpose-relationships',
+    'headers': {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    },
+    'data': input
+  }
+
+  return axios(options).then(response => {
+    console.log("Response code:", response.status);
+    console.log("Create response:", response.data);
+    if (response.status == 204) {
+      return true;
+    } else {
+      throw(response.data);
+    }
   });
 }
 
-function getIndentitySourceId(realm, accessToken) {
-  return new Promise((resolve, reject) => {
-    var options = {
-      'headers': {
-        'Content-Type': 'application/scim+json',
-        'Authorization': `Bearer ${accessToken}`
+async function getIndentitySourceId(realm, accessToken) {
+  var options = {
+    'method': 'get',
+    'url': process.env.OIDC_CI_BASE_URI + '/v1.0/identitysources',
+    'headers': {
+      'Content-Type': 'application/scim+json',
+      'Authorization': `Bearer ${accessToken}`
+    }
+  }
+
+  console.log("Lookup Identity Source:" + realm);
+  var response = await axios(options);
+
+  console.log("Response code:", response.status);
+  console.log("Lookup response:", JSON.stringify(response.data));
+
+  if (response.status == 200) {
+    pbody = response.data;
+    for (i in pbody.identitySources) {
+      for (j in pbody.identitySources[i].properties) {
+        if (pbody.identitySources[i].properties[j].key == "realm" &&
+            pbody.identitySources[i].properties[j].value == realm) {
+          return pbody.identitySources[i].id;
+        }
       }
     }
-    console.log("Lookup Identity Source:" + realm);
-    request.get(process.env.OIDC_CI_BASE_URI + '/v1.0/identitysources', options, function(_err, response, body) {
-      console.log("Response code:", response.statusCode);
-      console.log("Lookup response:", body);
-      if (response.statusCode == 200) {
-        pbody = JSON.parse(body);
-        for (i in pbody.identitySources) {
-          for (j in pbody.identitySources[i].properties) {
-            if (pbody.identitySources[i].properties[j].key == "realm" &&
-                pbody.identitySources[i].properties[j].value == realm) {
-              resolve(pbody.identitySources[i].id);
-              break;
-            }
-          }
-        }
-        reject(false);
-      } else reject(false);
-    });
-  });
+    throw("Source not found for " + realm);
+  } else throw("Bad response code for " + realm);
 }
 
 module.exports = {
