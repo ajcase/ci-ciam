@@ -507,7 +507,7 @@ function toggleMfa(userId, toggle, accessToken, callback) {
     data: data
   };
 
-  console.log("Options JSON:", options)
+  console.log("Options JSON:", JSON.stringify(options));
 
   axios(options).then(response => {
     console.log("Group modified response code:", response.status)

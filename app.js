@@ -75,7 +75,7 @@ passport.use(new OpenIDStrategy({
     console.log('params:', params);
 
     req.session.accessToken = accessToken;
-    req.session.userId = claims.userId;
+    req.session.userId = claims.id;
     req.session.loggedIn = true;
     return cb(null, claims);
   }));
