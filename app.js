@@ -54,6 +54,7 @@ var openaccount = require('./routes/open-account');
 var accountclaim = require('./routes/account-claim');
 var consent = require('./routes/consent');
 
+try {
 // Configure the OpenId Connect Strategy
 // with credentials obtained from env details (.env)
 passport.use(new OpenIDStrategy({
@@ -87,7 +88,9 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
-
+} catch (e) {
+  console.log("OIDC initialization failed.",e);
+}
 var app = express();
 
 app.set('views', path.join(__dirname, 'views'));
