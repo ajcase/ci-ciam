@@ -38,6 +38,7 @@
       <form action="/setup" method="post">
         <p>Click "Run Setup" button to perform automated setup of your Verify Tenant.</p>
         <p>Parameters for setup are read from .env file.</p>
+        <p>Application Client ID and secret are written back to .env file.</p>
         {{#if error}}
           <div class="bb-alert bb-warning">
             <span class="bb-closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
