@@ -322,26 +322,26 @@ router.post('/', async function(req, res, next) {
 
       passport.use(new OpenIDStrategy({
           issuer: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default',
-          clientID: process.env.OIDC_CLIENT_ID,
-          clientSecret: process.env.OIDC_CLIENT_SECRET,
+          clientID: process.env.OIDC_CLIENT_ID, // from .env file
+          clientSecret: process.env.OIDC_CLIENT_SECRET, // from .env file
           authorizationURL: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/authorize', // this won't change
           userInfoURL: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/userinfo', // this won't change
           tokenURL: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/token', // this won't change
-          callbackURL: process.env.OIDC_REDIRECT_URI,
+          callbackURL: process.env.OIDC_REDIRECT_URI, // from .env file
           passReqToCallback: true
         },
-        function(req, issuer, userId, profile, accessToken, refreshToken, params, cb) {
-
+        function(req, issuer, claims, acr, idToken, accessToken, params, cb) {
           console.log('issuer:', issuer);
-          console.log('userId:', userId);
+          console.log('claims:', claims);
+          console.log('acr:', acr);
+          console.log('idtoken:', idToken);
           console.log('accessToken:', accessToken);
-          console.log('refreshToken:', refreshToken);
           console.log('params:', params);
 
           req.session.accessToken = accessToken;
-          req.session.userId = userId;
+          req.session.userId = claims.id;
           req.session.loggedIn = true;
-          return cb(null, profile);
+          return cb(null, claims);
         }));
 
       res.redirect('/setup');
