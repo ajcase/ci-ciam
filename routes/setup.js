@@ -2,9 +2,36 @@ var express = require('express');
 var bbfn = require('../functions.js');
 var router = express.Router();
 var passport = require('passport');
+var fs = require('fs');
+var os = require('os');
+
 var OpenIDStrategy = require('passport-openidconnect').Strategy;
 
 var apiAccessToken;
+
+function setEnvValues(updates) {
+
+    const ENV_VARS = fs.readFileSync("./.env", "utf8").split(os.EOL);
+
+    for (i in updates) {
+      if (updates[i].key && updates[i].value) {
+        var target = ENV_VARS.indexOf(ENV_VARS.find((line) => {
+          return line.match(new RegExp(updates[i].key + "="));
+        }));
+        console.log(target);
+        // replace the key/value with the new value
+        if (target > 0) {
+          ENV_VARS.splice(target, 1, `${updates[i].key}=${updates[i].value}`);
+        } else {
+          ENV_VARS.push(`${updates[i].key}=${updates[i].value}`);
+        }
+      }
+    }
+
+    // write everything back to the file system
+    fs.writeFileSync("./.env", ENV_VARS.join(os.EOL));
+
+}
 
 // GET setup page
 router.get('/', function(req, res, next) {
@@ -66,6 +93,10 @@ router.post('/', async function(req, res, next) {
           if (appl) {
             process.env.OIDC_CLIENT_ID = appl.providers.oidc.properties.clientId;
             process.env.OIDC_CLIENT_SECRET = appl.providers.oidc.properties.clientSecret;
+            setEnvValues([
+              {key: "OIDC_CLIENT_ID", value: appl.providers.oidc.properties.clientId},
+              {key: "OIDC_CLIENT_SECRET", value: appl.providers.oidc.properties.clientSecret},
+            ]);
           }
 
           attributes = [{
