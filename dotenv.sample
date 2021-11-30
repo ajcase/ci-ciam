@@ -1,18 +1,20 @@
+# Your tenant URL.  You must set this.
+OIDC_CI_BASE_URI=https://xxxxxxxxxx.verify.ibm.com
+
 # API Client for client_credentials flow
 # Give full permissions for auto-setup
 API_CLIENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 API_SECRET=xxxxxxxx
 
 # OIDC Relying Party configuration.  Auto setup will create this application
-# using BASE URI and REDIRECT URI specified here.
-OIDC_CI_BASE_URI=https://xxxxxxxxxx.verify.ibm.com
+# using OIDC_REDIRECT_URI specified here.
 OIDC_REDIRECT_URI=http://localhost:3000/oauth/callback
 
-# After auto setup, complete these values from application config:
+# Auto-setup will complete these values for created application:
 OIDC_CLIENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 OIDC_CLIENT_SECRET=xxxxxxxx
 
-# Allow dynamic setup page access (at /setup)
+# Allow setup page access (at /setup)
 ALLOW_DYNAMIC_SETUP=true
 
 # Name of application in Verify to be used/created.

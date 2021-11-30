@@ -36,55 +36,17 @@
       <h1>Initial Setup</h1>
 
       <form action="/setup" method="post">
-        <p>Enter information to initialize API Client</p>
+        <p>Click "Run Setup" button to perform automated setup of your Verify Tenant.</p>
+        <p>Parameters for setup are read from .env file.</p>
         {{#if error}}
           <div class="bb-alert bb-warning">
             <span class="bb-closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
             {{errorMessage}}
           </div>
         {{/if}}
-        <div class="formRow">
-          <label>CI Tenant Base URL</label>
-          <input type="text" required placeholder="Base URI" name="baseUri" onFocus="this.placeholder = ''" value="{{baseUri}}">
-          <div class="inputLine"></div>
-        </div>
-        <div class="formRow">
-          <label>Privileged API Client ID</label>
-          <input type="text" required placeholder="API Client ID" name="APIclientId" onFocus="this.placeholder = ''" value="{{APIclientId}}">
-          <div class="inputLine"></div>
-        </div>
-        <div class="formRow">
-          <label>Privileged API Client Secret</label>
-          <input type="password" placeholder="API Client Secret" name="APIclientSecret" onFocus="this.placeholder = ''">
-          <div class="inputLine"></div>
-        </div>
-        <div class="formRow">
-          <label>OIDC App Client ID</label>
-          <input type="text" placeholder="OIDC App Client ID" name="OIDCclientId" onFocus="this.placeholder = ''" value="{{OIDCclientId}}">
-          <div class="inputLine"></div>
-        </div>
-        <div class="formRow">
-          <label>OIDC App Client Secret</label>
-          <input type="password" placeholder="OIDC App Client Secret" name="OIDCclientSecret" onFocus="this.placeholder = ''">
-          <div class="inputLine"></div>
-        </div>
-        <div class="formRow">
-          <label>OIDC Redirect URI</label>
-          <input type="text" required placeholder="OIDC Redirect URI" name="OIDCredirectUri" onFocus="this.placeholder = ''" value="{{OIDCredirectUri}}">
-          <div class="inputLine"></div>
-        </div>
-        <div class="formRow">
-          <label>MFA Group</label>
-          <input type="text" required placeholder="MFA Group Name" name="MFAgroup" onFocus="this.placeholder = ''" value="{{MFAgroup}}">
-          <div class="inputLine"></div>
-        </div>
-        <span style="display:inline-block;margin-top:1rem;width:100%">
-          <input type="checkbox" id="createObjects" name="createObjects">
-          <label for="createObjects">Create Group/Attributes/Policy Now</label><br>
-        </span>
         <div class="formRow-bottom clearfix">
           <div class="clear"></div>
-          <input class="input-cta" type="submit" value="Submit">
+          <input class="input-cta" type="submit" value="Run Setup">
           <div class="clear"></div>
         </div>
       </form>

@@ -57,15 +57,6 @@ router.post('/', async function(req, res, next) {
       message: "Dynamic Setup is disabled"
     });
   } else {
-    var data = req.body;
-    console.log(data);
-    if (data.baseUri) process.env.OIDC_CI_BASE_URI = data.baseUri;
-    if (data.APIclientId) process.env.API_CLIENT_ID = data.APIclientId;
-    if (data.APIclientSecret) process.env.API_SECRET = data.APIclientSecret;
-    if (data.OIDCclientId) process.env.OIDC_CLIENT_ID = data.OIDCclientId;
-    if (data.OIDCclientSecret) process.env.OIDC_CLIENT_SECRET = data.OIDCclientSecret;
-    if (data.OIDCredirectUri) process.env.OIDC_REDIRECT_URI = data.OIDCredirectUri;
-    if (data.MFAgroup) process.env.MFAGROUP = data.MFAgroup;
 
     bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, async function(err, body) {
       if (err) {
@@ -73,7 +64,7 @@ router.post('/', async function(req, res, next) {
       } else {
         apiAccessToken = body.access_token;
 
-        if (data.createObjects) {
+        if (true) {
 
           var appl = false;
           try {
@@ -177,13 +168,15 @@ router.post('/', async function(req, res, next) {
             console.log(e);
           }
 
+          var readAcessTypeId = await bbfn.getAccessTypeId(process.env.READ_ACCESS_TYPE,apiAccessToken);
+
           var marketingExists = await bbfn.purposeExists(process.env.MARKETING_PURPOSE_ID, apiAccessToken);
           if (!marketingExists) {
             await bbfn.createPurpose(
               process.env.MARKETING_PURPOSE_ID,
               "3",
               "A preference that indicates that the customer agrees with receiving information on promotions, new products, and personalized advice weekly.",
-              process.env.READ_ACCESS_TYPE,
+              readAcessTypeId,
               process.env.DEFAULT_ACCESS_TYPE,
               apiAccessToken);
           }
@@ -194,7 +187,7 @@ router.post('/', async function(req, res, next) {
               process.env.PAPERLESS_PURPOSE_ID,
               "3",
               "A preference that indicates that the customer agrees to paperless billing.",
-              process.env.READ_ACCESS_TYPE,
+              readAcessTypeId,
               process.env.DEFAULT_ACCESS_TYPE,
               apiAccessToken);
           }
@@ -298,7 +291,7 @@ router.post('/', async function(req, res, next) {
 
           var sources = [];
           if (googleId) sources.push(googleId);
-          if (linkedInID) source.push(linkedInID);
+          if (linkedInID) sources.push(linkedInID);
           if (facebookID) sources.push(facebookID);
           if (cloudId) sources.push(cloudId);
 

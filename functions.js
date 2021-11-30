@@ -1060,9 +1060,39 @@ async function createAccessType(accessId, accessToken) {
     if (response.status == 201) {
       return true;
     } else {
-      throw(JSON.stringify(response.data));
+      return false;
     }
+  }).catch(e => {
+    throw(e.response?e.response.data:e);
   });
+}
+
+async function getAccessTypeId(name, accessToken) {
+    var options = {
+      'method': 'get',
+      'url': process.env.OIDC_CI_BASE_URI + `/dpcm-mgmt/config/v1.0/privacy/access-types?search=name="${name}"`,
+      'headers': {
+        'Content-Type': 'application/scim+json',
+        'Authorization': `Bearer ${accessToken}`
+      }
+    }
+    console.log("Lookup AccessType:" + name);
+    return axios(options).then(response => {
+      pbody = response.data;
+      console.log("Response code:", response.status);
+      console.log("Lookup response:", JSON.stringify(pbody));
+      if (response.status == 200) {
+        if (pbody["access-types"][0]) {
+          console.log("Returning id: " + pbody["access-types"][0].id);
+          return pbody["access-types"][0].id;
+        } else {
+          console.log("AccessType not found");
+          return false;
+        }
+      } else {
+        return false;
+      }
+    });
 }
 
 async function createPurpose(purposeId, attrId, description, readAT, defaultAT, accessToken) {
@@ -1418,6 +1448,7 @@ module.exports = {
   applyPolicyThemeSources: applyPolicyThemeSources,
   createEula: createEula,
   createAccessType: createAccessType,
+  getAccessTypeId: getAccessTypeId,
   createPurpose: createPurpose,
   purposeExists: purposeExists,
   createDpcmRule: createDpcmRule,
