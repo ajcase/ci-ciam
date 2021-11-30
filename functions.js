@@ -747,7 +747,7 @@ async function createApplication(appName, redirectUrl, accessToken) {
       console.log("Response code:", response.status);
       console.log("Create response:", response.data);
       return response.data;
-    }).catch( e => { throw e.response ? e.response.data : e });
+    }).catch(e=>{throw e.response?e.response.data:e.stack});
 }
 
 async function getApplication(appName, accessToken) {
@@ -1221,7 +1221,7 @@ async function createDpcmRule(ruleName, conditions, decision, preChecked, descri
     } else {
       throw(response.data);
     }
-  });
+  }).catch(e=>{throw e.response?e.response.data:e.stack});
 }
 
 async function registerTheme(name, accessToken) {
