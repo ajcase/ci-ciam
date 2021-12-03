@@ -80,6 +80,9 @@ passport.use(new OpenIDStrategy({
     req.session.loggedIn = true;
     return cb(null, claims);
   }));
+} catch (e) {
+  console.log("OIDC initialization failed.",e);
+}
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -88,9 +91,7 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
-} catch (e) {
-  console.log("OIDC initialization failed.",e);
-}
+
 var app = express();
 
 app.set('views', path.join(__dirname, 'views'));
