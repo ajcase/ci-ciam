@@ -975,7 +975,11 @@ async function applyPolicyThemeSources(policyid,themeId,sources,app,accessToken)
     } else {
       throw(response.data);
     }
-  });
+  }).catch(e => {throw (
+      "Application update failed: "
+      + (e.response ? e.response.status : "")
+      + " " + (e.response ? e.response.data : e)
+    )});
 }
 
 async function createEula(id,description,url, accessToken) {
