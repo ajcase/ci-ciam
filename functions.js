@@ -1393,7 +1393,7 @@ async function associatePurpose(appId, purposeIds, accessToken) {
   });
 }
 
-async function getIndentitySourceId(realm, accessToken) {
+async function getIdentitySourceId(realm, accessToken) {
   var options = {
     'method': 'get',
     'url': process.env.OIDC_CI_BASE_URI + '/v1.0/identitysources',
@@ -1461,5 +1461,5 @@ module.exports = {
   associatePurpose: associatePurpose,
   getThemeId: getThemeId,
   registerTheme: registerTheme,
-  getIndentitySourceId: getIndentitySourceId
+  getIdentitySourceId: getIdentitySourceId
 };
