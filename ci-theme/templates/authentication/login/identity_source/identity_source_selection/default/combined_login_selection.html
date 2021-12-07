@@ -17,7 +17,7 @@
       const idSources = @ID_SOURCES@;
 
       function getIdSourcesData(){
-        // Read the JSON provided by the @ID_SOURCES@ macro to determine URLs.
+        // Read the JSON provided by the ID_SOURCES macro to determine URLs.
         // This script is run when the page is loaded
         for(let i = 0; i < idSources.length; i++) {
               const idSource = idSources[i];
@@ -29,12 +29,15 @@
               }
               if(idSource.type === 'LINKEDIN') {
                   document.getElementById('linkedin-connect').href = idSource.loginUrl;
+                  document.getElementById('linkedin-connect').style = "display:block";
               }
               if(idSource.type === 'GOOGLE') {
                   document.getElementById('google-connect').href = idSource.loginUrl;
+                  document.getElementById('google-connect').style = "display:block";
               }
               if(idSource.type === 'FACEBOOK') {
                   document.getElementById('facebook-connect').href = idSource.loginUrl;
+                  document.getElementById('facebook-connect').style = "display:block";
               }
           }
       }
@@ -78,12 +81,14 @@
 
         <div style="width:100%; text-align:center">
           <div class="tx--social" style="margin:auto;max-width:600px">
-            <a class="social-button" id="google-connect">
-              <span>Google</span></a
-            >
-            <a class="social-button" id="linkedin-connect">
-              <span>LinkedIn</span></a
-            >
+            <a class="social-button" style="display:none" id="google-connect">
+              <span>Google</span></a>
+
+            <a class="social-button" style="display:none" id="linkedin-connect">
+              <span>LinkedIn</span></a>
+
+            <a class="social-button" style="display:none" id="facebook-connect">
+              <span>Facebook</span></a>
           </div>
         </div>
 

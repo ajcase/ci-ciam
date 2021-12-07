@@ -1,10 +1,9 @@
 require('dotenv').config();
 
-var request = require('request');
+var axios = require('axios');
+var qs = require('qs');
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
@@ -43,7 +42,6 @@ hbs.registerHelper('formatAttribute', function(attribute) {
   }
 })
 
-
 // Use Passport with OpenId Connect strategy to
 // Authenticate users with IBM Cloud Identity Connect
 var passport = require('passport')
@@ -56,17 +54,7 @@ var openaccount = require('./routes/open-account');
 var accountclaim = require('./routes/account-claim');
 var consent = require('./routes/consent');
 
-function titleCase(string) {
-  var sentence = string.toLowerCase().split(" ");
-  for (var i = 0; i < sentence.length; i++) {
-    sentence[i] = sentence[i][0].toUpperCase() + sentence[i].slice(1);
-  }
-  return sentence.join(" ");
-}
-
-// edit this URL with your base URL for IBM Cloud Identity OIDC default endpoint
-var APP = process.env.APP || "Demo Site";
-
+try {
 // Configure the OpenId Connect Strategy
 // with credentials obtained from env details (.env)
 passport.use(new OpenIDStrategy({
@@ -79,19 +67,22 @@ passport.use(new OpenIDStrategy({
     callbackURL: process.env.OIDC_REDIRECT_URI, // from .env file
     passReqToCallback: true
   },
-  function(req, issuer, userId, profile, accessToken, refreshToken, params, cb) {
-
+  function(req, issuer, claims, acr, idToken, accessToken, params, cb) {
     console.log('issuer:', issuer);
-    console.log('userId:', userId);
+    console.log('claims:', claims);
+    console.log('acr:', acr);
+    console.log('idtoken:', idToken);
     console.log('accessToken:', accessToken);
-    console.log('refreshToken:', refreshToken);
     console.log('params:', params);
 
     req.session.accessToken = accessToken;
-    req.session.userId = userId;
+    req.session.userId = claims.id;
     req.session.loggedIn = true;
-    return cb(null, profile);
+    return cb(null, claims);
   }));
+} catch (e) {
+  console.log("OIDC initialization failed.",e);
+}
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -106,7 +97,6 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
@@ -137,8 +127,6 @@ function checkAuthentication(req, res, next) {
   }
 }
 
-app.locals.pageTitle = titleCase(APP);
-app.locals.bodyCSS = APP;
 app.use('/', index);
 app.use('/setup', setup);
 app.use('/app/profile', checkAuthentication, profile);
@@ -149,21 +137,28 @@ app.use('/app/consent', checkAuthentication, consent);
 //app.use('/users', checkAuthentication, users);
 // Only allow authenticated users to access the /users route
 
+var scopes = "profile email";
+if (process.env.SEND_PRIVACY_SCOPES == "true") {
+  scopes = scopes + " " + process.env.MARKETING_PURPOSE_ID +
+    "/email." + process.env.READ_ACCESS_TYPE +
+    " " + process.env.PAPERLESS_PURPOSE_ID +
+    "/email." + process.env.READ_ACCESS_TYPE;
+}
 // Initiates an authentication request with IBM
 // The user will be redirect to IBM and once authenticated
 // they will be returned to the callback handler below
 app.get('/login', passport.authenticate('openidconnect', {
   successReturnToOrRedirect: "/",
-  scope: 'email profile privacyPolicy'
+  scope: scopes
 }));
 app.get('/login-linkedin', passport.authenticate('openidconnect', {
   successReturnToOrRedirect: "/",
-  scope: 'email profile',
+  scope: scopes,
   login_hint: `{"realm":"www.linkedin.com"}`
 }));
 app.get('/login-google', passport.authenticate('openidconnect', {
   successReturnToOrRedirect: "/",
-  scope: 'email profile',
+  scope: scopes,
   login_hint: `{"realm":"www.google.com"}`
 }));
 // app.get('/new-linkedin', passport.authenticate('openidconnect', {
@@ -179,32 +174,41 @@ app.get('/login-google', passport.authenticate('openidconnect', {
 
 // Callback handler that IBM will redirect back to
 // after successfully authenticating the user
-app.get('/oauth/callback', passport.authenticate('openidconnect', {
-  callback: true,
-  successReturnToOrRedirect: '/app/profile',
-  failureRedirect: '/'
-}))
-
-
+app.get('/oauth/callback', passport.authenticate(
+  'openidconnect',
+  {
+    failureRedirect: '/'
+  }),
+  function(req,res) {
+    res.redirect('/app/profile');
+  });
 
 // Destroy both the local session and
 // revoke the access_token at IBM
 app.get('/logout', function(req, res) {
-  request.post(process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/revoke', {
-    'form': {
-      'client_id': process.env.OIDC_CLIENT_ID,
-      'client_secret': process.env.OIDC_CLIENT_SECRET,
-      'token': req.session.accessToken,
-      'token_type_hint': 'access_token'
-    }
-  }, function(err, respose, body) {
 
-    console.log('Session Revoked at IBM');
+  var data = {
+    'client_id': process.env.OIDC_CLIENT_ID,
+    'client_secret': process.env.OIDC_CLIENT_SECRET,
+    'token': req.session.accessToken,
+    'token_type_hint': 'access_token'
+  };
+
+  var options = {
+    method: 'post',
+    url: process.env.OIDC_CI_BASE_URI + '/oidc/endpoint/default/revoke',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    data: qs.stringify(data)
+  };
+
+  axios(options).then(response => {
+    console.log('Session Revoked at Verify. Status',response.status);
     req.session.loggedIn = false;
     console.log('process.env.THEME_ID in /logout is: ' + process.env.THEME_ID);
     req.session.loggedIn = false;
     res.redirect(process.env.OIDC_CI_BASE_URI + '/idaas/mtfim/sps/idaas/logout' + '?themeId=' + process.env.THEME_ID);
-
   });
 });
 
@@ -230,20 +234,25 @@ app.use(function(err, req, res, next) {
 
 if (process.env.API_CLIENT_ID && process.env.API_SECRET && process.env.MFAGROUP && process.env.APP_NAME) {
   // Get access token for privileged API access
-  bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, function(err, body) {
+  bbfn.authorize(process.env.API_CLIENT_ID, process.env.API_SECRET, async function(err, body) {
     if (err) {
       console.log(err);
     } else {
       apiAccessToken = body.access_token;
       // Get the MFA group's id
-      bbfn.getGroupID(process.env.MFAGROUP, apiAccessToken, (_err,result) => {
-        if (result && result['urn:ietf:params:scim:schemas:extension:ibm:2.0:Group'].groupType == "standard") {
-          process.env.MFAGROUPID = result.id;
-          console.log(`MFA Group ID is ${process.env.MFAGROUPID}`);
-        } else {
-          console.log(`Group ${process.env.MFAGROUP} is invalid`);
-        }
-      });
+      var result;
+      try {
+        result = await bbfn.getGroupID(process.env.MFAGROUP, apiAccessToken);
+      } catch (e) {
+        console.log("Group lookup failed");
+      }
+
+      if (result && result['urn:ietf:params:scim:schemas:extension:ibm:2.0:Group'].groupType == "standard") {
+        process.env.MFAGROUPID = result.id;
+        console.log(`MFA Group ID is ${process.env.MFAGROUPID}`);
+      } else {
+        console.log(`Group ${process.env.MFAGROUP} is invalid`);
+      }
       // Get the demo app's theme id
       bbfn.getThemeID(process.env.APP_NAME, apiAccessToken, (_err,result) => {
         if (result) {

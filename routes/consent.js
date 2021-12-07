@@ -1,7 +1,4 @@
 var express = require('express');
-var request = require('request');
-var _ = require('lodash');
-var bbfn = require('../functions.js');
 var router = express.Router();
 
 var DPCMClient = require('../lib/dpcm/dpcmClient');
@@ -40,6 +37,10 @@ router.get('/terms', function(req, res, next) {
       }
 
       dpcmClient.getDSP(userAccessToken, { purposeId: [purposeID] }, function(_err, dspResp) {
+        if (!dspResp.purposes) {
+          res.redirect("/app/profile");
+          return;
+        }
         var lastModified = new Date(dspResp.purposes[purposeID].lastModifiedTime *1000);
         var termsDSP = dspResp.purposes[purposeID];
         res.render('insurance/privacy/eula_consent', {

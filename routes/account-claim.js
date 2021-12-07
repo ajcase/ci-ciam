@@ -1,7 +1,4 @@
-var request = require('request');
 var express = require('express');
-var _ = require('lodash');
-var json2csv = require('json2csv');
 var bbfn = require('../functions');
 var router = express.Router();
 
