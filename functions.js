@@ -747,7 +747,14 @@ async function createApplication(appName, redirectUrl, accessToken) {
       console.log("Response code:", response.status);
       console.log("Create response:", response.data);
       return response.data;
-    }).catch(e=>{throw e.response?e.response.data:e.stack});
+    }).catch(e=>{
+      if (e.response) {
+        console.log("ERROR: App creation response data: " + JSON.stringify(e.response.data));
+        console.log(`ERROR: App creation response HTTP status code: ${e.response.status}`);
+        // console.log(e.response.headers);
+        throw e.response.data;
+      } else { throw e.stack}
+    })
 }
 
 async function getApplication(appName, accessToken) {
