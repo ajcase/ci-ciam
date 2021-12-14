@@ -20,7 +20,13 @@ Here's how manage-theme.js can be used to modify the theme:
 
 1. Navigate to directory *ci-theme*
 2. Make changes to files within the *templates* subdirectory.
-3. Zip up the *templates* directory to e.g. the default TrustMeInsurance.zip.  
+3. Zip up the *templates* directory to TrustMeInsurance.zip.
+		
+	Here's an example command to do so:
+	
+	 ```
+	 zip -r TrustMeInsurance.zip templates
+	 ```
 4. Run the below command to update the theme. 
 
 	```

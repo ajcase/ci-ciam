@@ -749,8 +749,9 @@ async function createApplication(appName, redirectUrl, accessToken) {
       return response.data;
     }).catch(e=>{
       if (e.response) {
-        console.log("ERROR: App creation response data: " + JSON.stringify(e.response.data));
-        console.log(`ERROR: App creation response HTTP status code: ${e.response.status}`);
+        console.log(`WARNING: App creation failed.`);
+        console.log(`Response data: ${JSON.stringify(e.response.data)}`);
+        console.log(`HTTP status code: ${e.response.status}`);
         // console.log(e.response.headers);
         throw e.response.data;
       } else { throw e.stack}
@@ -957,6 +958,19 @@ async function applyPolicyThemeSources(policyid,themeId,sources,app,accessToken)
   if (themeId) {
     app.customization = {themeId: themeId};
   }
+
+  // Convert app icon to base64. Path is in .env's APP_ICON_PATH
+  try {
+    app.customIcon="data:image/png;base64," + fs.readFileSync(process.env.APP_ICON_PATH, 'base64');
+  } catch (e) { 
+    console.log("Failed to read & convert application icon");
+    console.log(e.stack);
+  }
+  
+  app.description=process.env.APP_DESCRIPTION;
+
+  app.providers.oidc.applicationUrl = process.env.OIDC_APP_URL;
+
   delete app._links;
   delete app.xforce;
   delete app.type;
@@ -969,6 +983,7 @@ async function applyPolicyThemeSources(policyid,themeId,sources,app,accessToken)
     'url': url,
     'headers': {
       'Content-Type': 'application/json',
+      'Accept-Encoding': 'gzip, deflate, br', // Required for upload of custom icon
       'Authorization': `Bearer ${accessToken}`
     },
     'data': app
@@ -982,11 +997,14 @@ async function applyPolicyThemeSources(policyid,themeId,sources,app,accessToken)
     } else {
       throw(response.data);
     }
-  }).catch(e => {throw (
-      "Application update failed: "
-      + (e.response ? e.response.status : "")
-      + " " + (e.response ? e.response.data : e)
-    )});
+  }).catch(e=>{
+    if (e.response) {
+      console.log("ERROR: App update response data: " + JSON.stringify(e.response.data));
+      console.log(`ERROR: App update response HTTP status code: ${e.response.status}`);
+      // console.log(e.response.headers);
+      throw e.response.data;
+    } else { throw e.stack}
+  })
 }
 
 async function createEula(id,description,url, accessToken) {

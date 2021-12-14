@@ -48,3 +48,12 @@ BRAND_ID=false
 
 #If true will request DPCM scopes in OIDC request
 SEND_PRIVACY_SCOPES=false
+
+# Application icon used in Verify admin UI
+APP_ICON_PATH="./ci-theme/logo80x72.png"
+
+# Application description
+APP_DESCRIPTION="Retail insurances for cars, homes and much more"
+
+# OIDC application URL
+OIDC_APP_URL="http://localhost:3000/"

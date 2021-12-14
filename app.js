@@ -229,7 +229,10 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error', {
+    message: `An HTTP ${err.status} was returned.`,
+    detail: JSON.stringify(err)
+  });
 });
 
 if (process.env.API_CLIENT_ID && process.env.API_SECRET && process.env.MFAGROUP && process.env.APP_NAME) {
